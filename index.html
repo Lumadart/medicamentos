@@ -278,7 +278,8 @@
   </main>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbygi4DMEklucoLk_H2q8SPpUq-h3Y-r52xIy5zKFYcW95G6CPohunB_8MKD0q7L2Wje/exec'; 
+    const API_URL = 'https://script.google.com/macros/s/AKfycbygi4DMEklucoLk_H2q8SPpUq-h3Y-r52xIy5zKFYcW95G6CPohunB_8MKD0q7L2Wje/exec
+';
     const $ = s => document.querySelector(s);
     let pin = localStorage.getItem('pin') || '';
     let doses = [];
@@ -354,18 +355,27 @@
 
     async function carregarMeds() {
       const box = $('#vMeds'); box.innerHTML = '';
-      const r = await api('meds');
-      if (!r.ok) {$('#msg').textContent = r.erro; return;}
-      r.meds.forEach(m => {
-        const det = el('details'); const s = el('summary', '', m.nome);
-        s.append(el('span', '', [m.dosagem, m.posologia].filter(Boolean).join(' · ')));
-        det.append(s);
-        const dl = el('dl');
-        [['Princípio ativo', m.ativo], ['Outros nomes', m.outros], ['Forma', m.forma], ['Horários', m.horarios],
-        ['Para que serve', m.paraQue], ['Observações', m.obs], ['Status', m.status]]
-          .filter(x => x[1]).forEach(([k, v]) => {dl.append(el('dt', '', k), el('dd', '', v));});
-        det.append(dl); box.append(det);
-      });
+      $('#msg').textContent = '';
+      try {
+        const r = await api('meds');
+        if (!r.ok) {$('#msg').textContent = r.erro; return;}
+        if (!r.meds.length) {
+          box.append(el('p', 'empty', 'Nenhum medicamento encontrado. Preencha a aba Medicamentos da planilha (a coluna Nome comercial é obrigatória).'));
+          return;
+        }
+        r.meds.forEach(m => {
+          const det = el('details'); const s = el('summary', '', m.nome);
+          s.append(el('span', '', [m.dosagem, m.posologia].filter(Boolean).join(' · ')));
+          det.append(s);
+          const dl = el('dl');
+          [['Princípio ativo', m.ativo], ['Outros nomes', m.outros], ['Forma', m.forma], ['Horários', m.horarios],
+          ['Para que serve', m.paraQue], ['Observações', m.obs], ['Status', m.status]]
+            .filter(x => x[1]).forEach(([k, v]) => {dl.append(el('dt', '', k), el('dd', '', v));});
+          det.append(dl); box.append(det);
+        });
+      } catch (e) {
+        $('#msg').textContent = 'Não foi possível carregar os medicamentos. Verifique a conexão e a implantação do Apps Script.';
+      }
     }
 
     function aba(hoje) {
