@@ -1,0 +1,8 @@
+{
+  "name": "Minhas medicações",
+  "short_name": "Medicações",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#eef2f4",
+  "theme_color": "#12303b"
+}

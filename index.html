@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#12303b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Medicações">
+  <link rel="manifest" href="manifest.json">
+  <title>Minhas medicações</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #eef2f4;
+      --ink: #12303b;
+      --mute: #5d737d;
+      --line: #d3dde2;
+      --card: #fff;
+      --ok: #2f7d4f;
+      --okbg: #e4f2e9;
+      --warn: #b4570a
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html,
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Instrument Sans', system-ui, sans-serif;
+      -webkit-tap-highlight-color: transparent
+    }
+
+    body {
+      padding: env(safe-area-inset-top) 16px calc(env(safe-area-inset-bottom) + 24px);
+      max-width: 520px;
+      margin: 0 auto
+    }
+
+    h1 {
+      font-size: 26px;
+      margin: 22px 0 4px;
+      letter-spacing: -.01em
+    }
+
+    .sub {
+      color: var(--mute);
+      margin: 0 0 16px
+    }
+
+    .tabs {
+      display: flex;
+      gap: 6px;
+      background: #dfe7eb;
+      padding: 4px;
+      border-radius: 12px;
+      margin-bottom: 16px
+    }
+
+    .tabs button {
+      flex: 1;
+      border: 0;
+      background: none;
+      padding: 10px;
+      border-radius: 9px;
+      font: 600 15px inherit;
+      font-family: inherit;
+      color: var(--mute)
+    }
+
+    .tabs button.on {
+      background: var(--card);
+      color: var(--ink)
+    }
+
+    .bar {
+      height: 6px;
+      background: var(--line);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 16px
+    }
+
+    .bar i {
+      display: block;
+      height: 100%;
+      background: var(--ok);
+      width: 0;
+      transition: width .25s
+    }
+
+    .dose {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+      text-align: left;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 10px;
+      font-family: inherit;
+      color: inherit
+    }
+
+    .dose .h {
+      font-size: 22px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      min-width: 62px
+    }
+
+    .dose .t {
+      flex: 1
+    }
+
+    .dose .t b {
+      display: block;
+      font-size: 16px
+    }
+
+    .dose .t span {
+      color: var(--mute);
+      font-size: 14px
+    }
+
+    .chk {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 2px solid var(--line);
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-size: 18px
+    }
+
+    .dose.done {
+      background: var(--okbg);
+      border-color: #bfdcca
+    }
+
+    .dose.done .chk {
+      background: var(--ok);
+      border-color: var(--ok)
+    }
+
+    .dose.done .h {
+      color: var(--ok)
+    }
+
+    details {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      margin-bottom: 10px;
+      padding: 0 14px
+    }
+
+    summary {
+      padding: 14px 0;
+      font-weight: 600;
+      cursor: pointer;
+      list-style: none
+    }
+
+    summary span {
+      display: block;
+      color: var(--mute);
+      font-weight: 400;
+      font-size: 14px
+    }
+
+    dl {
+      margin: 0 0 12px;
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 6px 10px;
+      font-size: 14px
+    }
+
+    dt {
+      color: var(--mute)
+    }
+
+    dd {
+      margin: 0
+    }
+
+    .msg {
+      color: var(--warn);
+      min-height: 20px;
+      margin: 8px 0
+    }
+
+    .login {
+      margin-top: 18vh;
+      text-align: center
+    }
+
+    .login input {
+      width: 100%;
+      font: 700 28px inherit;
+      font-family: inherit;
+      text-align: center;
+      letter-spacing: .3em;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      margin: 16px 0 8px
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      border: 0;
+      border-radius: 14px;
+      background: var(--ink);
+      color: #fff;
+      font: 600 16px inherit;
+      font-family: inherit
+    }
+
+    .link {
+      background: none;
+      border: 0;
+      color: var(--mute);
+      font: 14px inherit;
+      font-family: inherit;
+      padding: 8px;
+      text-decoration: underline
+    }
+
+    .empty {
+      color: var(--mute);
+      text-align: center;
+      padding: 32px 0
+    }
+
+    [hidden] {
+      display: none !important
+    }
+  </style>
+</head>
+
+<body>
+
+  <section id="login" class="login" hidden>
+    <h1>Minhas medicações</h1>
+    <p class="sub">Digite seu PIN para entrar.</p>
+    <input id="pin" type="password" inputmode="numeric" autocomplete="current-password" aria-label="PIN">
+    <div class="msg" id="loginMsg"></div>
+    <button class="btn" id="entrar">Entrar</button>
+  </section>
+
+  <main id="app" hidden>
+    <h1 id="titulo">Hoje</h1>
+    <p class="sub" id="data"></p>
+    <div class="tabs">
+      <button id="tHoje" class="on">Hoje</button>
+      <button id="tMeds">Medicamentos</button>
+    </div>
+    <div class="msg" id="msg"></div>
+    <div id="vHoje">
+      <div class="bar"><i id="prog"></i></div>
+      <div id="doses"></div>
+    </div>
+    <div id="vMeds" hidden></div>
+    <div style="text-align:center;margin-top:12px">
+      <button class="link" id="atualizar">Atualizar</button>
+      <button class="link" id="sair">Sair</button>
+    </div>
+  </main>
+
+  <script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycbygi4DMEklucoLk_H2q8SPpUq-h3Y-r52xIy5zKFYcW95G6CPohunB_8MKD0q7L2Wje/exec'; 
+    const $ = s => document.querySelector(s);
+    let pin = localStorage.getItem('pin') || '';
+    let doses = [];
+
+    async function api(acao, extra = {}) {
+      const r = await fetch(API_URL, {
+        method: 'POST',
+        headers: {'Content-Type': 'text/plain;charset=utf-8'},
+        body: JSON.stringify({pin, acao, ...extra})
+      });
+      return r.json();
+    }
+
+    function el(tag, cls, txt) {
+      const e = document.createElement(tag);
+      if (cls) e.className = cls;
+      if (txt !== undefined) e.textContent = txt;
+      return e;
+    }
+
+    function mostrarLogin(msg = '') {
+      $('#app').hidden = true; $('#login').hidden = false;
+      $('#loginMsg').textContent = msg; $('#pin').value = '';
+    }
+
+    async function carregarHoje() {
+      $('#msg').textContent = '';
+      try {
+        const r = await api('hoje');
+        if (!r.ok) {
+          if (r.auth === false) {localStorage.removeItem('pin'); pin = ''; return mostrarLogin(r.erro);}
+          $('#msg').textContent = r.erro; return false;
+        }
+        doses = r.doses;
+        $('#login').hidden = true; $('#app').hidden = false;
+        $('#data').textContent = new Date().toLocaleDateString('pt-BR', {weekday: 'long', day: 'numeric', month: 'long'});
+        desenharDoses();
+        return true;
+      } catch (e) {
+        $('#msg').textContent = 'Sem conexão. Tente atualizar.';
+        $('#app').hidden = false; $('#login').hidden = true;
+      }
+    }
+
+    function desenharDoses() {
+      const box = $('#doses'); box.innerHTML = '';
+      if (!doses.length) box.append(el('p', 'empty', 'Nenhuma dose para hoje.'));
+      doses.forEach(d => {
+        const b = el('button', 'dose' + (d.tomou ? ' done' : ''));
+        b.append(el('div', 'h', d.horario));
+        const t = el('div', 't'); t.append(el('b', '', d.medicamento));
+        t.append(el('span', '', d.dosagem + (d.tomou && d.marcadoAs ? ' · tomou às ' + d.marcadoAs : '')));
+        b.append(t, el('div', 'chk', d.tomou ? '✓' : ''));
+        b.onclick = () => alternar(d);
+        box.append(b);
+      });
+      const feitas = doses.filter(d => d.tomou).length;
+      $('#prog').style.width = doses.length ? (100 * feitas / doses.length) + '%' : '0';
+      $('#titulo').textContent = doses.length ? `Hoje: ${feitas} de ${doses.length}` : 'Hoje';
+    }
+
+    async function alternar(d) {
+      d.tomou = !d.tomou; d.marcadoAs = d.tomou ? new Date().toTimeString().slice(0, 5) : '';
+      desenharDoses();
+      try {
+        const r = await api('marcar', {linha: d.linha, tomou: d.tomou});
+        if (!r.ok) throw new Error(r.erro);
+      } catch (e) {
+        d.tomou = !d.tomou; desenharDoses();
+        $('#msg').textContent = 'Não foi possível salvar. Verifique a conexão.';
+      }
+    }
+
+    async function carregarMeds() {
+      const box = $('#vMeds'); box.innerHTML = '';
+      const r = await api('meds');
+      if (!r.ok) {$('#msg').textContent = r.erro; return;}
+      r.meds.forEach(m => {
+        const det = el('details'); const s = el('summary', '', m.nome);
+        s.append(el('span', '', [m.dosagem, m.posologia].filter(Boolean).join(' · ')));
+        det.append(s);
+        const dl = el('dl');
+        [['Princípio ativo', m.ativo], ['Outros nomes', m.outros], ['Forma', m.forma], ['Horários', m.horarios],
+        ['Para que serve', m.paraQue], ['Observações', m.obs], ['Status', m.status]]
+          .filter(x => x[1]).forEach(([k, v]) => {dl.append(el('dt', '', k), el('dd', '', v));});
+        det.append(dl); box.append(det);
+      });
+    }
+
+    function aba(hoje) {
+      $('#vHoje').hidden = !hoje; $('#vMeds').hidden = hoje;
+      $('#tHoje').classList.toggle('on', hoje); $('#tMeds').classList.toggle('on', !hoje);
+      if (!hoje) carregarMeds();
+    }
+
+    $('#entrar').onclick = async () => {
+      pin = $('#pin').value.trim(); if (!pin) return;
+      $('#loginMsg').textContent = 'Verificando…';
+      if (await carregarHoje()) localStorage.setItem('pin', pin);
+    };
+    $('#pin').onkeydown = e => {if (e.key === 'Enter') $('#entrar').click();};
+    $('#tHoje').onclick = () => aba(true);
+    $('#tMeds').onclick = () => aba(false);
+    $('#atualizar').onclick = () => $('#vMeds').hidden ? carregarHoje() : carregarMeds();
+    $('#sair').onclick = () => {localStorage.removeItem('pin'); pin = ''; mostrarLogin();};
+    document.addEventListener('visibilitychange', () => {if (!document.hidden && pin) carregarHoje();});
+
+    pin ? carregarHoje() : mostrarLogin();
+  </script>
+</body>
+
+</html>
