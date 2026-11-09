@@ -278,8 +278,7 @@
   </main>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbygi4DMEklucoLk_H2q8SPpUq-h3Y-r52xIy5zKFYcW95G6CPohunB_8MKD0q7L2Wje/exec
-';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbygi4DMEklucoLk_H2q8SPpUq-h3Y-r52xIy5zKFYcW95G6CPohunB_8MKD0q7L2Wje/exec'; 
     const $ = s => document.querySelector(s);
     let pin = localStorage.getItem('pin') || '';
     let doses = [];
@@ -396,7 +395,15 @@
     $('#sair').onclick = () => {localStorage.removeItem('pin'); pin = ''; mostrarLogin();};
     document.addEventListener('visibilitychange', () => {if (!document.hidden && pin) carregarHoje();});
 
-    pin ? carregarHoje() : mostrarLogin();
+    if (API_URL.includes('COLE_AQUI')) {
+      mostrarLogin('Falta colar a URL do Apps Script no index.html (linha API_URL).');
+    } else if (pin) {
+      $('#app').hidden = false;
+      $('#msg').textContent = 'Carregando…';
+      carregarHoje();
+    } else {
+      mostrarLogin();
+    }
   </script>
 </body>
 
