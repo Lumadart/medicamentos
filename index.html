@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#12303b">
+  <meta name="theme-color" content="#ffffff">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="Medicações">
   <link rel="manifest" href="manifest.json">
@@ -12,14 +12,16 @@
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #eef2f4;
-      --ink: #12303b;
-      --mute: #5d737d;
-      --line: #d3dde2;
+      --bg: #fff;
+      --ink: #2b2024;
+      --mute: #8a7a80;
+      --line: #f0e4e7;
       --card: #fff;
-      --ok: #2f7d4f;
-      --okbg: #e4f2e9;
-      --warn: #b4570a
+      --rose: #b5546b;
+      --rose-d: #9a4258;
+      --rose-l: #fbeff2;
+      --rose-m: #f2d5dc;
+      --ease: cubic-bezier(.2, .8, .2, 1)
     }
 
     * {
@@ -36,61 +38,102 @@
     }
 
     body {
-      padding: env(safe-area-inset-top) 16px calc(env(safe-area-inset-bottom) + 24px);
+      padding: env(safe-area-inset-top) 18px calc(env(safe-area-inset-bottom) + 28px);
       max-width: 520px;
       margin: 0 auto
     }
 
+    button {
+      font-family: inherit;
+      cursor: pointer
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--rose);
+      outline-offset: 3px
+    }
+
     h1 {
-      font-size: 26px;
-      margin: 22px 0 4px;
-      letter-spacing: -.01em
+      font-size: 28px;
+      margin: 24px 0 2px;
+      letter-spacing: -.02em;
+      font-weight: 700
     }
 
     .sub {
       color: var(--mute);
-      margin: 0 0 16px
+      margin: 0 0 18px;
+      text-transform: capitalize
     }
 
     .tabs {
+      position: relative;
       display: flex;
-      gap: 6px;
-      background: #dfe7eb;
+      background: var(--rose-l);
       padding: 4px;
-      border-radius: 12px;
-      margin-bottom: 16px
+      border-radius: 14px;
+      margin-bottom: 18px
+    }
+
+    .tabs::before {
+      content: "";
+      position: absolute;
+      top: 4px;
+      bottom: 4px;
+      left: 4px;
+      width: calc(50% - 4px);
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 1px 4px rgba(181, 84, 107, .18);
+      transition: transform .3s var(--ease)
+    }
+
+    .tabs[data-aba="meds"]::before {
+      transform: translateX(100%)
     }
 
     .tabs button {
+      position: relative;
       flex: 1;
       border: 0;
       background: none;
-      padding: 10px;
-      border-radius: 9px;
-      font: 600 15px inherit;
-      font-family: inherit;
-      color: var(--mute)
+      padding: 11px;
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--mute);
+      transition: color .2s
     }
 
     .tabs button.on {
-      background: var(--card);
-      color: var(--ink)
+      color: var(--rose-d)
     }
 
     .bar {
-      height: 6px;
-      background: var(--line);
-      border-radius: 3px;
+      height: 8px;
+      background: var(--rose-l);
+      border-radius: 4px;
       overflow: hidden;
-      margin-bottom: 16px
+      margin-bottom: 18px
     }
 
     .bar i {
       display: block;
       height: 100%;
-      background: var(--ok);
+      background: var(--rose);
+      border-radius: 4px;
       width: 0;
-      transition: width .25s
+      transition: width .5s var(--ease)
+    }
+
+    .bar.full i {
+      animation: pulse .7s var(--ease)
+    }
+
+    @keyframes pulse {
+      50% {
+        filter: brightness(1.15);
+        transform: scaleY(1.6)
+      }
     }
 
     .dose {
@@ -101,18 +144,23 @@
       text-align: left;
       background: var(--card);
       border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 14px;
+      border-radius: 16px;
+      padding: 15px;
       margin-bottom: 10px;
-      font-family: inherit;
-      color: inherit
+      color: inherit;
+      transition: transform .15s var(--ease), border-color .2s, background .25s, box-shadow .2s
+    }
+
+    .dose:active {
+      transform: scale(.975)
     }
 
     .dose .h {
       font-size: 22px;
       font-weight: 700;
       font-variant-numeric: tabular-nums;
-      min-width: 62px
+      min-width: 64px;
+      transition: color .25s
     }
 
     .dose .t {
@@ -130,43 +178,117 @@
     }
 
     .chk {
-      width: 34px;
-      height: 34px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
-      border: 2px solid var(--line);
+      border: 2px solid var(--rose-m);
       display: grid;
       place-items: center;
-      color: #fff;
-      font-size: 18px
+      transition: background .25s, border-color .25s, transform .2s var(--ease)
+    }
+
+    .chk svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: #fff;
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-linejoin: round
+    }
+
+    .chk svg path {
+      stroke-dasharray: 24;
+      stroke-dashoffset: 0
+    }
+
+    .chk.pop {
+      animation: pop .4s var(--ease)
+    }
+
+    .chk.pop svg path {
+      animation: draw .35s .05s var(--ease) both
+    }
+
+    @keyframes pop {
+      0% {
+        transform: scale(.6)
+      }
+
+      60% {
+        transform: scale(1.18)
+      }
+
+      100% {
+        transform: scale(1)
+      }
+    }
+
+    @keyframes draw {
+      from {
+        stroke-dashoffset: 24
+      }
+
+      to {
+        stroke-dashoffset: 0
+      }
     }
 
     .dose.done {
-      background: var(--okbg);
-      border-color: #bfdcca
+      background: var(--rose-l);
+      border-color: var(--rose-m)
     }
 
     .dose.done .chk {
-      background: var(--ok);
-      border-color: var(--ok)
+      background: var(--rose);
+      border-color: var(--rose)
     }
 
     .dose.done .h {
-      color: var(--ok)
+      color: var(--rose-d)
     }
 
     details {
       background: var(--card);
       border: 1px solid var(--line);
-      border-radius: 14px;
+      border-radius: 16px;
       margin-bottom: 10px;
-      padding: 0 14px
+      padding: 0 16px;
+      transition: border-color .2s, box-shadow .2s
+    }
+
+    details[open] {
+      border-color: var(--rose-m);
+      box-shadow: 0 6px 18px rgba(181, 84, 107, .08)
     }
 
     summary {
-      padding: 14px 0;
+      position: relative;
+      padding: 15px 28px 15px 0;
       font-weight: 600;
       cursor: pointer;
       list-style: none
+    }
+
+    summary::-webkit-details-marker {
+      display: none
+    }
+
+    summary::after {
+      content: "";
+      position: absolute;
+      right: 4px;
+      top: 50%;
+      width: 8px;
+      height: 8px;
+      border-right: 2px solid var(--rose);
+      border-bottom: 2px solid var(--rose);
+      transform: translateY(-70%) rotate(45deg);
+      transition: transform .25s var(--ease)
+    }
+
+    details[open] summary::after {
+      transform: translateY(-30%) rotate(-135deg)
     }
 
     summary span {
@@ -177,11 +299,19 @@
     }
 
     dl {
-      margin: 0 0 12px;
+      margin: 0 0 14px;
       display: grid;
       grid-template-columns: 110px 1fr;
-      gap: 6px 10px;
-      font-size: 14px
+      gap: 8px 10px;
+      font-size: 14px;
+      animation: abrir .3s var(--ease)
+    }
+
+    @keyframes abrir {
+      from {
+        opacity: 0;
+        transform: translateY(-6px)
+      }
     }
 
     dt {
@@ -193,7 +323,7 @@
     }
 
     .msg {
-      color: var(--warn);
+      color: var(--rose-d);
       min-height: 20px;
       margin: 8px 0
     }
@@ -210,30 +340,42 @@
       text-align: center;
       letter-spacing: .3em;
       padding: 14px;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      margin: 16px 0 8px
+      border: 1.5px solid var(--line);
+      border-radius: 16px;
+      margin: 16px 0 8px;
+      transition: border-color .2s, box-shadow .2s
+    }
+
+    .login input:focus {
+      outline: 0;
+      border-color: var(--rose);
+      box-shadow: 0 0 0 4px var(--rose-l)
     }
 
     .btn {
       width: 100%;
-      padding: 14px;
+      padding: 15px;
       border: 0;
-      border-radius: 14px;
-      background: var(--ink);
+      border-radius: 16px;
+      background: var(--rose);
       color: #fff;
-      font: 600 16px inherit;
-      font-family: inherit
+      font-weight: 600;
+      font-size: 16px;
+      transition: background .2s, transform .15s var(--ease)
+    }
+
+    .btn:active {
+      transform: scale(.97)
     }
 
     .link {
       background: none;
       border: 0;
       color: var(--mute);
-      font: 14px inherit;
-      font-family: inherit;
-      padding: 8px;
-      text-decoration: underline
+      font-size: 14px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      transition: color .2s, background .2s
     }
 
     .empty {
@@ -242,8 +384,63 @@
       padding: 32px 0
     }
 
+    #vHoje,
+    #vMeds {
+      animation: entrar .3s var(--ease)
+    }
+
+    @keyframes entrar {
+      from {
+        opacity: 0;
+        transform: translateY(6px)
+      }
+    }
+
     [hidden] {
       display: none !important
+    }
+
+    @media (hover:hover) {
+      .dose:hover {
+        border-color: var(--rose-m);
+        box-shadow: 0 6px 16px rgba(181, 84, 107, .1);
+        transform: translateY(-2px)
+      }
+
+      .dose:hover .chk {
+        border-color: var(--rose)
+      }
+
+      .dose:active {
+        transform: scale(.975)
+      }
+
+      details:hover {
+        border-color: var(--rose-m)
+      }
+
+      .tabs button:not(.on):hover {
+        color: var(--rose)
+      }
+
+      .btn:hover {
+        background: var(--rose-d)
+      }
+
+      .link:hover {
+        color: var(--rose-d);
+        background: var(--rose-l)
+      }
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+
+      *,
+      *::before,
+      *::after {
+        animation: none !important;
+        transition: none !important
+      }
     }
   </style>
 </head>
@@ -261,7 +458,7 @@
   <main id="app" hidden>
     <h1 id="titulo">Hoje</h1>
     <p class="sub" id="data"></p>
-    <div class="tabs">
+    <div class="tabs" data-aba="hoje">
       <button id="tHoje" class="on">Hoje</button>
       <button id="tMeds">Medicamentos</button>
     </div>
@@ -278,7 +475,7 @@
   </main>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbygi4DMEklucoLk_H2q8SPpUq-h3Y-r52xIy5zKFYcW95G6CPohunB_8MKD0q7L2Wje/exec'; 
+    const API_URL = 'https://script.google.com/macros/s/AKfycbygi4DMEklucoLk_H2q8SPpUq-h3Y-r52xIy5zKFYcW95G6CPohunB_8MKD0q7L2Wje/exec';
     const $ = s => document.querySelector(s);
     let pin = localStorage.getItem('pin') || '';
     let doses = [];
@@ -323,6 +520,8 @@
       }
     }
 
+    const CHECK = '<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+
     function desenharDoses() {
       const box = $('#doses'); box.innerHTML = '';
       if (!doses.length) box.append(el('p', 'empty', 'Nenhuma dose para hoje.'));
@@ -331,18 +530,20 @@
         b.append(el('div', 'h', d.horario));
         const t = el('div', 't'); t.append(el('b', '', d.medicamento));
         t.append(el('span', '', d.dosagem + (d.tomou && d.marcadoAs ? ' · tomou às ' + d.marcadoAs : '')));
-        b.append(t, el('div', 'chk', d.tomou ? '✓' : ''));
+        const c = el('div', 'chk' + (d.recem ? ' pop' : '')); c.innerHTML = d.tomou ? CHECK : ''; b.append(t, c);
         b.onclick = () => alternar(d);
         box.append(b);
       });
       const feitas = doses.filter(d => d.tomou).length;
       $('#prog').style.width = doses.length ? (100 * feitas / doses.length) + '%' : '0';
-      $('#titulo').textContent = doses.length ? `Hoje: ${feitas} de ${doses.length}` : 'Hoje';
+      const tudo = doses.length > 0 && feitas === doses.length;
+      $('#titulo').textContent = tudo ? 'Tudo certo por hoje' : (doses.length ? `Hoje: ${feitas} de ${doses.length}` : 'Hoje');
+      $('.bar').classList.toggle('full', tudo);
     }
 
     async function alternar(d) {
       d.tomou = !d.tomou; d.marcadoAs = d.tomou ? new Date().toTimeString().slice(0, 5) : '';
-      desenharDoses();
+      d.recem = d.tomou; desenharDoses(); d.recem = false;
       try {
         const r = await api('marcar', {linha: d.linha, tomou: d.tomou});
         if (!r.ok) throw new Error(r.erro);
@@ -378,6 +579,7 @@
     }
 
     function aba(hoje) {
+      $('.tabs').dataset.aba = hoje ? 'hoje' : 'meds';
       $('#vHoje').hidden = !hoje; $('#vMeds').hidden = hoje;
       $('#tHoje').classList.toggle('on', hoje); $('#tMeds').classList.toggle('on', !hoje);
       if (!hoje) carregarMeds();
