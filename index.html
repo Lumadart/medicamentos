@@ -10,7 +10,7 @@
   <link rel="manifest" href="manifest.json">
   <title>Minhas medicações</title>
   <link
-    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Nunito:wght@400;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700&family=Nunito:wght@400;600;700&display=swap"
     rel="stylesheet">
   <style>
     :root {
@@ -22,6 +22,7 @@
       --mute: #94838a;
       --line: #f3e4e9;
       --ease: cubic-bezier(.2, .8, .2, 1);
+      --display: 'Baloo 2', 'Nunito', sans-serif;
       --hero: linear-gradient(145deg, #d86a8d, #a9405f)
     }
 
@@ -89,8 +90,8 @@
 
     .login h1,
     .hero h1 {
-      font-family: 'Fraunces', serif;
-      font-weight: 500;
+      font-family: var(--display);
+      font-weight: 600;
       letter-spacing: -.01em;
       margin: 0
     }
@@ -196,20 +197,65 @@
     /* topo */
     .hero {
       position: relative;
-      background: var(--hero);
+      background: radial-gradient(circle at 88% 0%, rgba(255, 255, 255, .24), transparent 50%), var(--hero);
       color: #fff;
-      padding: calc(env(safe-area-inset-top) + 26px) 22px 34px;
-      border-radius: 0 0 40px 40px;
+      padding: calc(env(safe-area-inset-top) + 14px) 22px 34px;
+      border-radius: 0 0 42px 42px;
+      box-shadow: 0 18px 34px rgba(169, 64, 95, .22)
+    }
+
+    .deco {
+      position: absolute;
+      inset: 0;
       overflow: hidden;
+      border-radius: inherit;
+      pointer-events: none
+    }
+
+    .top,
+    .row {
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 14px;
-      box-shadow: 0 14px 30px rgba(169, 64, 95, .2)
+      gap: 14px
     }
 
-    .hero>div {
+    .top {
+      margin-bottom: 20px
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font: 600 15px var(--display);
+      opacity: .95
+    }
+
+    .brand .i {
+      width: 18px;
+      height: 18px
+    }
+
+    .menu {
       position: relative
+    }
+
+    #menuBtn {
+      width: 38px;
+      height: 38px;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .2);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      transition: background .2s, transform .15s var(--ease)
+    }
+
+    #menuBtn:active {
+      transform: scale(.92)
     }
 
     .hi {
@@ -219,8 +265,8 @@
     }
 
     .hero h1 {
-      font-size: 27px;
-      line-height: 1.15;
+      font-size: 28px;
+      line-height: 1.1;
       margin: 2px 0 6px
     }
 
@@ -235,21 +281,23 @@
     }
 
     .f1 {
-      width: 130px;
-      height: 130px;
-      right: -34px;
-      top: -30px;
-      opacity: .14;
+      width: 140px;
+      height: 140px;
+      right: -36px;
+      top: -34px;
+      opacity: .16;
       transform: rotate(15deg);
-      animation: girar 40s linear infinite
+      animation: girar 40s linear infinite;
+      stroke-width: 1.1
     }
 
     .f2 {
-      width: 70px;
-      height: 70px;
-      left: 46%;
-      bottom: -24px;
-      opacity: .12
+      width: 80px;
+      height: 80px;
+      left: 42%;
+      bottom: -22px;
+      opacity: .14;
+      stroke-width: 1.1
     }
 
     @keyframes girar {
@@ -293,7 +341,7 @@
       inset: 0;
       display: grid;
       place-items: center;
-      font-size: 17px;
+      font-size: 18px;
       font-variant-numeric: tabular-nums
     }
 
@@ -562,35 +610,36 @@
       left: 50%;
       bottom: calc(env(safe-area-inset-bottom) + 14px);
       transform: translateX(-50%);
-      width: calc(100% - 32px);
-      max-width: 488px;
+      width: calc(100% - 56px);
+      max-width: 340px;
       display: flex;
       gap: 4px;
-      padding: 7px;
-      background: var(--hero);
+      padding: 6px;
+      background: linear-gradient(145deg, rgba(216, 106, 141, .96), rgba(169, 64, 95, .96));
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border-radius: 26px;
-      box-shadow: 0 14px 30px rgba(169, 64, 95, .38);
+      box-shadow: 0 16px 32px rgba(169, 64, 95, .35);
       z-index: 5
     }
 
     .nav button {
       flex: 1;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      gap: 3px;
-      padding: 8px 0 7px;
+      justify-content: center;
+      gap: 7px;
+      padding: 12px 0;
       border: 0;
-      border-radius: 19px;
+      border-radius: 20px;
       background: none;
-      color: rgba(255, 255, 255, .8);
-      font-size: 11px;
-      font-weight: 700;
+      color: rgba(255, 255, 255, .85);
+      font: 600 14px var(--display);
       transition: background .25s, color .25s, transform .15s var(--ease)
     }
 
     .nav button:active {
-      transform: scale(.94)
+      transform: scale(.95)
     }
 
     .nav button.on {
@@ -598,7 +647,56 @@
       color: var(--rose-d)
     }
 
-    .nav .spin .i {
+    .menu-pop {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 8px);
+      min-width: 172px;
+      padding: 6px;
+      background: #fff;
+      color: var(--ink);
+      border-radius: 18px;
+      box-shadow: 0 18px 40px rgba(58, 42, 49, .25);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-6px) scale(.95);
+      transform-origin: top right;
+      transition: opacity .2s, transform .25s var(--ease), visibility .2s;
+      z-index: 10
+    }
+
+    .menu.open .menu-pop {
+      opacity: 1;
+      visibility: visible;
+      transform: none
+    }
+
+    .menu-pop button {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 11px 12px;
+      border: 0;
+      border-radius: 12px;
+      background: none;
+      color: var(--ink);
+      font: 600 14px var(--display);
+      text-align: left;
+      transition: background .2s
+    }
+
+    .menu-pop button:active {
+      background: var(--rose-l)
+    }
+
+    .menu-pop .i {
+      width: 18px;
+      height: 18px;
+      color: var(--rose)
+    }
+
+    .spin .i {
       animation: rodar .7s var(--ease)
     }
 
@@ -650,20 +748,181 @@
         transition: none !important
       }
     }
+
+    /* acabamento */
+    .t b,
+    .t em,
+    .ring b,
+    .chip,
+    .btn,
+    .per,
+    .login h1 {
+      font-family: var(--display)
+    }
+
+    .t b {
+      font-weight: 600;
+      font-size: 17px
+    }
+
+    .t em {
+      font-weight: 600
+    }
+
+    .dose,
+    details {
+      box-shadow: 0 1px 2px rgba(58, 42, 49, .04), 0 8px 22px rgba(58, 42, 49, .045)
+    }
+
+    .dose.done {
+      background: linear-gradient(135deg, var(--rose-l), #fff)
+    }
+
+    .chip {
+      margin-top: 5px;
+      font-weight: 600
+    }
+
+    .chip+.chip {
+      margin-left: 6px
+    }
+
+    .chip.off {
+      background: #f1ecee;
+      color: var(--mute)
+    }
+
+    .chip.o {
+      background: #fff;
+      box-shadow: inset 0 0 0 1px var(--rose-m)
+    }
+
+    .info {
+      display: grid;
+      gap: 12px;
+      padding: 2px 0 16px;
+      animation: subir .3s var(--ease)
+    }
+
+    .rowi {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start
+    }
+
+    .info>.rowi+.rowi {
+      border-top: 1px dashed var(--line);
+      padding-top: 12px
+    }
+
+    .mini {
+      width: 34px;
+      height: 34px;
+      border-radius: 11px;
+      background: var(--rose-l);
+      color: var(--rose);
+      display: grid;
+      place-items: center;
+      flex: none
+    }
+
+    .mini .i {
+      width: 18px;
+      height: 18px
+    }
+
+    .cont {
+      flex: 1;
+      min-width: 0
+    }
+
+    .k {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--mute);
+      margin-bottom: 2px
+    }
+
+    .v {
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.35
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px
+    }
+
+    .chips .chip {
+      margin: 0
+    }
+
+    .info>.rowi.note,
+    .info>.rowi+.rowi.note {
+      background: var(--rose-l);
+      border: 0;
+      border-left: 3px solid var(--rose);
+      border-radius: 14px;
+      padding: 12px
+    }
+
+    .note .mini {
+      background: #fff
+    }
   </style>
 </head>
 
 <body>
 
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-    <symbol id="flor" viewBox="0 0 100 100">
-      <g fill="currentColor">
-        <circle cx="50" cy="26" r="17" />
-        <circle cx="74" cy="44" r="17" />
-        <circle cx="65" cy="72" r="17" />
-        <circle cx="35" cy="72" r="17" />
-        <circle cx="26" cy="44" r="17" />
-      </g>
+    <symbol id="i-flower" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="3" />
+      <path d="M12 16.5A4.5 4.5 0 1 1 7.5 12 4.5 4.5 0 1 1 12 7.5a4.5 4.5 0 1 1 4.5 4.5 4.5 4.5 0 1 1-4.5 4.5" />
+      <path d="M12 7.5V9" />
+      <path d="M7.5 12H9" />
+      <path d="M16.5 12H15" />
+      <path d="M12 16.5V15" />
+      <path d="m8 8 1.88 1.88" />
+      <path d="M14.12 9.88 16 8" />
+      <path d="m8 16 1.88-1.88" />
+      <path d="M14.12 14.12 16 16" />
+    </symbol>
+    <symbol id="i-dots" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="1" />
+      <circle cx="12" cy="5" r="1" />
+      <circle cx="12" cy="19" r="1" />
+    </symbol>
+    <symbol id="i-flask" viewBox="0 0 24 24">
+      <path
+        d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2" />
+      <path d="M8.5 2h7" />
+      <path d="M7 16h10" />
+    </symbol>
+    <symbol id="i-tag" viewBox="0 0 24 24">
+      <path
+        d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z" />
+      <circle cx="7.5" cy="7.5" r=".5" fill="currentColor" />
+    </symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24">
+      <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+      <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+    </symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24">
+      <path d="M8 2v4" />
+      <path d="M16 2v4" />
+      <rect width="18" height="18" x="3" y="4" rx="2" />
+      <path d="M3 10h18" />
+      <path d="m9 16 2 2 4-4" />
+    </symbol>
+    <symbol id="i-info" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="10" />
+      <path d="M12 16v-4" />
+      <path d="M12 8h.01" />
     </symbol>
     <symbol id="i-pill" viewBox="0 0 24 24">
       <path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z" />
@@ -722,8 +981,8 @@
       <p>Cuidar de você, um horário de cada vez.</p>
     </div>
     <div class="login-card">
-      <svg class="flor" style="width:120px;height:120px;right:-30px;bottom:-30px;opacity:.13">
-        <use href="#flor" />
+      <svg class="i flor" style="width:130px;height:130px;right:-30px;bottom:-30px;opacity:.16;stroke-width:1.1">
+        <use href="#i-flower" />
       </svg>
       <div class="emblem"><svg class="i">
           <use href="#i-pill" />
@@ -739,23 +998,45 @@
 
   <main id="app" hidden>
     <header class="hero">
-      <svg class="flor f1">
-        <use href="#flor" />
-      </svg>
-      <svg class="flor f2">
-        <use href="#flor" />
-      </svg>
-      <div>
-        <p class="hi" id="saudacao">Olá</p>
-        <h1 id="titulo">Hoje</h1>
-        <p class="data" id="data"></p>
-      </div>
-      <div class="ring" id="ring">
-        <svg viewBox="0 0 44 44">
-          <circle class="trk" cx="22" cy="22" r="18" />
-          <circle class="val" id="prog" cx="22" cy="22" r="18" />
+      <div class="deco">
+        <svg class="i flor f1">
+          <use href="#i-flower" />
         </svg>
-        <b id="ringTxt">0/0</b>
+        <svg class="i flor f2">
+          <use href="#i-flower" />
+        </svg>
+      </div>
+      <div class="top">
+        <span class="brand"><svg class="i">
+            <use href="#i-pill" />
+          </svg>Minhas medicações</span>
+        <div class="menu">
+          <button id="menuBtn" aria-label="Menu" aria-expanded="false"><svg class="i">
+              <use href="#i-dots" />
+            </svg></button>
+          <div class="menu-pop">
+            <button id="atualizar"><svg class="i">
+                <use href="#i-refresh" />
+              </svg>Atualizar</button>
+            <button id="sair"><svg class="i">
+                <use href="#i-out" />
+              </svg>Sair</button>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <p class="hi" id="saudacao">Olá</p>
+          <h1 id="titulo">Hoje</h1>
+          <p class="data" id="data"></p>
+        </div>
+        <div class="ring" id="ring">
+          <svg viewBox="0 0 44 44">
+            <circle class="trk" cx="22" cy="22" r="18" />
+            <circle class="val" id="prog" cx="22" cy="22" r="18" />
+          </svg>
+          <b id="ringTxt">0/0</b>
+        </div>
       </div>
     </header>
     <div class="msg" id="msg"></div>
@@ -772,12 +1053,6 @@
       <button id="tMeds"><svg class="i">
           <use href="#i-pill" />
         </svg>Remédios</button>
-      <button id="atualizar"><svg class="i">
-          <use href="#i-refresh" />
-        </svg>Atualizar</button>
-      <button id="sair"><svg class="i">
-          <use href="#i-out" />
-        </svg>Sair</button>
     </nav>
   </main>
 
@@ -897,15 +1172,31 @@
           const s = el('summary');
           const tile = el('div', 'tile'); tile.innerHTML = ic(iconeForma(m.forma));
           const t = el('div', 't'); t.append(el('b', '', m.nome));
-          const sub = [m.dosagem, m.posologia].filter(Boolean).join(' · ');
+          const sub = [m.dosagem, m.forma].filter(Boolean).join(' · ');
           if (sub) t.append(el('span', '', sub));
           if (m.paraQue) {t.append(document.createElement('br')); t.append(el('span', 'chip', m.paraQue));}
+          if (m.status && m.status !== 'Ativo') t.append(el('span', 'chip off', m.status));
           s.append(tile, t); det.append(s);
-          const dl = el('dl');
-          [['Princípio ativo', m.ativo], ['Outros nomes', m.outros], ['Forma', m.forma], ['Horários', m.horarios],
-          ['Observações', m.obs], ['Status', m.status]]
-            .filter(x => x[1]).forEach(([k, v]) => {dl.append(el('dt', '', k), el('dd', '', v));});
-          det.append(dl); box.append(det);
+          const info = el('div', 'info');
+          const linha = (icone, rotulo, conteudo, cls = '') => {
+            const r = el('div', 'rowi ' + cls);
+            const mini = el('div', 'mini'); mini.innerHTML = ic(icone);
+            const c = el('div', 'cont'); c.append(el('div', 'k', rotulo), conteudo);
+            r.append(mini, c); info.append(r);
+          };
+          const txt = v => el('div', 'v', v);
+          const chips = (v, cls) => {
+            const w = el('div', 'chips');
+            v.split(',').map(x => x.trim()).filter(Boolean).forEach(x => w.append(el('span', 'chip ' + cls, x)));
+            return w;
+          };
+          if (m.ativo) linha('flask', 'Princípio ativo', txt(m.ativo));
+          if (m.outros) linha('tag', 'Também conhecido como', chips(m.outros, 'o'));
+          if (m.posologia) linha('calendar', 'Como tomar', txt(m.posologia));
+          if (m.horarios) linha('bell', 'Horários', chips(m.horarios, ''));
+          if (m.forma) linha(iconeForma(m.forma), 'Forma', txt(m.forma));
+          if (m.obs) linha('info', 'Observações', txt(m.obs), 'note');
+          det.append(info); box.append(det);
         });
       } catch (e) {
         $('#msg').textContent = 'Não foi possível carregar os medicamentos. Verifique a conexão e a implantação do Apps Script.';
@@ -931,6 +1222,14 @@
       $('#vMeds').hidden ? carregarHoje() : carregarMeds();
     };
     $('#sair').onclick = () => {localStorage.removeItem('pin'); pin = ''; mostrarLogin();};
+    const menu = $('.menu');
+    $('#menuBtn').onclick = e => {
+      e.stopPropagation();
+      const aberto = menu.classList.toggle('open');
+      e.currentTarget.setAttribute('aria-expanded', aberto);
+    };
+    document.addEventListener('click', () => menu.classList.remove('open'));
+    document.addEventListener('keydown', e => {if (e.key === 'Escape') menu.classList.remove('open');});
     document.addEventListener('visibilitychange', () => {if (!document.hidden && pin) carregarHoje();});
 
     if (API_URL.includes('COLE_AQUI')) {
