@@ -657,7 +657,7 @@
       position: absolute;
       right: 0;
       top: calc(100% + 8px);
-      min-width: 210px;
+      min-width: 230px;
       white-space: nowrap;
       padding: 6px;
       background: #fff;
@@ -1533,6 +1533,117 @@
         background: var(--rose-m)
       }
     }
+
+    /* nav: rótulo só na aba ativa */
+    .nav button {
+      flex: 1;
+      gap: 0;
+      transition: flex .35s var(--ease), background .25s, color .25s, transform .15s var(--ease)
+    }
+
+    .nav button.on {
+      flex: 2.1
+    }
+
+    .nav button span {
+      max-width: 0;
+      opacity: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      transition: max-width .35s var(--ease), opacity .25s, margin .35s var(--ease)
+    }
+
+    .nav button.on span {
+      max-width: 90px;
+      opacity: 1;
+      margin-left: 6px
+    }
+
+    /* itens */
+    .item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 12px 12px 12px 13px;
+      margin-bottom: 10px;
+      box-shadow: 0 1px 2px rgba(58, 42, 49, .04), 0 8px 22px rgba(58, 42, 49, .045);
+      animation: subir .45s var(--ease) both;
+      animation-delay: var(--d, 0s);
+      transition: border-color .25s, background .25s
+    }
+
+    .item .t b {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap
+    }
+
+    .item.low {
+      background: linear-gradient(135deg, #fff7ec, #fff);
+      border-color: #f3dcb8
+    }
+
+    .item.low .tile {
+      background: #fdebd0;
+      color: #b9741a
+    }
+
+    .item.low .step b {
+      color: #b9741a
+    }
+
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      background: var(--rose-l);
+      border-radius: 14px;
+      padding: 3px;
+      flex: none
+    }
+
+    .step button {
+      width: 32px;
+      height: 32px;
+      border: 0;
+      border-radius: 11px;
+      background: #fff;
+      color: var(--rose-d);
+      display: grid;
+      place-items: center;
+      box-shadow: 0 1px 3px rgba(194, 85, 119, .18);
+      transition: transform .15s var(--ease), background .2s
+    }
+
+    .step button:active {
+      transform: scale(.86);
+      background: var(--rose-m)
+    }
+
+    .step .i {
+      width: 16px;
+      height: 16px
+    }
+
+    .step b {
+      min-width: 34px;
+      text-align: center;
+      font: 600 17px var(--display);
+      font-variant-numeric: tabular-nums
+    }
+
+    .bump {
+      animation: bump .3s var(--ease)
+    }
+
+    @keyframes bump {
+      40% {
+        transform: scale(1.28)
+      }
+    }
   </style>
 </head>
 
@@ -1645,6 +1756,20 @@
         d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
       <path d="m15 5 4 4" />
     </symbol>
+    <symbol id="i-box" viewBox="0 0 24 24">
+      <path
+        d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
+      <path d="m3.3 7 8.7 5 8.7-5" />
+      <path d="M12 22V12" />
+    </symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24">
+      <path d="M5 12h14" />
+    </symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24">
+      <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" />
+      <path d="M12 9v4" />
+      <path d="M12 17h.01" />
+    </symbol>
     <symbol id="i-hpulse" viewBox="0 0 24 24">
       <path
         d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
@@ -1703,7 +1828,7 @@
           <div class="menu-pop">
             <button id="novoMed"><svg class="i">
                 <use href="#i-pencil" />
-              </svg>Adicionar ou editar</button>
+              </svg><span id="novoTxt">Adicionar ou editar remédio</span></button>
             <button id="atualizar"><svg class="i">
                 <use href="#i-refresh" />
               </svg>Atualizar</button>
@@ -1735,17 +1860,21 @@
       </div>
       <div id="vMeds" hidden></div>
       <div id="vPress" hidden></div>
+      <div id="vItens" hidden></div>
     </div>
     <nav class="nav">
       <button id="tHoje" class="on"><svg class="i">
           <use href="#i-list" />
-        </svg>Hoje</button>
+        </svg><span>Hoje</span></button>
       <button id="tMeds"><svg class="i">
           <use href="#i-pill" />
-        </svg>Remédios</button>
+        </svg><span>Remédios</span></button>
       <button id="tPress"><svg class="i">
           <use href="#i-hpulse" />
-        </svg>Pressão</button>
+        </svg><span>Pressão</span></button>
+      <button id="tItens"><svg class="i">
+          <use href="#i-box" />
+        </svg><span>Itens</span></button>
     </nav>
   </main>
 
@@ -1789,6 +1918,47 @@
       <div class="sheet-foot">
         <button class="danger" id="sExcluir">Excluir</button>
         <button class="psave" id="sSalvar" style="margin:0">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="sheetI" class="sheet" hidden>
+    <div class="sheet-bg" id="iBg"></div>
+    <div class="sheet-card" role="dialog" aria-modal="true" aria-labelledby="iTit">
+      <div class="sheet-head">
+        <h2 id="iTit">Novo item</h2><button id="iFechar" aria-label="Fechar"><svg class="i">
+            <use href="#i-x" />
+          </svg></button>
+      </div>
+      <div class="sheet-body">
+        <label class="f"><span>O que você quer fazer?</span><select id="iEscolher"></select></label>
+        <label class="f"><span>Item *</span><input id="iNome" placeholder="Ex.: Fraldas M" autocomplete="off"></label>
+        <div class="f2">
+          <label class="f"><span>Categoria</span><select id="iCat"></select></label>
+          <label class="f"><span>Unidade</span><input id="iUn" placeholder="pacotes" list="listaUn"
+              autocomplete="off"></label>
+        </div>
+        <datalist id="listaUn">
+          <option value="unidades">
+          <option value="pacotes">
+          <option value="caixas">
+          <option value="tubos">
+          <option value="frascos">
+          <option value="rolos">
+        </datalist>
+        <div class="f2">
+          <label class="f"><span>Quantidade atual</span><input id="iQtd" type="number" inputmode="decimal" min="0"
+              placeholder="0"></label>
+          <label class="f"><span>Avisar quando restar</span><input id="iMin" type="number" inputmode="decimal" min="0"
+              placeholder="2"></label>
+        </div>
+        <label class="f"><span>Observações</span><textarea id="iObs" rows="2"
+            placeholder="Marca, tamanho, onde comprar…"></textarea></label>
+        <div class="msg" id="iMsg" style="margin:0"></div>
+      </div>
+      <div class="sheet-foot">
+        <button class="danger" id="iExcluir">Excluir</button>
+        <button class="psave" id="iSalvar" style="margin:0">Salvar</button>
       </div>
     </div>
   </div>
@@ -1946,15 +2116,17 @@
 
     function aba(q) {
       abaAtual = q;
-      [['hoje', '#vHoje', '#tHoje'], ['meds', '#vMeds', '#tMeds'], ['press', '#vPress', '#tPress']].forEach(([k, v, t]) => {
+      [['hoje', '#vHoje', '#tHoje'], ['meds', '#vMeds', '#tMeds'], ['press', '#vPress', '#tPress'], ['itens', '#vItens', '#tItens']].forEach(([k, v, t]) => {
         $(v).hidden = k !== q; $(t).classList.toggle('on', k === q);
       });
       $('#msg').textContent = '';
       if (q === 'hoje') carregarHoje();
       if (q === 'meds') carregarMeds();
       if (q === 'press') carregarPressao();
+      if (q === 'itens') carregarItens();
+      $('#novoTxt').textContent = q === 'itens' ? 'Adicionar ou editar item' : 'Adicionar ou editar remédio';
     }
-    function recarregar() {abaAtual === 'hoje' ? carregarHoje() : abaAtual === 'meds' ? carregarMeds() : carregarPressao();}
+    function recarregar() {({hoje: carregarHoje, meds: carregarMeds, press: carregarPressao, itens: carregarItens})[abaAtual]();}
 
     function classe(s, d) {
       if (s >= 180 || d >= 110) return ['Muito elevada', '#a23f61'];
@@ -2156,11 +2328,124 @@
     document.querySelectorAll('#fStatus button').forEach(b => b.onclick = () => {statusSel = b.dataset.v; marcarStatus();});
     $('#fAddHora').onclick = addHora;
     $('#fHora').onkeydown = e => {if (e.key === 'Enter') {e.preventDefault(); addHora();} };
-    $('#novoMed').onclick = abrirEditor;
+    $('#novoMed').onclick = () => abaAtual === 'itens' ? abrirEditorItem() : abrirEditor();
     $('#fEscolher').onchange = e => preencher(listaMeds.find(x => String(x.linha) === e.target.value));
     $('#sSalvar').onclick = salvarMed; $('#sExcluir').onclick = excluirMed;
     $('#sFechar').onclick = fecharForm; $('#sBg').onclick = fecharForm;
     document.addEventListener('keydown', e => {if (e.key === 'Escape' && !$('#sheet').hidden) fecharForm();});
+
+    let itens = [], editI = null, tRe = null;
+    const CATS = ['Higiene', 'Curativos', 'Pomadas e cremes', 'Equipamentos', 'Outros'];
+    const baixo = it => it.min > 0 && it.qtd <= it.min;
+    const fmtN = n => Number.isInteger(n) ? String(n) : String(Math.round(n * 100) / 100).replace('.', ',');
+    const mostrarSheet = sh => {sh.hidden = false; requestAnimationFrame(() => sh.classList.add('open')); document.body.style.overflow = 'hidden';};
+    const esconderSheet = sh => {sh.classList.remove('open'); setTimeout(() => {sh.hidden = true;}, 260); document.body.style.overflow = '';};
+
+    async function carregarItens() {
+      $('#msg').textContent = '';
+      try {
+        const r = await api('itens');
+        if (!r.ok) {$('#msg').textContent = r.erro; return;}
+        itens = r.itens; desenharItens(true);
+      } catch (e) {
+        $('#msg').textContent = 'Não foi possível carregar os itens. Verifique a conexão e a implantação do Apps Script.';
+      }
+    }
+
+    function desenharItens(animar) {
+      const box = $('#vItens'); box.innerHTML = '';
+      if (!itens.length) {
+        box.append(el('p', 'empty', 'Nenhum item cadastrado ainda. Toque nos três pontinhos e escolha “Adicionar ou editar item” (fraldas, gazes, pomadas…).'));
+        return;
+      }
+      let n = 0;
+      const secao = (titulo, icone, lista) => {
+        if (!lista.length) return;
+        const h = el('div', 'per'); h.innerHTML = ic(icone); h.append(document.createTextNode(titulo)); box.append(h);
+        lista.forEach(it => box.append(linhaItem(it, animar ? n++ : -1)));
+      };
+      secao('Repor em breve', 'alert', itens.filter(baixo));
+      const resto = itens.filter(x => !baixo(x));
+      [...new Set(resto.map(x => x.categoria || 'Outros'))].sort().forEach(c => secao(c, 'box', resto.filter(x => (x.categoria || 'Outros') === c)));
+    }
+
+    function linhaItem(it, idx) {
+      const r = el('div', 'item' + (baixo(it) ? ' low' : ''));
+      if (idx >= 0) r.style.setProperty('--d', Math.min(idx, 10) * 40 + 'ms'); else r.style.animation = 'none';
+      const tile = el('div', 'tile'); tile.innerHTML = ic(baixo(it) ? 'alert' : 'box');
+      const t = el('div', 't'); t.append(el('b', '', it.nome));
+      const sub = it.min > 0 ? `Avisa com ${fmtN(it.min)} ${it.unidade || ''}`.trim() : (it.unidade || '');
+      if (sub) t.append(el('span', '', sub));
+      const st = el('div', 'step');
+      const menos = el('button'); menos.setAttribute('aria-label', 'Diminuir'); menos.innerHTML = ic('minus');
+      const mais = el('button'); mais.setAttribute('aria-label', 'Aumentar'); mais.innerHTML = ic('plus');
+      const q = el('b', '', fmtN(it.qtd));
+      menos.onclick = () => ajustar(it, -1, q, r); mais.onclick = () => ajustar(it, 1, q, r);
+      st.append(menos, q, mais); r.append(tile, t, st); return r;
+    }
+
+    async function ajustar(it, delta, q, row) {
+      if (delta < 0 && it.qtd <= 0) return;
+      it.qtd = Math.max(0, it.qtd + delta); q.textContent = fmtN(it.qtd);
+      q.classList.remove('bump'); void q.offsetWidth; q.classList.add('bump');
+      row.classList.toggle('low', baixo(it));
+      clearTimeout(tRe); tRe = setTimeout(() => desenharItens(false), 1000);
+      try {
+        const r = await api('item_ajustar', {linha: it.linha, nome: it.nome, delta});
+        if (!r.ok) throw new Error(r.erro);
+      } catch (e) {
+        it.qtd = Math.max(0, it.qtd - delta); q.textContent = fmtN(it.qtd);
+        $('#msg').textContent = 'Não foi possível salvar. Atualize e tente de novo.';
+      }
+    }
+
+    function preencherI(it) {
+      editI = it ? {linha: it.linha, nome: it.nome} : null;
+      $('#iTit').textContent = it ? 'Editar item' : 'Novo item';
+      $('#iNome').value = it ? it.nome : ''; $('#iUn').value = it ? it.unidade : '';
+      $('#iQtd').value = it ? it.qtd : ''; $('#iMin').value = it && it.min ? it.min : ''; $('#iObs').value = it ? it.obs : '';
+      const c = $('#iCat'); c.innerHTML = '';
+      const cats = it && it.categoria && !CATS.includes(it.categoria) ? [...CATS, it.categoria] : CATS;
+      cats.forEach(x => {const o = el('option', '', x); o.value = x; c.append(o);});
+      c.value = it && it.categoria ? it.categoria : 'Outros';
+      $('#iExcluir').hidden = !it; $('#iMsg').textContent = '';
+    }
+    function montarEscolhaI() {
+      const c = $('#iEscolher'); c.innerHTML = '';
+      const n = el('option', '', 'Adicionar um novo item'); n.value = ''; c.append(n);
+      [...itens].sort((a, b) => a.nome.localeCompare(b.nome)).forEach(it => {
+        const o = el('option', '', 'Editar: ' + it.nome); o.value = it.linha; c.append(o);
+      });
+      c.value = '';
+    }
+    async function abrirEditorItem() {
+      try {const r = await api('itens'); if (r.ok) itens = r.itens;} catch (e) { /* usa a lista já carregada */}
+      montarEscolhaI(); preencherI(); mostrarSheet($('#sheetI'));
+    }
+    async function salvarItem() {
+      const nome = $('#iNome').value.trim();
+      if (!nome) {$('#iMsg').textContent = 'Informe o nome do item.'; return;}
+      const item = {nome, categoria: $('#iCat').value, unidade: $('#iUn').value.trim(), qtd: $('#iQtd').value, min: $('#iMin').value, obs: $('#iObs').value.trim()};
+      const b = $('#iSalvar'); b.disabled = true; $('#iMsg').textContent = '';
+      try {
+        const r = await api('item_salvar', {linha: editI ? editI.linha : 0, nomeOriginal: editI ? editI.nome : '', item});
+        if (!r.ok) {$('#iMsg').textContent = r.erro; return;}
+        esconderSheet($('#sheetI')); await carregarItens(); $('#msg').textContent = 'Item salvo.';
+      } catch (e) {$('#iMsg').textContent = 'Não foi possível salvar. Verifique a conexão.';}
+      finally {b.disabled = false;}
+    }
+    async function excluirItem() {
+      if (!editI || !confirm(`Excluir “${editI.nome}” da lista?`)) return;
+      try {
+        const r = await api('item_del', {linha: editI.linha, nomeOriginal: editI.nome});
+        if (!r.ok) {$('#iMsg').textContent = r.erro; return;}
+        esconderSheet($('#sheetI')); await carregarItens(); $('#msg').textContent = 'Item excluído.';
+      } catch (e) {$('#iMsg').textContent = 'Não foi possível excluir. Verifique a conexão.';}
+    }
+    $('#iEscolher').onchange = e => preencherI(itens.find(x => String(x.linha) === e.target.value));
+    $('#iSalvar').onclick = salvarItem; $('#iExcluir').onclick = excluirItem;
+    $('#iFechar').onclick = () => esconderSheet($('#sheetI')); $('#iBg').onclick = () => esconderSheet($('#sheetI'));
+    document.addEventListener('keydown', e => {if (e.key === 'Escape' && !$('#sheetI').hidden) esconderSheet($('#sheetI'));});
 
     $('#entrar').onclick = async () => {
       pin = $('#pin').value.trim(); if (!pin) return;
@@ -2171,6 +2456,7 @@
     $('#tHoje').onclick = () => aba('hoje');
     $('#tMeds').onclick = () => aba('meds');
     $('#tPress').onclick = () => aba('press');
+    $('#tItens').onclick = () => aba('itens');
     $('#atualizar').onclick = e => {
       const b = e.currentTarget; b.classList.add('spin'); setTimeout(() => b.classList.remove('spin'), 750);
       recarregar();
