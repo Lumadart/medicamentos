@@ -3,7 +3,12 @@ const V = 'medicacoes-v1';
 const ARQUIVOS = ['./', './index.html', './manifest.json', './icons/icon-192.png', './icons/icon-512.png', './icons/favicon.svg'];
 
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(V).then(c => c.addAll(ARQUIVOS)).then(() => self.skipWaiting()));
+  // Guarda cada arquivo separadamente: se algum faltar no GitHub, os outros continuam funcionando.
+  e.waitUntil(
+    caches.open(V)
+      .then(c => Promise.all(ARQUIVOS.map(a => c.add(a).catch(() => {}))))
+      .then(() => self.skipWaiting())
+  );
 });
 
 self.addEventListener('activate', e => {
