@@ -1,2147 +1,619 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#c25577">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="Medicações">
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
-  <link rel="icon" href="icons/favicon.ico" sizes="48x48">
-  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16x16.png">
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-  <title>Minhas medicações</title>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700&family=Nunito:wght@400;600;700&display=swap"
-    rel="stylesheet">
-  <style>
-    :root {
-      --rose: #c25577;
-      --rose-d: #a23f61;
-      --rose-l: #fdf1f4;
-      --rose-m: #f6d6df;
-      --ink: #3a2a31;
-      --mute: #94838a;
-      --line: #f1dfe5;
-      --bg: #fff3f6;
-      --ease: cubic-bezier(.2, .8, .2, 1);
-      --display: 'Baloo 2', 'Nunito', sans-serif;
-      --hero: linear-gradient(145deg, #d86a8d, #a9405f)
-    }
-
-    * {
-      box-sizing: border-box
-    }
-
-    html,
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--ink);
-      font-family: 'Nunito', system-ui, sans-serif;
-      -webkit-tap-highlight-color: transparent
-    }
-
-    body {
-      max-width: 520px;
-      margin: 0 auto
-    }
-
-    button {
-      font-family: inherit;
-      cursor: pointer
-    }
-
-    :focus-visible {
-      outline: 2px solid var(--rose);
-      outline-offset: 3px
-    }
-
-    .i {
-      width: 20px;
-      height: 20px;
-      fill: none;
-      stroke: currentColor;
-      stroke-width: 2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      flex: none
-    }
-
-    .flor {
-      position: absolute;
-      color: #fff;
-      pointer-events: none
-    }
-
-    /* login */
-    .login {
-      position: fixed;
-      inset: 0;
-      max-width: 520px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      background: var(--bg);
-      overflow: hidden
-    }
-
-    .login-top {
-      padding: 12vh 28px 0;
-      text-align: center
-    }
-
-    .login h1,
-    .hero h1 {
-      font-family: var(--display);
-      font-weight: 600;
-      letter-spacing: -.01em;
-      margin: 0
-    }
-
-    .login h1 {
-      font-size: 30px
-    }
-
-    .login p {
-      color: var(--mute);
-      margin: 8px 0 0
-    }
-
-    .login-card {
-      position: relative;
-      margin-top: auto;
-      padding: 70px 28px calc(env(safe-area-inset-bottom) + 36px);
-      background: var(--hero);
-      border-radius: 64px 64px 0 0;
-      text-align: center;
-      overflow: hidden
-    }
-
-    .emblem {
-      position: absolute;
-      top: -1px;
-      left: 50%;
-      width: 84px;
-      height: 84px;
-      margin: -42px 0 0 -42px;
-      border-radius: 50%;
-      background: #fff;
-      color: var(--rose);
-      display: grid;
-      place-items: center;
-      box-shadow: 0 0 0 8px var(--bg), 0 10px 24px rgba(169, 64, 95, .25);
-      animation: flutuar 4s ease-in-out infinite
-    }
-
-    .emblem .i {
-      width: 36px;
-      height: 36px;
-      stroke-width: 1.8
-    }
-
-    @keyframes flutuar {
-      50% {
-        transform: translateY(-4px)
-      }
-    }
-
-    .login input {
-      position: relative;
-      width: 100%;
-      font: 700 26px 'Nunito';
-      text-align: center;
-      letter-spacing: .4em;
-      padding: 14px;
-      border: 0;
-      border-radius: 18px;
-      background: rgba(255, 255, 255, .18);
-      color: #fff;
-      transition: background .2s, box-shadow .2s
-    }
-
-    .login input::placeholder {
-      color: rgba(255, 255, 255, .6);
-      letter-spacing: .2em
-    }
-
-    .login input:focus {
-      outline: 0;
-      background: rgba(255, 255, 255, .28);
-      box-shadow: 0 0 0 3px rgba(255, 255, 255, .5)
-    }
-
-    .login .msg {
-      color: #fff;
-      position: relative
-    }
-
-    .btn {
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      width: 100%;
-      padding: 15px;
-      border: 0;
-      border-radius: 18px;
-      background: #fff;
-      color: var(--rose-d);
-      font-weight: 700;
-      font-size: 16px;
-      transition: transform .15s var(--ease), box-shadow .2s
-    }
-
-    .btn:active {
-      transform: scale(.97)
-    }
-
-    /* topo */
-    .hero {
-      position: relative;
-      background: radial-gradient(circle at 88% 0%, rgba(255, 255, 255, .24), transparent 50%), var(--hero);
-      color: #fff;
-      padding: calc(env(safe-area-inset-top) + 14px) 22px 34px;
-      border-radius: 0 0 42px 42px;
-      box-shadow: 0 18px 34px rgba(169, 64, 95, .22)
-    }
-
-    .deco {
-      position: absolute;
-      inset: 0;
-      overflow: hidden;
-      border-radius: inherit;
-      pointer-events: none
-    }
-
-    .top,
-    .row {
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px
-    }
-
-    .top {
-      margin-bottom: 20px
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font: 600 15px var(--display);
-      opacity: .95
-    }
-
-    .brand .i {
-      width: 18px;
-      height: 18px
-    }
-
-    .menu {
-      position: relative
-    }
-
-    #menuBtn {
-      width: 38px;
-      height: 38px;
-      border: 0;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, .2);
-      color: #fff;
-      display: grid;
-      place-items: center;
-      transition: background .2s, transform .15s var(--ease)
-    }
-
-    #menuBtn:active {
-      transform: scale(.92)
-    }
-
-    .hi {
-      margin: 0;
-      opacity: .85;
-      font-weight: 600
-    }
-
-    .hero h1 {
-      font-size: 28px;
-      line-height: 1.1;
-      margin: 2px 0 6px
-    }
-
-    .data {
-      margin: 0;
-      opacity: .85;
-      font-size: 14px
-    }
-
-    .data::first-letter {
-      text-transform: uppercase
-    }
-
-    .f1 {
-      width: 140px;
-      height: 140px;
-      right: -36px;
-      top: -34px;
-      opacity: .16;
-      transform: rotate(15deg);
-      animation: girar 40s linear infinite;
-      stroke-width: 1.1
-    }
-
-    .f2 {
-      width: 80px;
-      height: 80px;
-      left: 42%;
-      bottom: -22px;
-      opacity: .14;
-      stroke-width: 1.1
-    }
-
-    @keyframes girar {
-      to {
-        transform: rotate(375deg)
-      }
-    }
-
-    .ring {
-      position: relative;
-      width: 76px;
-      height: 76px;
-      flex: none
-    }
-
-    .ring svg {
-      width: 100%;
-      height: 100%;
-      transform: rotate(-90deg)
-    }
-
-    .ring circle {
-      fill: none;
-      stroke-width: 4;
-      stroke-linecap: round
-    }
-
-    .ring .trk {
-      stroke: rgba(255, 255, 255, .25)
-    }
-
-    .ring .val {
-      stroke: #fff;
-      stroke-dasharray: 113.1;
-      stroke-dashoffset: 113.1;
-      transition: stroke-dashoffset .6s var(--ease)
-    }
-
-    .ring b {
-      position: absolute;
-      inset: 0;
-      display: grid;
-      place-items: center;
-      font-size: 18px;
-      font-variant-numeric: tabular-nums
-    }
-
-    .ring.full {
-      animation: pulso .8s var(--ease)
-    }
-
-    @keyframes pulso {
-      40% {
-        transform: scale(1.12)
-      }
-    }
-
-    main {
-      padding-bottom: 110px
-    }
-
-    .wrap {
-      padding: 0 18px
-    }
-
-    .msg {
-      color: var(--rose-d);
-      min-height: 20px;
-      margin: 12px 22px 0;
-      font-size: 14px
-    }
-
-    .per {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin: 20px 4px 10px;
-      color: var(--rose-d);
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: .06em;
-      text-transform: uppercase
-    }
-
-    .per::after {
-      content: "";
-      flex: 1;
-      height: 1px;
-      background: var(--line)
-    }
-
-    .dose,
-    details {
-      background: #fff;
-      border: 1px solid var(--line);
-      border-radius: 20px;
-      margin-bottom: 10px;
-      transition: transform .15s var(--ease), border-color .2s, background .25s, box-shadow .2s;
-      animation: subir .45s var(--ease) both;
-      animation-delay: var(--d, 0s)
-    }
-
-    @keyframes subir {
-      from {
-        opacity: 0;
-        transform: translateY(10px)
-      }
-    }
-
-    .dose {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      width: 100%;
-      text-align: left;
-      padding: 13px 15px 13px 13px;
-      color: inherit
-    }
-
-    .dose:active {
-      transform: scale(.975)
-    }
-
-    .tile {
-      width: 46px;
-      height: 46px;
-      border-radius: 15px;
-      background: var(--rose-l);
-      color: var(--rose);
-      display: grid;
-      place-items: center;
-      flex: none;
-      transition: transform .3s var(--ease), background .25s, color .25s
-    }
-
-    .t {
-      flex: 1;
-      min-width: 0
-    }
-
-    .t b {
-      display: block;
-      font-size: 16px
-    }
-
-    .t span {
-      color: var(--mute);
-      font-size: 14px
-    }
-
-    .t em {
-      font-style: normal;
-      color: var(--rose-d);
-      font-weight: 700
-    }
-
-    .chk {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      border: 2px solid var(--rose-m);
-      display: grid;
-      place-items: center;
-      flex: none;
-      transition: background .25s, border-color .25s
-    }
-
-    .chk svg {
-      width: 19px;
-      height: 19px;
-      fill: none;
-      stroke: #fff;
-      stroke-width: 3;
-      stroke-linecap: round;
-      stroke-linejoin: round
-    }
-
-    .chk path {
-      stroke-dasharray: 24
-    }
-
-    .chk.pop {
-      animation: pop .4s var(--ease)
-    }
-
-    .chk.pop path {
-      animation: draw .35s .05s var(--ease) both
-    }
-
-    @keyframes pop {
-      0% {
-        transform: scale(.6)
-      }
-
-      60% {
-        transform: scale(1.2)
-      }
-
-      100% {
-        transform: scale(1)
-      }
-    }
-
-    @keyframes draw {
-      from {
-        stroke-dashoffset: 24
-      }
-
-      to {
-        stroke-dashoffset: 0
-      }
-    }
-
-    .dose.done {
-      background: var(--rose-l);
-      border-color: var(--rose-m)
-    }
-
-    .dose.done .chk {
-      background: var(--rose);
-      border-color: var(--rose)
-    }
-
-    .dose.done .tile {
-      background: var(--rose);
-      color: #fff
-    }
-
-    details {
-      padding: 0 14px
-    }
-
-    details[open] {
-      border-color: var(--rose-m);
-      box-shadow: 0 8px 20px rgba(194, 85, 119, .1)
-    }
-
-    details.off {
-      opacity: .6
-    }
-
-    summary {
-      position: relative;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 13px 26px 13px 0;
-      cursor: pointer;
-      list-style: none
-    }
-
-    summary::-webkit-details-marker {
-      display: none
-    }
-
-    summary::after {
-      content: "";
-      position: absolute;
-      right: 4px;
-      top: 50%;
-      width: 8px;
-      height: 8px;
-      border-right: 2px solid var(--rose);
-      border-bottom: 2px solid var(--rose);
-      transform: translateY(-70%) rotate(45deg);
-      transition: transform .25s var(--ease)
-    }
-
-    details[open] summary::after {
-      transform: translateY(-30%) rotate(-135deg)
-    }
-
-    .chip {
-      display: inline-block;
-      margin-top: 5px;
-      padding: 2px 10px;
-      border-radius: 99px;
-      background: var(--rose-l);
-      color: var(--rose-d);
-      font-size: 12px;
-      font-weight: 700
-    }
-
-    dl {
-      margin: 0 0 14px;
-      display: grid;
-      grid-template-columns: 105px 1fr;
-      gap: 8px 10px;
-      font-size: 14px;
-      animation: subir .3s var(--ease)
-    }
-
-    dt {
-      color: var(--mute)
-    }
-
-    dd {
-      margin: 0
-    }
-
-    .empty {
-      color: var(--mute);
-      text-align: center;
-      padding: 36px 12px
-    }
-
-    /* navegação */
-    .nav {
-      position: fixed;
-      left: 50%;
-      bottom: calc(env(safe-area-inset-bottom) + 14px);
-      transform: translateX(-50%);
-      width: calc(100% - 56px);
-      max-width: 340px;
-      display: flex;
-      gap: 4px;
-      padding: 6px;
-      background: linear-gradient(145deg, rgba(216, 106, 141, .96), rgba(169, 64, 95, .96));
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-radius: 26px;
-      box-shadow: 0 16px 32px rgba(169, 64, 95, .35);
-      z-index: 5
-    }
-
-    .nav button {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 7px;
-      padding: 12px 0;
-      border: 0;
-      border-radius: 20px;
-      background: none;
-      color: rgba(255, 255, 255, .85);
-      font: 600 14px var(--display);
-      transition: background .25s, color .25s, transform .15s var(--ease)
-    }
-
-    .nav button:active {
-      transform: scale(.95)
-    }
-
-    .nav button.on {
-      background: #fff;
-      color: var(--rose-d)
-    }
-
-    .menu-pop {
-      position: absolute;
-      right: 0;
-      top: calc(100% + 8px);
-      min-width: 230px;
-      white-space: nowrap;
-      padding: 6px;
-      background: #fff;
-      color: var(--ink);
-      border-radius: 18px;
-      box-shadow: 0 18px 40px rgba(58, 42, 49, .25);
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(-6px) scale(.95);
-      transform-origin: top right;
-      transition: opacity .2s, transform .25s var(--ease), visibility .2s;
-      z-index: 10
-    }
-
-    .menu.open .menu-pop {
-      opacity: 1;
-      visibility: visible;
-      transform: none
-    }
-
-    .menu-pop button {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      width: 100%;
-      padding: 11px 12px;
-      border: 0;
-      border-radius: 12px;
-      background: none;
-      color: var(--ink);
-      font: 600 14px var(--display);
-      text-align: left;
-      transition: background .2s
-    }
-
-    .menu-pop button:active {
-      background: var(--rose-l)
-    }
-
-    .menu-pop .i {
-      width: 18px;
-      height: 18px;
-      color: var(--rose)
-    }
-
-    .spin .i {
-      animation: rodar .7s var(--ease)
-    }
-
-    @keyframes rodar {
-      to {
-        transform: rotate(360deg)
-      }
-    }
-
-    [hidden] {
-      display: none !important
-    }
-
-    @media (hover:hover) {
-      .dose:hover {
-        border-color: var(--rose-m);
-        box-shadow: 0 8px 18px rgba(194, 85, 119, .12);
-        transform: translateY(-2px)
-      }
-
-      .dose:hover .tile {
-        transform: rotate(-6deg) scale(1.06)
-      }
-
-      .dose:hover .chk {
-        border-color: var(--rose)
-      }
-
-      details:hover {
-        border-color: var(--rose-m)
-      }
-
-      .btn:hover {
-        box-shadow: 0 8px 20px rgba(0, 0, 0, .15)
-      }
-
-      .nav button:not(.on):hover {
-        background: rgba(255, 255, 255, .18);
-        color: #fff
-      }
-    }
-
-    @media (prefers-reduced-motion:reduce) {
-
-      *,
-      *::before,
-      *::after {
-        animation: none !important;
-        transition: none !important
-      }
-    }
-
-    /* acabamento */
-    .t b,
-    .t em,
-    .ring b,
-    .chip,
-    .btn,
-    .per,
-    .login h1 {
-      font-family: var(--display)
-    }
-
-    .t b {
-      font-weight: 600;
-      font-size: 17px
-    }
-
-    .t em {
-      font-weight: 600
-    }
-
-    .dose,
-    details {
-      box-shadow: 0 1px 2px rgba(58, 42, 49, .04), 0 8px 22px rgba(58, 42, 49, .045)
-    }
-
-    .dose.done {
-      background: linear-gradient(135deg, var(--rose-l), #fff)
-    }
-
-    .chip {
-      margin-top: 5px;
-      font-weight: 600
-    }
-
-    .chip+.chip {
-      margin-left: 6px
-    }
-
-    .chip.off {
-      background: #f1ecee;
-      color: var(--mute)
-    }
-
-    .chip.o {
-      background: #fff;
-      box-shadow: inset 0 0 0 1px var(--rose-m)
-    }
-
-    .info {
-      display: grid;
-      gap: 12px;
-      padding: 2px 0 16px;
-      animation: subir .3s var(--ease)
-    }
-
-    .rowi {
-      display: flex;
-      gap: 12px;
-      align-items: flex-start
-    }
-
-    .info>.rowi+.rowi {
-      border-top: 1px dashed var(--line);
-      padding-top: 12px
-    }
-
-    .mini {
-      width: 34px;
-      height: 34px;
-      border-radius: 11px;
-      background: var(--rose-l);
-      color: var(--rose);
-      display: grid;
-      place-items: center;
-      flex: none
-    }
-
-    .mini .i {
-      width: 18px;
-      height: 18px
-    }
-
-    .cont {
-      flex: 1;
-      min-width: 0
-    }
-
-    .k {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      color: var(--mute);
-      margin-bottom: 2px
-    }
-
-    .v {
-      font-size: 15px;
-      font-weight: 600;
-      line-height: 1.35
-    }
-
-    .chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 4px
-    }
-
-    .chips .chip {
-      margin: 0
-    }
-
-    .info>.rowi.note,
-    .info>.rowi+.rowi.note {
-      background: var(--rose-l);
-      border: 0;
-      border-left: 3px solid var(--rose);
-      border-radius: 14px;
-      padding: 12px
-    }
-
-    .note .mini {
-      background: #fff
-    }
-
-    /* nav com 3 abas */
-    .nav {
-      max-width: 380px
-    }
-
-    .nav button {
-      font-size: 13px;
-      gap: 5px
-    }
-
-    .nav .i {
-      width: 19px;
-      height: 19px
-    }
-
-    /* pressão */
-    .pcard {
-      background: #fff;
-      border: 1px solid var(--line);
-      border-radius: 22px;
-      padding: 18px;
-      margin-bottom: 14px;
-      box-shadow: 0 1px 2px rgba(58, 42, 49, .04), 0 8px 22px rgba(58, 42, 49, .045);
-      animation: subir .45s var(--ease) both
-    }
-
-    .ptit {
-      font: 600 17px var(--display);
-      margin: 0 0 12px
-    }
-
-    .pgrid {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      gap: 8px;
-      align-items: end
-    }
-
-    .pgrid label {
-      display: block
-    }
-
-    .pgrid label span,
-    .pul span {
-      display: block;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      color: var(--mute);
-      margin-bottom: 6px;
-      text-align: center
-    }
-
-    .pgrid input,
-    .pul input {
-      width: 100%;
-      border: 1.5px solid transparent;
-      border-radius: 16px;
-      background: var(--rose-l);
-      color: var(--ink);
-      text-align: center;
-      font: 600 30px var(--display);
-      padding: 10px 4px;
-      transition: border-color .2s, box-shadow .2s, background .2s;
-      -moz-appearance: textfield
-    }
-
-    .pgrid input::-webkit-outer-spin-button,
-    .pgrid input::-webkit-inner-spin-button,
-    .pul input::-webkit-outer-spin-button,
-    .pul input::-webkit-inner-spin-button {
-      -webkit-appearance: none
-    }
-
-    .pgrid input::placeholder,
-    .pul input::placeholder {
-      color: #d9bfc7
-    }
-
-    .pgrid input:focus,
-    .pul input:focus {
-      outline: 0;
-      background: #fff;
-      border-color: var(--rose);
-      box-shadow: 0 0 0 4px var(--rose-l)
-    }
-
-    .pbar {
-      font: 500 30px var(--display);
-      color: var(--rose-m);
-      padding-bottom: 10px
-    }
-
-    .pul {
-      margin-top: 12px
-    }
-
-    .pul input {
-      font-size: 20px;
-      padding: 8px
-    }
-
-    .psave {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      width: 100%;
-      margin-top: 14px;
-      padding: 14px;
-      border: 0;
-      border-radius: 16px;
-      background: var(--hero);
-      color: #fff;
-      font: 600 16px var(--display);
-      box-shadow: 0 8px 18px rgba(169, 64, 95, .28);
-      transition: transform .15s var(--ease), box-shadow .2s, opacity .2s
-    }
-
-    .psave:active {
-      transform: scale(.97)
-    }
-
-    .psave:disabled {
-      opacity: .6
-    }
-
-    .pnota {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      justify-content: center;
-      margin: 10px 0 0;
-      color: var(--mute);
-      font-size: 13px
-    }
-
-    .pnota .i {
-      width: 15px;
-      height: 15px;
-      color: var(--rose)
-    }
-
-    .pres {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px
-    }
-
-    .pres .big {
-      font: 600 38px/1 var(--display);
-      letter-spacing: -.02em
-    }
-
-    .pres small {
-      display: block;
-      color: var(--mute);
-      font-size: 13px;
-      margin-top: 4px
-    }
-
-    .pres .med {
-      text-align: right;
-      font-size: 13px;
-      color: var(--mute)
-    }
-
-    .pres .med b {
-      display: block;
-      font: 600 20px var(--display);
-      color: var(--ink)
-    }
-
-    .pstat {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 3px 11px 3px 9px;
-      border-radius: 99px;
-      background: var(--rose-l);
-      font: 600 12.5px var(--display);
-      color: var(--ink)
-    }
-
-    .pstat i {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--c, #999)
-    }
-
-    .palerta {
-      margin: 12px 0 0;
-      padding: 10px 12px;
-      border-radius: 12px;
-      background: var(--rose-l);
-      border-left: 3px solid var(--rose);
-      font-size: 13px;
-      line-height: 1.4
-    }
-
-    .graf {
-      width: 100%;
-      height: auto;
-      margin-top: 6px;
-      overflow: visible
-    }
-
-    .graf polyline {
-      fill: none;
-      stroke-width: 2.5;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      stroke-dasharray: 1;
-      animation: tracar 1.1s var(--ease) both
-    }
-
-    .graf .ls {
-      stroke: var(--rose)
-    }
-
-    .graf .ld {
-      stroke: #e8a6b8
-    }
-
-    .graf .ds circle {
-      fill: var(--rose)
-    }
-
-    .graf .dd circle {
-      fill: #e8a6b8
-    }
-
-    @keyframes tracar {
-      from {
-        stroke-dashoffset: 1
-      }
-
-      to {
-        stroke-dashoffset: 0
-      }
-    }
-
-    .leg {
-      display: flex;
-      gap: 14px;
-      font-size: 12px;
-      color: var(--mute);
-      margin-top: 6px
-    }
-
-    .leg i {
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      margin-right: 5px;
-      vertical-align: -1px
-    }
-
-    .pitem {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: #fff;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 12px 8px 12px 14px;
-      margin-bottom: 8px;
-      box-shadow: 0 1px 2px rgba(58, 42, 49, .04);
-      animation: subir .4s var(--ease) both;
-      animation-delay: var(--d, 0s)
-    }
-
-    .pitem .pm {
-      flex: 1;
-      min-width: 0
-    }
-
-    .pitem .pm b {
-      display: block;
-      font: 600 20px var(--display)
-    }
-
-    .pitem .pm span {
-      color: var(--mute);
-      font-size: 13px
-    }
-
-    .pdel {
-      width: 36px;
-      height: 36px;
-      border: 0;
-      border-radius: 12px;
-      background: none;
-      color: #cdb5bd;
-      display: grid;
-      place-items: center;
-      transition: background .2s, color .2s
-    }
-
-    .pdel .i {
-      width: 17px;
-      height: 17px
-    }
-
-    .pdel:active {
-      background: var(--rose-l);
-      color: var(--rose-d)
-    }
-
-    .pfoot {
-      color: var(--mute);
-      font-size: 12px;
-      line-height: 1.45;
-      text-align: center;
-      margin: 14px 8px 0
-    }
-
-    @media (hover:hover) {
-      .pdel:hover {
-        background: var(--rose-l);
-        color: var(--rose-d)
-      }
-
-      .psave:hover {
-        box-shadow: 0 12px 24px rgba(169, 64, 95, .36)
-      }
-    }
-
-    /* cadastro de medicamentos */
-    .addmed {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      width: 100%;
-      padding: 14px;
-      margin-bottom: 12px;
-      border: 1.5px dashed var(--rose-m);
-      border-radius: 18px;
-      background: rgba(255, 255, 255, .6);
-      color: var(--rose-d);
-      font: 600 15px var(--display);
-      transition: background .2s, transform .15s var(--ease), border-color .2s
-    }
-
-    .addmed:active {
-      transform: scale(.98)
-    }
-
-    .edit-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      margin: 0 0 14px;
-      padding: 9px 14px;
-      border: 0;
-      border-radius: 12px;
-      background: var(--rose-l);
-      color: var(--rose-d);
-      font: 600 14px var(--display);
-      transition: background .2s, transform .15s var(--ease)
-    }
-
-    .edit-btn .i {
-      width: 16px;
-      height: 16px
-    }
-
-    .edit-btn:active {
-      transform: scale(.96)
-    }
-
-    .sheet {
-      position: fixed;
-      inset: 0;
-      z-index: 20;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center
-    }
-
-    .sheet-bg {
-      position: absolute;
-      inset: 0;
-      background: rgba(58, 42, 49, .38);
-      backdrop-filter: blur(3px);
-      -webkit-backdrop-filter: blur(3px);
-      opacity: 0;
-      transition: opacity .25s
-    }
-
-    .sheet-card {
-      position: relative;
-      width: 100%;
-      max-width: 520px;
-      max-height: 92vh;
-      display: flex;
-      flex-direction: column;
-      background: var(--bg);
-      border-radius: 28px 28px 0 0;
-      box-shadow: 0 -12px 40px rgba(58, 42, 49, .22);
-      transform: translateY(100%);
-      transition: transform .35s var(--ease)
-    }
-
-    .sheet.open .sheet-bg {
-      opacity: 1
-    }
-
-    .sheet.open .sheet-card {
-      transform: none
-    }
-
-    .sheet-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 18px 20px 8px
-    }
-
-    .sheet-head h2 {
-      font: 600 20px var(--display);
-      margin: 0
-    }
-
-    .sheet-head button {
-      width: 36px;
-      height: 36px;
-      border: 0;
-      border-radius: 50%;
-      background: var(--rose-l);
-      color: var(--rose-d);
-      display: grid;
-      place-items: center
-    }
-
-    .sheet-body {
-      overflow: auto;
-      padding: 8px 20px 12px;
-      display: grid;
-      gap: 14px;
-      -webkit-overflow-scrolling: touch
-    }
-
-    .f {
-      display: block
-    }
-
-    .f>span,
-    .f label>span {
-      display: block;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      color: var(--mute);
-      margin-bottom: 6px
-    }
-
-    .f2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px
-    }
-
-    .f input,
-    .f select,
-    .f textarea {
-      width: 100%;
-      border: 1.5px solid transparent;
-      border-radius: 14px;
-      background: #fff;
-      color: var(--ink);
-      font: 600 16px 'Nunito', sans-serif;
-      padding: 12px 14px;
-      box-shadow: 0 1px 2px rgba(58, 42, 49, .05);
-      transition: border-color .2s, box-shadow .2s;
-      resize: vertical
-    }
-
-    .f input:focus,
-    .f select:focus,
-    .f textarea:focus {
-      outline: 0;
-      border-color: var(--rose);
-      box-shadow: 0 0 0 4px var(--rose-l)
-    }
-
-    .pre {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 8px
-    }
-
-    .pre button {
-      border: 0;
-      border-radius: 99px;
-      padding: 6px 12px;
-      background: var(--rose-l);
-      color: var(--rose-d);
-      font: 600 13px var(--display);
-      transition: background .2s, transform .15s var(--ease)
-    }
-
-    .pre button:active {
-      transform: scale(.94);
-      background: var(--rose-m)
-    }
-
-    .horas {
-      display: flex;
-      gap: 8px
-    }
-
-    .horas input {
-      flex: 1
-    }
-
-    .horas button {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      border: 0;
-      border-radius: 14px;
-      padding: 0 16px;
-      background: var(--rose);
-      color: #fff;
-      font: 600 14px var(--display);
-      transition: transform .15s var(--ease)
-    }
-
-    .horas button:active {
-      transform: scale(.95)
-    }
-
-    .horas .i {
-      width: 16px;
-      height: 16px
-    }
-
-    .hchips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 10px;
-      min-height: 8px
-    }
-
-    .hchip {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 6px 6px 6px 14px;
-      border-radius: 99px;
-      background: #fff;
-      box-shadow: inset 0 0 0 1.5px var(--rose-m);
-      font: 600 15px var(--display);
-      font-variant-numeric: tabular-nums;
-      animation: pop .3s var(--ease)
-    }
-
-    .hchip button {
-      width: 24px;
-      height: 24px;
-      border: 0;
-      border-radius: 50%;
-      background: var(--rose-l);
-      color: var(--rose-d);
-      display: grid;
-      place-items: center
-    }
-
-    .hchip .i {
-      width: 13px;
-      height: 13px
-    }
-
-    .hint {
-      color: var(--mute);
-      font-size: 13px
-    }
-
-    .seg {
-      display: flex;
-      background: var(--rose-l);
-      padding: 4px;
-      border-radius: 14px;
-      gap: 4px
-    }
-
-    .seg button {
-      flex: 1;
-      border: 0;
-      background: none;
-      border-radius: 10px;
-      padding: 10px;
-      font: 600 14px var(--display);
-      color: var(--mute);
-      transition: background .25s, color .25s, box-shadow .25s
-    }
-
-    .seg button.on {
-      background: #fff;
-      color: var(--rose-d);
-      box-shadow: 0 1px 4px rgba(194, 85, 119, .2)
-    }
-
-    .sheet-foot {
-      display: flex;
-      gap: 10px;
-      padding: 12px 20px calc(env(safe-area-inset-bottom) + 16px);
-      border-top: 1px solid var(--line)
-    }
-
-    .sheet-foot .psave {
-      flex: 1
-    }
-
-    .danger {
-      border: 1.5px solid var(--rose-m);
-      background: #fff;
-      color: var(--rose-d);
-      border-radius: 16px;
-      padding: 0 18px;
-      font: 600 15px var(--display);
-      transition: background .2s
-    }
-
-    .danger:active {
-      background: var(--rose-l)
-    }
-
-    @media (hover:hover) {
-      .addmed:hover {
-        background: #fff;
-        border-color: var(--rose)
-      }
-
-      .edit-btn:hover {
-        background: var(--rose-m)
-      }
-
-      .pre button:hover {
-        background: var(--rose-m)
-      }
-    }
-
-    /* nav: rótulo só na aba ativa */
-    .nav button {
-      flex: 1;
-      gap: 0;
-      transition: flex .35s var(--ease), background .25s, color .25s, transform .15s var(--ease)
-    }
-
-    .nav button.on {
-      flex: 2.1
-    }
-
-    .nav button span {
-      max-width: 0;
-      opacity: 0;
-      overflow: hidden;
-      white-space: nowrap;
-      transition: max-width .35s var(--ease), opacity .25s, margin .35s var(--ease)
-    }
-
-    .nav button.on span {
-      max-width: 90px;
-      opacity: 1;
-      margin-left: 6px
-    }
-
-    /* itens */
-    .item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: #fff;
-      border: 1px solid var(--line);
-      border-radius: 20px;
-      padding: 12px 12px 12px 13px;
-      margin-bottom: 10px;
-      box-shadow: 0 1px 2px rgba(58, 42, 49, .04), 0 8px 22px rgba(58, 42, 49, .045);
-      animation: subir .45s var(--ease) both;
-      animation-delay: var(--d, 0s);
-      transition: border-color .25s, background .25s
-    }
-
-    .item .t b {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap
-    }
-
-    .item.low {
-      background: linear-gradient(135deg, #fff7ec, #fff);
-      border-color: #f3dcb8
-    }
-
-    .item.low .tile {
-      background: #fdebd0;
-      color: #b9741a
-    }
-
-    .item.low .step b {
-      color: #b9741a
-    }
-
-    .step {
-      display: flex;
-      align-items: center;
-      gap: 2px;
-      background: var(--rose-l);
-      border-radius: 14px;
-      padding: 3px;
-      flex: none
-    }
-
-    .step button {
-      width: 32px;
-      height: 32px;
-      border: 0;
-      border-radius: 11px;
-      background: #fff;
-      color: var(--rose-d);
-      display: grid;
-      place-items: center;
-      box-shadow: 0 1px 3px rgba(194, 85, 119, .18);
-      transition: transform .15s var(--ease), background .2s
-    }
-
-    .step button:active {
-      transform: scale(.86);
-      background: var(--rose-m)
-    }
-
-    .step .i {
-      width: 16px;
-      height: 16px
-    }
-
-    .step b {
-      min-width: 34px;
-      text-align: center;
-      font: 600 17px var(--display);
-      font-variant-numeric: tabular-nums
-    }
-
-    .bump {
-      animation: bump .3s var(--ease)
-    }
-
-    @keyframes bump {
-      40% {
-        transform: scale(1.28)
-      }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#c25577">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Medicações">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="icons/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16x16.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<title>Minhas medicações</title>
+<link rel="preconnect" href="https://script.google.com">
+<link rel="preconnect" href="https://script.googleusercontent.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--rose:#c25577;--rose-d:#a23f61;--rose-l:#fdf1f4;--rose-m:#f6d6df;--ink:#3a2a31;--mute:#94838a;--line:#f1dfe5;--bg:#fff3f6;--ease:cubic-bezier(.2,.8,.2,1);--display:'Baloo 2','Nunito',sans-serif;--hero:linear-gradient(145deg,#d86a8d,#a9405f)}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:'Nunito',system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
+body{max-width:520px;margin:0 auto}
+button{font-family:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--rose);outline-offset:3px}
+.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.flor{position:absolute;color:#fff;pointer-events:none}
+
+/* login */
+.login{position:fixed;inset:0;max-width:520px;margin:0 auto;display:flex;flex-direction:column;background:var(--bg);overflow:hidden}
+.login-top{padding:12vh 28px 0;text-align:center}
+.login h1,.hero h1{font-family:var(--display);font-weight:600;letter-spacing:-.01em;margin:0}
+.login h1{font-size:30px}
+.login p{color:var(--mute);margin:8px 0 0}
+.login-card{position:relative;margin-top:auto;padding:70px 28px calc(env(safe-area-inset-bottom) + 36px);background:var(--hero);border-radius:64px 64px 0 0;text-align:center}
+.emblem{position:absolute;top:-1px;left:50%;width:84px;height:84px;margin:-42px 0 0 -42px;border-radius:50%;background:#fff;color:var(--rose);display:grid;place-items:center;box-shadow:0 0 0 8px var(--bg),0 10px 24px rgba(169,64,95,.25);animation:flutuar 4s ease-in-out infinite}
+.emblem .i{width:36px;height:36px;stroke-width:1.8}
+@keyframes flutuar{50%{transform:translateY(-4px)}}
+.login input{position:relative;width:100%;font:700 26px 'Nunito';text-align:center;letter-spacing:.4em;padding:14px;border:0;border-radius:18px;background:rgba(255,255,255,.18);color:#fff;transition:background .2s,box-shadow .2s}
+.login input::placeholder{color:rgba(255,255,255,.6);letter-spacing:.2em}
+.login input:focus{outline:0;background:rgba(255,255,255,.28);box-shadow:0 0 0 3px rgba(255,255,255,.5)}
+.login .msg{color:#fff;position:relative}
+.btn{position:relative;display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:15px;border:0;border-radius:18px;background:#fff;color:var(--rose-d);font-weight:700;font-size:16px;transition:transform .15s var(--ease),box-shadow .2s}
+.btn:active{transform:scale(.97)}
+
+/* topo */
+.hero{position:relative;background:radial-gradient(circle at 88% 0%,rgba(255,255,255,.24),transparent 50%),var(--hero);color:#fff;padding:calc(env(safe-area-inset-top) + 14px) 22px 34px;border-radius:0 0 42px 42px;box-shadow:0 18px 34px rgba(169,64,95,.22)}
+.deco{position:absolute;inset:0;overflow:hidden;border-radius:inherit;pointer-events:none}
+.top,.row{position:relative;display:flex;align-items:center;justify-content:space-between;gap:14px}
+.top{margin-bottom:20px}
+.brand{display:flex;align-items:center;gap:8px;font:600 15px var(--display);opacity:.95}
+.brand .i{width:18px;height:18px}
+.menu{position:relative}
+#menuBtn{width:38px;height:38px;border:0;border-radius:50%;background:rgba(255,255,255,.2);color:#fff;display:grid;place-items:center;transition:background .2s,transform .15s var(--ease)}
+#menuBtn:active{transform:scale(.92)}
+.hi{margin:0;opacity:.85;font-weight:600}
+.hero h1{font-size:28px;line-height:1.1;margin:2px 0 6px}
+.data{margin:0;opacity:.85;font-size:14px}.data::first-letter{text-transform:uppercase}
+.f1{width:140px;height:140px;right:-36px;top:-34px;opacity:.16;transform:rotate(15deg);animation:girar 40s linear infinite;stroke-width:1.1}
+.f2{width:80px;height:80px;left:42%;bottom:-22px;opacity:.14;stroke-width:1.1}
+@keyframes girar{to{transform:rotate(375deg)}}
+.ring{position:relative;width:76px;height:76px;flex:none}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:4;stroke-linecap:round}
+.ring .trk{stroke:rgba(255,255,255,.25)}
+.ring .val{stroke:#fff;stroke-dasharray:113.1;stroke-dashoffset:113.1;transition:stroke-dashoffset .6s var(--ease)}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font-size:18px;font-variant-numeric:tabular-nums}
+.ring.full{animation:pulso .8s var(--ease)}
+@keyframes pulso{40%{transform:scale(1.12)}}
+
+main{padding-bottom:110px}
+.wrap{padding:0 18px}
+.msg{color:var(--rose-d);min-height:20px;margin:12px 22px 0;font-size:14px}
+.per{display:flex;align-items:center;gap:8px;margin:20px 4px 10px;color:var(--rose-d);font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.per::after{content:"";flex:1;height:1px;background:var(--line)}
+
+.dose,details{background:#fff;border:1px solid var(--line);border-radius:20px;margin-bottom:10px;transition:transform .15s var(--ease),border-color .2s,background .25s,box-shadow .2s;animation:subir .45s var(--ease) both;animation-delay:var(--d,0s)}
+@keyframes subir{from{opacity:0;transform:translateY(10px)}}
+.dose{display:flex;align-items:center;gap:14px;width:100%;text-align:left;padding:13px 15px 13px 13px;color:inherit}
+.dose:active{transform:scale(.975)}
+.tile{width:46px;height:46px;border-radius:15px;background:var(--rose-l);color:var(--rose);display:grid;place-items:center;flex:none;transition:transform .3s var(--ease),background .25s,color .25s}
+.t{flex:1;min-width:0}.t b{display:block;font-size:16px}.t span{color:var(--mute);font-size:14px}.t em{font-style:normal;color:var(--rose-d);font-weight:700}
+.chk{width:34px;height:34px;border-radius:50%;border:2px solid var(--rose-m);display:grid;place-items:center;flex:none;transition:background .25s,border-color .25s}
+.chk svg{width:19px;height:19px;fill:none;stroke:#fff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.chk path{stroke-dasharray:24}
+.chk.pop{animation:pop .4s var(--ease)}.chk.pop path{animation:draw .35s .05s var(--ease) both}
+@keyframes pop{0%{transform:scale(.6)}60%{transform:scale(1.2)}100%{transform:scale(1)}}
+@keyframes draw{from{stroke-dashoffset:24}to{stroke-dashoffset:0}}
+.dose.done{background:var(--rose-l);border-color:var(--rose-m)}
+.dose.done .chk{background:var(--rose);border-color:var(--rose)}
+.dose.done .tile{background:var(--rose);color:#fff}
+
+details{padding:0 14px}
+details[open]{border-color:var(--rose-m);box-shadow:0 8px 20px rgba(194,85,119,.1)}
+details.off{opacity:.6}
+summary{position:relative;display:flex;align-items:center;gap:14px;padding:13px 26px 13px 0;cursor:pointer;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"";position:absolute;right:4px;top:50%;width:8px;height:8px;border-right:2px solid var(--rose);border-bottom:2px solid var(--rose);transform:translateY(-70%) rotate(45deg);transition:transform .25s var(--ease)}
+details[open] summary::after{transform:translateY(-30%) rotate(-135deg)}
+.chip{display:inline-block;margin-top:5px;padding:2px 10px;border-radius:99px;background:var(--rose-l);color:var(--rose-d);font-size:12px;font-weight:700}
+dl{margin:0 0 14px;display:grid;grid-template-columns:105px 1fr;gap:8px 10px;font-size:14px;animation:subir .3s var(--ease)}
+dt{color:var(--mute)}dd{margin:0}
+.empty{color:var(--mute);text-align:center;padding:36px 12px}
+
+/* navegação */
+.nav{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 14px);transform:translateX(-50%);width:calc(100% - 56px);max-width:340px;display:flex;gap:4px;padding:6px;background:linear-gradient(145deg,rgba(216,106,141,.96),rgba(169,64,95,.96));backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:26px;box-shadow:0 16px 32px rgba(169,64,95,.35);z-index:5}
+.nav button{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:12px 0;border:0;border-radius:20px;background:none;color:rgba(255,255,255,.85);font:600 14px var(--display);transition:background .25s,color .25s,transform .15s var(--ease)}
+.nav button:active{transform:scale(.95)}
+.nav button.on{background:#fff;color:var(--rose-d)}
+.menu-pop{position:absolute;right:0;top:calc(100% + 8px);min-width:230px;white-space:nowrap;padding:6px;background:#fff;color:var(--ink);border-radius:18px;box-shadow:0 18px 40px rgba(58,42,49,.25);opacity:0;visibility:hidden;transform:translateY(-6px) scale(.95);transform-origin:top right;transition:opacity .2s,transform .25s var(--ease),visibility .2s;z-index:10}
+.menu.open .menu-pop{opacity:1;visibility:visible;transform:none}
+.menu-pop button{display:flex;align-items:center;gap:10px;width:100%;padding:11px 12px;border:0;border-radius:12px;background:none;color:var(--ink);font:600 14px var(--display);text-align:left;transition:background .2s}
+.menu-pop button:active{background:var(--rose-l)}
+.menu-pop .i{width:18px;height:18px;color:var(--rose)}
+.spin .i{animation:rodar .7s var(--ease)}
+@keyframes rodar{to{transform:rotate(360deg)}}
+[hidden]{display:none!important}
+
+@media (hover:hover){
+  .dose:hover{border-color:var(--rose-m);box-shadow:0 8px 18px rgba(194,85,119,.12);transform:translateY(-2px)}
+  .dose:hover .tile{transform:rotate(-6deg) scale(1.06)}
+  .dose:hover .chk{border-color:var(--rose)}
+  details:hover{border-color:var(--rose-m)}
+  .btn:hover{box-shadow:0 8px 20px rgba(0,0,0,.15)}
+  .nav button:not(.on):hover{background:rgba(255,255,255,.18);color:#fff}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* acabamento */
+.t b,.t em,.ring b,.chip,.btn,.per,.login h1{font-family:var(--display)}
+.t b{font-weight:600;font-size:17px}.t em{font-weight:600}
+.dose,details{box-shadow:0 1px 2px rgba(58,42,49,.04),0 8px 22px rgba(58,42,49,.045)}
+.dose.done{background:linear-gradient(135deg,var(--rose-l),#fff)}
+.chip{margin-top:5px;font-weight:600}
+.chip+.chip{margin-left:6px}
+.chip.off{background:#f1ecee;color:var(--mute)}
+.chip.o{background:#fff;box-shadow:inset 0 0 0 1px var(--rose-m)}
+.info{display:grid;gap:12px;padding:2px 0 16px;animation:subir .3s var(--ease)}
+.rowi{display:flex;gap:12px;align-items:flex-start}
+.info>.rowi+.rowi{border-top:1px dashed var(--line);padding-top:12px}
+.mini{width:34px;height:34px;border-radius:11px;background:var(--rose-l);color:var(--rose);display:grid;place-items:center;flex:none}
+.mini .i{width:18px;height:18px}
+.cont{flex:1;min-width:0}
+.k{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin-bottom:2px}
+.v{font-size:15px;font-weight:600;line-height:1.35}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.chips .chip{margin:0}
+.info>.rowi.note,.info>.rowi+.rowi.note{background:var(--rose-l);border:0;border-left:3px solid var(--rose);border-radius:14px;padding:12px}
+.note .mini{background:#fff}
+
+/* nav com 3 abas */
+.nav{max-width:380px}
+.nav button{font-size:13px;gap:5px}
+.nav .i{width:19px;height:19px}
+
+/* pressão */
+.pcard{background:#fff;border:1px solid var(--line);border-radius:22px;padding:18px;margin-bottom:14px;box-shadow:0 1px 2px rgba(58,42,49,.04),0 8px 22px rgba(58,42,49,.045);animation:subir .45s var(--ease) both}
+.ptit{font:600 17px var(--display);margin:0 0 12px}
+.pgrid{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:end}
+.pgrid label{display:block}
+.pgrid label span,.pul span{display:block;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin-bottom:6px;text-align:center}
+.pgrid input,.pul input{width:100%;border:1.5px solid transparent;border-radius:16px;background:var(--rose-l);color:var(--ink);text-align:center;font:600 30px var(--display);padding:10px 4px;transition:border-color .2s,box-shadow .2s,background .2s;-moz-appearance:textfield}
+.pgrid input::-webkit-outer-spin-button,.pgrid input::-webkit-inner-spin-button,.pul input::-webkit-outer-spin-button,.pul input::-webkit-inner-spin-button{-webkit-appearance:none}
+.pgrid input::placeholder,.pul input::placeholder{color:#d9bfc7}
+.pgrid input:focus,.pul input:focus{outline:0;background:#fff;border-color:var(--rose);box-shadow:0 0 0 4px var(--rose-l)}
+.pbar{font:500 30px var(--display);color:var(--rose-m);padding-bottom:10px}
+.pul{margin-top:12px}.pul input{font-size:20px;padding:8px}
+.psave{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:14px;padding:14px;border:0;border-radius:16px;background:var(--hero);color:#fff;font:600 16px var(--display);box-shadow:0 8px 18px rgba(169,64,95,.28);transition:transform .15s var(--ease),box-shadow .2s,opacity .2s}
+.psave:active{transform:scale(.97)}.psave:disabled{opacity:.6}
+.pnota{display:flex;align-items:center;gap:6px;justify-content:center;margin:10px 0 0;color:var(--mute);font-size:13px}
+.pnota .i{width:15px;height:15px;color:var(--rose)}
+.pres{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.pres .big{font:600 38px/1 var(--display);letter-spacing:-.02em}
+.pres small{display:block;color:var(--mute);font-size:13px;margin-top:4px}
+.pres .med{text-align:right;font-size:13px;color:var(--mute)}.pres .med b{display:block;font:600 20px var(--display);color:var(--ink)}
+.pstat{display:inline-flex;align-items:center;gap:6px;padding:3px 11px 3px 9px;border-radius:99px;background:var(--rose-l);font:600 12.5px var(--display);color:var(--ink)}
+.pstat i{width:8px;height:8px;border-radius:50%;background:var(--c,#999)}
+.palerta{margin:12px 0 0;padding:10px 12px;border-radius:12px;background:var(--rose-l);border-left:3px solid var(--rose);font-size:13px;line-height:1.4}
+.graf{width:100%;height:auto;margin-top:6px;overflow:visible}
+.graf polyline{fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;animation:tracar 1.1s var(--ease) both}
+.graf .ls{stroke:var(--rose)}.graf .ld{stroke:#e8a6b8}
+.graf .ds circle{fill:var(--rose)}.graf .dd circle{fill:#e8a6b8}
+@keyframes tracar{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+.leg{display:flex;gap:14px;font-size:12px;color:var(--mute);margin-top:6px}
+.leg i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.pitem{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:12px 8px 12px 14px;margin-bottom:8px;box-shadow:0 1px 2px rgba(58,42,49,.04);animation:subir .4s var(--ease) both;animation-delay:var(--d,0s)}
+.pitem .pm{flex:1;min-width:0}.pitem .pm b{display:block;font:600 20px var(--display)}.pitem .pm span{color:var(--mute);font-size:13px}
+.pdel{width:36px;height:36px;border:0;border-radius:12px;background:none;color:#cdb5bd;display:grid;place-items:center;transition:background .2s,color .2s}
+.pdel .i{width:17px;height:17px}.pdel:active{background:var(--rose-l);color:var(--rose-d)}
+.pfoot{color:var(--mute);font-size:12px;line-height:1.45;text-align:center;margin:14px 8px 0}
+@media (hover:hover){.pdel:hover{background:var(--rose-l);color:var(--rose-d)}.psave:hover{box-shadow:0 12px 24px rgba(169,64,95,.36)}}
+
+/* cadastro de medicamentos */
+.addmed{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;margin-bottom:12px;border:1.5px dashed var(--rose-m);border-radius:18px;background:rgba(255,255,255,.6);color:var(--rose-d);font:600 15px var(--display);transition:background .2s,transform .15s var(--ease),border-color .2s}
+.addmed:active{transform:scale(.98)}
+.edit-btn{display:inline-flex;align-items:center;gap:6px;margin:0 0 14px;padding:9px 14px;border:0;border-radius:12px;background:var(--rose-l);color:var(--rose-d);font:600 14px var(--display);transition:background .2s,transform .15s var(--ease)}
+.edit-btn .i{width:16px;height:16px}.edit-btn:active{transform:scale(.96)}
+.sheet{position:fixed;inset:0;z-index:20;display:flex;align-items:flex-end;justify-content:center}
+.sheet-bg{position:absolute;inset:0;background:rgba(58,42,49,.38);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);opacity:0;transition:opacity .25s}
+.sheet-card{position:relative;width:100%;max-width:520px;max-height:92vh;display:flex;flex-direction:column;background:var(--bg);border-radius:28px 28px 0 0;box-shadow:0 -12px 40px rgba(58,42,49,.22);transform:translateY(100%);transition:transform .35s var(--ease)}
+.sheet.open .sheet-bg{opacity:1}.sheet.open .sheet-card{transform:none}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px 8px}
+.sheet-head h2{font:600 20px var(--display);margin:0}
+.sheet-head button{width:36px;height:36px;border:0;border-radius:50%;background:var(--rose-l);color:var(--rose-d);display:grid;place-items:center}
+.sheet-body{overflow:auto;padding:8px 20px 12px;display:grid;gap:14px;-webkit-overflow-scrolling:touch}
+.f{display:block}.f>span,.f label>span{display:block;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin-bottom:6px}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.f input,.f select,.f textarea{width:100%;border:1.5px solid transparent;border-radius:14px;background:#fff;color:var(--ink);font:600 16px 'Nunito',sans-serif;padding:12px 14px;box-shadow:0 1px 2px rgba(58,42,49,.05);transition:border-color .2s,box-shadow .2s;resize:vertical}
+.f input:focus,.f select:focus,.f textarea:focus{outline:0;border-color:var(--rose);box-shadow:0 0 0 4px var(--rose-l)}
+.pre{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.pre button{border:0;border-radius:99px;padding:6px 12px;background:var(--rose-l);color:var(--rose-d);font:600 13px var(--display);transition:background .2s,transform .15s var(--ease)}
+.pre button:active{transform:scale(.94);background:var(--rose-m)}
+.horas{display:flex;gap:8px}.horas input{flex:1}
+.horas button{display:flex;align-items:center;gap:6px;border:0;border-radius:14px;padding:0 16px;background:var(--rose);color:#fff;font:600 14px var(--display);transition:transform .15s var(--ease)}
+.horas button:active{transform:scale(.95)}.horas .i{width:16px;height:16px}
+.hchips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;min-height:8px}
+.hchip{display:inline-flex;align-items:center;gap:4px;padding:6px 6px 6px 14px;border-radius:99px;background:#fff;box-shadow:inset 0 0 0 1.5px var(--rose-m);font:600 15px var(--display);font-variant-numeric:tabular-nums;animation:pop .3s var(--ease)}
+.hchip button{width:24px;height:24px;border:0;border-radius:50%;background:var(--rose-l);color:var(--rose-d);display:grid;place-items:center}
+.hchip .i{width:13px;height:13px}
+.hint{color:var(--mute);font-size:13px}
+.seg{display:flex;background:var(--rose-l);padding:4px;border-radius:14px;gap:4px}
+.seg button{flex:1;border:0;background:none;border-radius:10px;padding:10px;font:600 14px var(--display);color:var(--mute);transition:background .25s,color .25s,box-shadow .25s}
+.seg button.on{background:#fff;color:var(--rose-d);box-shadow:0 1px 4px rgba(194,85,119,.2)}
+.sheet-foot{display:flex;gap:10px;padding:12px 20px calc(env(safe-area-inset-bottom) + 16px);border-top:1px solid var(--line)}
+.sheet-foot .psave{flex:1}
+.danger{border:1.5px solid var(--rose-m);background:#fff;color:var(--rose-d);border-radius:16px;padding:0 18px;font:600 15px var(--display);transition:background .2s}
+.danger:active{background:var(--rose-l)}
+@media (hover:hover){.addmed:hover{background:#fff;border-color:var(--rose)}.edit-btn:hover{background:var(--rose-m)}.pre button:hover{background:var(--rose-m)}}
+
+/* nav: rótulo só na aba ativa */
+.nav button{flex:1;gap:0;transition:flex .35s var(--ease),background .25s,color .25s,transform .15s var(--ease)}
+.nav button.on{flex:2.1}
+.nav button span{max-width:0;opacity:0;overflow:hidden;white-space:nowrap;transition:max-width .35s var(--ease),opacity .25s,margin .35s var(--ease)}
+.nav button.on span{max-width:90px;opacity:1;margin-left:6px}
+
+/* itens */
+.item{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:12px 12px 12px 13px;margin-bottom:10px;box-shadow:0 1px 2px rgba(58,42,49,.04),0 8px 22px rgba(58,42,49,.045);animation:subir .45s var(--ease) both;animation-delay:var(--d,0s);transition:border-color .25s,background .25s}
+.item .t b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.item.low{background:linear-gradient(135deg,#fff7ec,#fff);border-color:#f3dcb8}
+.item.low .tile{background:#fdebd0;color:#b9741a}
+.item.low .step b{color:#b9741a}
+.step{display:flex;align-items:center;gap:2px;background:var(--rose-l);border-radius:14px;padding:3px;flex:none}
+.step button{width:32px;height:32px;border:0;border-radius:11px;background:#fff;color:var(--rose-d);display:grid;place-items:center;box-shadow:0 1px 3px rgba(194,85,119,.18);transition:transform .15s var(--ease),background .2s}
+.step button:active{transform:scale(.86);background:var(--rose-m)}
+.step .i{width:16px;height:16px}
+.step b{min-width:34px;text-align:center;font:600 17px var(--display);font-variant-numeric:tabular-nums}
+.bump{animation:bump .3s var(--ease)}
+@keyframes bump{40%{transform:scale(1.28)}}
+</style>
 </head>
-
 <body>
 
-  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-    <symbol id="i-flower" viewBox="0 0 24 24">
-      <circle cx="12" cy="12" r="3" />
-      <path d="M12 16.5A4.5 4.5 0 1 1 7.5 12 4.5 4.5 0 1 1 12 7.5a4.5 4.5 0 1 1 4.5 4.5 4.5 4.5 0 1 1-4.5 4.5" />
-      <path d="M12 7.5V9" />
-      <path d="M7.5 12H9" />
-      <path d="M16.5 12H15" />
-      <path d="M12 16.5V15" />
-      <path d="m8 8 1.88 1.88" />
-      <path d="M14.12 9.88 16 8" />
-      <path d="m8 16 1.88-1.88" />
-      <path d="M14.12 14.12 16 16" />
-    </symbol>
-    <symbol id="i-dots" viewBox="0 0 24 24">
-      <circle cx="12" cy="12" r="1" />
-      <circle cx="12" cy="5" r="1" />
-      <circle cx="12" cy="19" r="1" />
-    </symbol>
-    <symbol id="i-flask" viewBox="0 0 24 24">
-      <path
-        d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2" />
-      <path d="M8.5 2h7" />
-      <path d="M7 16h10" />
-    </symbol>
-    <symbol id="i-tag" viewBox="0 0 24 24">
-      <path
-        d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z" />
-      <circle cx="7.5" cy="7.5" r=".5" fill="currentColor" />
-    </symbol>
-    <symbol id="i-bell" viewBox="0 0 24 24">
-      <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
-      <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
-    </symbol>
-    <symbol id="i-calendar" viewBox="0 0 24 24">
-      <path d="M8 2v4" />
-      <path d="M16 2v4" />
-      <rect width="18" height="18" x="3" y="4" rx="2" />
-      <path d="M3 10h18" />
-      <path d="m9 16 2 2 4-4" />
-    </symbol>
-    <symbol id="i-info" viewBox="0 0 24 24">
-      <circle cx="12" cy="12" r="10" />
-      <path d="M12 16v-4" />
-      <path d="M12 8h.01" />
-    </symbol>
-    <symbol id="i-pill" viewBox="0 0 24 24">
-      <path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z" />
-      <path d="m8.5 8.5 7 7" />
-    </symbol>
-    <symbol id="i-droplet" viewBox="0 0 24 24">
-      <path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z" />
-    </symbol>
-    <symbol id="i-syringe" viewBox="0 0 24 24">
-      <path d="m18 2 4 4" />
-      <path d="m17 7 3-3" />
-      <path d="M19 9 8.7 19.3c-1 1-2.5 1-3.4 0l-.6-.6c-1-1-1-2.5 0-3.4L15 5" />
-      <path d="m9 11 4 4" />
-      <path d="m5 19-3 3" />
-      <path d="m14 4 6 6" />
-    </symbol>
-    <symbol id="i-sun" viewBox="0 0 24 24">
-      <circle cx="12" cy="12" r="4" />
-      <path d="M12 2v2" />
-      <path d="M12 20v2" />
-      <path d="m4.93 4.93 1.41 1.41" />
-      <path d="m17.66 17.66 1.41 1.41" />
-      <path d="M2 12h2" />
-      <path d="M20 12h2" />
-      <path d="m6.34 17.66-1.41 1.41" />
-      <path d="m19.07 4.93-1.41 1.41" />
-    </symbol>
-    <symbol id="i-moon" viewBox="0 0 24 24">
-      <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
-    </symbol>
-    <symbol id="i-list" viewBox="0 0 24 24">
-      <rect width="8" height="4" x="8" y="2" rx="1" ry="1" />
-      <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
-      <path d="m9 14 2 2 4-4" />
-    </symbol>
-    <symbol id="i-refresh" viewBox="0 0 24 24">
-      <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
-      <path d="M21 3v5h-5" />
-      <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
-      <path d="M8 16H3v5" />
-    </symbol>
-    <symbol id="i-out" viewBox="0 0 24 24">
-      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-      <polyline points="16 17 21 12 16 7" />
-      <line x1="21" x2="9" y1="12" y2="12" />
-    </symbol>
-    <symbol id="i-arrow" viewBox="0 0 24 24">
-      <path d="M5 12h14" />
-      <path d="m12 5 7 7-7 7" />
-    </symbol>
-    <symbol id="i-plus" viewBox="0 0 24 24">
-      <path d="M5 12h14" />
-      <path d="M12 5v14" />
-    </symbol>
-    <symbol id="i-x" viewBox="0 0 24 24">
-      <path d="M18 6 6 18" />
-      <path d="m6 6 12 12" />
-    </symbol>
-    <symbol id="i-pencil" viewBox="0 0 24 24">
-      <path
-        d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
-      <path d="m15 5 4 4" />
-    </symbol>
-    <symbol id="i-box" viewBox="0 0 24 24">
-      <path
-        d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
-      <path d="m3.3 7 8.7 5 8.7-5" />
-      <path d="M12 22V12" />
-    </symbol>
-    <symbol id="i-minus" viewBox="0 0 24 24">
-      <path d="M5 12h14" />
-    </symbol>
-    <symbol id="i-alert" viewBox="0 0 24 24">
-      <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" />
-      <path d="M12 9v4" />
-      <path d="M12 17h.01" />
-    </symbol>
-    <symbol id="i-hpulse" viewBox="0 0 24 24">
-      <path
-        d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
-      <path d="M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27" />
-    </symbol>
-    <symbol id="i-trash" viewBox="0 0 24 24">
-      <path d="M3 6h18" />
-      <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-      <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-    </symbol>
-    <symbol id="i-clock" viewBox="0 0 24 24">
-      <circle cx="12" cy="12" r="10" />
-      <polyline points="12 6 12 12 16 14" />
-    </symbol>
-  </svg>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-flower" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 16.5A4.5 4.5 0 1 1 7.5 12 4.5 4.5 0 1 1 12 7.5a4.5 4.5 0 1 1 4.5 4.5 4.5 4.5 0 1 1-4.5 4.5"/><path d="M12 7.5V9"/><path d="M7.5 12H9"/><path d="M16.5 12H15"/><path d="M12 16.5V15"/><path d="m8 8 1.88 1.88"/><path d="M14.12 9.88 16 8"/><path d="m8 16 1.88-1.88"/><path d="M14.12 14.12 16 16"/></symbol>
+  <symbol id="i-dots" viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></symbol>
+  <symbol id="i-flask" viewBox="0 0 24 24"><path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></symbol>
+  <symbol id="i-tag" viewBox="0 0 24 24"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="m9 16 2 2 4-4"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></symbol>
+  <symbol id="i-pill" viewBox="0 0 24 24"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></symbol>
+  <symbol id="i-droplet" viewBox="0 0 24 24"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></symbol>
+  <symbol id="i-syringe" viewBox="0 0 24 24"><path d="m18 2 4 4"/><path d="m17 7 3-3"/><path d="M19 9 8.7 19.3c-1 1-2.5 1-3.4 0l-.6-.6c-1-1-1-2.5 0-3.4L15 5"/><path d="m9 11 4 4"/><path d="m5 19-3 3"/><path d="m14 4 6 6"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></symbol>
+  <symbol id="i-out" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5v14"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+  <symbol id="i-pencil" viewBox="0 0 24 24"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></symbol>
+  <symbol id="i-box" viewBox="0 0 24 24"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></symbol>
+  <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></symbol>
+  <symbol id="i-hpulse" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/><path d="M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></symbol>
+</svg>
 
-  <section id="login" class="login" hidden>
-    <div class="login-top">
-      <h1>Minhas medicações</h1>
-      <p>Cuidar de você, um horário de cada vez.</p>
-    </div>
-    <div class="login-card">
-      <svg class="i flor" style="width:130px;height:130px;right:-30px;bottom:-30px;opacity:.16;stroke-width:1.1">
-        <use href="#i-flower" />
-      </svg>
-      <div class="emblem"><svg class="i">
-          <use href="#i-pill" />
-        </svg></div>
-      <input id="pin" type="password" inputmode="numeric" autocomplete="current-password" placeholder="PIN"
-        aria-label="PIN">
-      <div class="msg" id="loginMsg"></div>
-      <button class="btn" id="entrar">Entrar <svg class="i">
-          <use href="#i-arrow" />
-        </svg></button>
-    </div>
-  </section>
+<section id="login" class="login" hidden>
+  <div class="login-top">
+    <h1>Minhas medicações</h1>
+    <p>Cuidar de você, um horário de cada vez.</p>
+  </div>
+  <div class="login-card">
+    <div class="deco"><svg class="i flor" style="width:130px;height:130px;right:-30px;bottom:-30px;opacity:.16;stroke-width:1.1"><use href="#i-flower"/></svg></div>
+    <div class="emblem"><svg class="i"><use href="#i-pill"/></svg></div>
+    <input id="pin" type="password" inputmode="numeric" autocomplete="current-password" placeholder="PIN" aria-label="PIN">
+    <div class="msg" id="loginMsg"></div>
+    <button class="btn" id="entrar">Entrar <svg class="i"><use href="#i-arrow"/></svg></button>
+  </div>
+</section>
 
-  <main id="app" hidden>
-    <header class="hero">
-      <div class="deco">
-        <svg class="i flor f1">
-          <use href="#i-flower" />
-        </svg>
-        <svg class="i flor f2">
-          <use href="#i-flower" />
-        </svg>
-      </div>
-      <div class="top">
-        <span class="brand"><svg class="i">
-            <use href="#i-pill" />
-          </svg>Minhas medicações</span>
-        <div class="menu">
-          <button id="menuBtn" aria-label="Menu" aria-expanded="false"><svg class="i">
-              <use href="#i-dots" />
-            </svg></button>
-          <div class="menu-pop">
-            <button id="novoMed"><svg class="i">
-                <use href="#i-pencil" />
-              </svg><span id="novoTxt">Adicionar ou editar remédio</span></button>
-            <button id="atualizar"><svg class="i">
-                <use href="#i-refresh" />
-              </svg>Atualizar</button>
-            <button id="sair"><svg class="i">
-                <use href="#i-out" />
-              </svg>Sair</button>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div>
-          <p class="hi" id="saudacao">Olá</p>
-          <h1 id="titulo">Hoje</h1>
-          <p class="data" id="data"></p>
-        </div>
-        <div class="ring" id="ring">
-          <svg viewBox="0 0 44 44">
-            <circle class="trk" cx="22" cy="22" r="18" />
-            <circle class="val" id="prog" cx="22" cy="22" r="18" />
-          </svg>
-          <b id="ringTxt">0/0</b>
-        </div>
-      </div>
-    </header>
-    <div class="msg" id="msg"></div>
-    <div class="wrap">
-      <div id="vHoje">
-        <div id="doses"></div>
-      </div>
-      <div id="vMeds" hidden></div>
-      <div id="vPress" hidden></div>
-      <div id="vItens" hidden></div>
+<main id="app" hidden>
+  <header class="hero">
+    <div class="deco">
+      <svg class="i flor f1"><use href="#i-flower"/></svg>
+      <svg class="i flor f2"><use href="#i-flower"/></svg>
     </div>
-    <nav class="nav">
-      <button id="tHoje" class="on"><svg class="i">
-          <use href="#i-list" />
-        </svg><span>Hoje</span></button>
-      <button id="tMeds"><svg class="i">
-          <use href="#i-pill" />
-        </svg><span>Remédios</span></button>
-      <button id="tPress"><svg class="i">
-          <use href="#i-hpulse" />
-        </svg><span>Pressão</span></button>
-      <button id="tItens"><svg class="i">
-          <use href="#i-box" />
-        </svg><span>Itens</span></button>
-    </nav>
-  </main>
+    <div class="top">
+      <span class="brand"><svg class="i"><use href="#i-pill"/></svg>Minhas medicações</span>
+      <div class="menu">
+        <button id="menuBtn" aria-label="Menu" aria-expanded="false"><svg class="i"><use href="#i-dots"/></svg></button>
+        <div class="menu-pop">
+          <button id="novoMed"><svg class="i"><use href="#i-pencil"/></svg><span id="novoTxt">Adicionar ou editar remédio</span></button>
+          <button id="atualizar"><svg class="i"><use href="#i-refresh"/></svg>Atualizar</button>
+          <button id="sair"><svg class="i"><use href="#i-out"/></svg>Sair</button>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div>
+        <p class="hi" id="saudacao">Olá</p>
+        <h1 id="titulo">Hoje</h1>
+        <p class="data" id="data"></p>
+      </div>
+      <div class="ring" id="ring">
+        <svg viewBox="0 0 44 44"><circle class="trk" cx="22" cy="22" r="18"/><circle class="val" id="prog" cx="22" cy="22" r="18"/></svg>
+        <b id="ringTxt">0/0</b>
+      </div>
+    </div>
+  </header>
+  <div class="msg" id="msg"></div>
+  <div class="wrap">
+    <div id="vHoje"><div id="doses"></div></div>
+    <div id="vMeds" hidden></div>
+    <div id="vPress" hidden></div>
+    <div id="vItens" hidden></div>
+  </div>
+  <nav class="nav">
+    <button id="tHoje" class="on"><svg class="i"><use href="#i-list"/></svg><span>Hoje</span></button>
+    <button id="tMeds"><svg class="i"><use href="#i-pill"/></svg><span>Remédios</span></button>
+    <button id="tPress"><svg class="i"><use href="#i-hpulse"/></svg><span>Pressão</span></button>
+    <button id="tItens"><svg class="i"><use href="#i-box"/></svg><span>Itens</span></button>
+  </nav>
+</main>
 
-  <div id="sheet" class="sheet" hidden>
-    <div class="sheet-bg" id="sBg"></div>
-    <div class="sheet-card" role="dialog" aria-modal="true" aria-labelledby="sTit">
-      <div class="sheet-head">
-        <h2 id="sTit">Novo medicamento</h2><button id="sFechar" aria-label="Fechar"><svg class="i">
-            <use href="#i-x" />
-          </svg></button>
+<div id="sheet" class="sheet" hidden>
+  <div class="sheet-bg" id="sBg"></div>
+  <div class="sheet-card" role="dialog" aria-modal="true" aria-labelledby="sTit">
+    <div class="sheet-head"><h2 id="sTit">Novo medicamento</h2><button id="sFechar" aria-label="Fechar"><svg class="i"><use href="#i-x"/></svg></button></div>
+    <div class="sheet-body">
+      <label class="f"><span>O que você quer fazer?</span><select id="fEscolher"></select></label>
+      <label class="f"><span>Nome *</span><input id="fNome" placeholder="Ex.: Losartana" autocomplete="off"></label>
+      <label class="f"><span>Princípio ativo</span><input id="fAtivo" autocomplete="off"></label>
+      <label class="f"><span>Outros nomes</span><input id="fOutros" placeholder="Separe por vírgula" autocomplete="off"></label>
+      <div class="f2">
+        <label class="f"><span>Dosagem</span><input id="fDose" placeholder="50 mg" autocomplete="off"></label>
+        <label class="f"><span>Forma</span><select id="fForma"></select></label>
       </div>
-      <div class="sheet-body">
-        <label class="f"><span>O que você quer fazer?</span><select id="fEscolher"></select></label>
-        <label class="f"><span>Nome *</span><input id="fNome" placeholder="Ex.: Losartana" autocomplete="off"></label>
-        <label class="f"><span>Princípio ativo</span><input id="fAtivo" autocomplete="off"></label>
-        <label class="f"><span>Outros nomes</span><input id="fOutros" placeholder="Separe por vírgula"
-            autocomplete="off"></label>
-        <div class="f2">
-          <label class="f"><span>Dosagem</span><input id="fDose" placeholder="50 mg" autocomplete="off"></label>
-          <label class="f"><span>Forma</span><select id="fForma"></select></label>
-        </div>
-        <label class="f"><span>Como tomar</span><input id="fPos" placeholder="1 comprimido, após o café"
-            autocomplete="off"></label>
-        <div class="f">
-          <span>Horários</span>
-          <div class="pre" id="fPre"></div>
-          <div class="horas"><input id="fHora" type="time" aria-label="Horário"><button type="button" id="fAddHora"><svg
-                class="i">
-                <use href="#i-plus" />
-              </svg>Adicionar</button></div>
-          <div class="hchips" id="fChips"></div>
-        </div>
-        <label class="f"><span>Para que serve</span><input id="fPara" autocomplete="off"></label>
-        <label class="f"><span>Observações</span><textarea id="fObs" rows="2"></textarea></label>
-        <div class="f"><span>Status</span>
-          <div class="seg" id="fStatus"><button type="button" data-v="Ativo">Ativo</button><button type="button"
-              data-v="Suspenso">Suspenso</button></div>
-        </div>
-        <div class="msg" id="sMsg" style="margin:0"></div>
+      <label class="f"><span>Como tomar</span><input id="fPos" placeholder="1 comprimido, após o café" autocomplete="off"></label>
+      <div class="f">
+        <span>Horários</span>
+        <div class="pre" id="fPre"></div>
+        <div class="horas"><input id="fHora" type="time" aria-label="Horário"><button type="button" id="fAddHora"><svg class="i"><use href="#i-plus"/></svg>Adicionar</button></div>
+        <div class="hchips" id="fChips"></div>
       </div>
-      <div class="sheet-foot">
-        <button class="danger" id="sExcluir">Excluir</button>
-        <button class="psave" id="sSalvar" style="margin:0">Salvar</button>
+      <label class="f"><span>Para que serve</span><input id="fPara" autocomplete="off"></label>
+      <label class="f"><span>Observações</span><textarea id="fObs" rows="2"></textarea></label>
+      <div class="f"><span>Status</span>
+        <div class="seg" id="fStatus"><button type="button" data-v="Ativo">Ativo</button><button type="button" data-v="Suspenso">Suspenso</button></div>
       </div>
+      <div class="msg" id="sMsg" style="margin:0"></div>
+    </div>
+    <div class="sheet-foot">
+      <button class="danger" id="sExcluir">Excluir</button>
+      <button class="psave" id="sSalvar" style="margin:0">Salvar</button>
     </div>
   </div>
+</div>
 
-  <div id="sheetI" class="sheet" hidden>
-    <div class="sheet-bg" id="iBg"></div>
-    <div class="sheet-card" role="dialog" aria-modal="true" aria-labelledby="iTit">
-      <div class="sheet-head">
-        <h2 id="iTit">Novo item</h2><button id="iFechar" aria-label="Fechar"><svg class="i">
-            <use href="#i-x" />
-          </svg></button>
+<div id="sheetI" class="sheet" hidden>
+  <div class="sheet-bg" id="iBg"></div>
+  <div class="sheet-card" role="dialog" aria-modal="true" aria-labelledby="iTit">
+    <div class="sheet-head"><h2 id="iTit">Novo item</h2><button id="iFechar" aria-label="Fechar"><svg class="i"><use href="#i-x"/></svg></button></div>
+    <div class="sheet-body">
+      <label class="f"><span>O que você quer fazer?</span><select id="iEscolher"></select></label>
+      <label class="f"><span>Item *</span><input id="iNome" placeholder="Ex.: Fraldas M" autocomplete="off"></label>
+      <div class="f2">
+        <label class="f"><span>Categoria</span><select id="iCat"></select></label>
+        <label class="f"><span>Unidade</span><input id="iUn" placeholder="pacotes" list="listaUn" autocomplete="off"></label>
       </div>
-      <div class="sheet-body">
-        <label class="f"><span>O que você quer fazer?</span><select id="iEscolher"></select></label>
-        <label class="f"><span>Item *</span><input id="iNome" placeholder="Ex.: Fraldas M" autocomplete="off"></label>
-        <div class="f2">
-          <label class="f"><span>Categoria</span><select id="iCat"></select></label>
-          <label class="f"><span>Unidade</span><input id="iUn" placeholder="pacotes" list="listaUn"
-              autocomplete="off"></label>
-        </div>
-        <datalist id="listaUn">
-          <option value="unidades">
-          <option value="pacotes">
-          <option value="caixas">
-          <option value="tubos">
-          <option value="frascos">
-          <option value="rolos">
-        </datalist>
-        <div class="f2">
-          <label class="f"><span>Quantidade atual</span><input id="iQtd" type="number" inputmode="decimal" min="0"
-              placeholder="0"></label>
-          <label class="f"><span>Avisar quando restar</span><input id="iMin" type="number" inputmode="decimal" min="0"
-              placeholder="2"></label>
-        </div>
-        <label class="f"><span>Observações</span><textarea id="iObs" rows="2"
-            placeholder="Marca, tamanho, onde comprar…"></textarea></label>
-        <div class="msg" id="iMsg" style="margin:0"></div>
+      <datalist id="listaUn"><option value="unidades"><option value="pacotes"><option value="caixas"><option value="tubos"><option value="frascos"><option value="rolos"></datalist>
+      <div class="f2">
+        <label class="f"><span>Quantidade atual</span><input id="iQtd" type="number" inputmode="decimal" min="0" placeholder="0"></label>
+        <label class="f"><span>Avisar quando restar</span><input id="iMin" type="number" inputmode="decimal" min="0" placeholder="2"></label>
       </div>
-      <div class="sheet-foot">
-        <button class="danger" id="iExcluir">Excluir</button>
-        <button class="psave" id="iSalvar" style="margin:0">Salvar</button>
-      </div>
+      <label class="f"><span>Observações</span><textarea id="iObs" rows="2" placeholder="Marca, tamanho, onde comprar…"></textarea></label>
+      <div class="msg" id="iMsg" style="margin:0"></div>
+    </div>
+    <div class="sheet-foot">
+      <button class="danger" id="iExcluir">Excluir</button>
+      <button class="psave" id="iSalvar" style="margin:0">Salvar</button>
     </div>
   </div>
+</div>
 
-  <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbygi4DMEklucoLk_H2q8SPpUq-h3Y-r52xIy5zKFYcW95G6CPohunB_8MKD0q7L2Wje/exec';
-    const $ = s => document.querySelector(s);
-    let pin = localStorage.getItem('pin') || '';
-    let doses = [];
-    const CHECK = '<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
-    const ic = n => `<svg class="i"><use href="#i-${n}"/></svg>`;
+<script>
+const API_URL = 'https://script.google.com/macros/s/AKfycbygi4DMEklucoLk_H2q8SPpUq-h3Y-r52xIy5zKFYcW95G6CPohunB_8MKD0q7L2Wje/exec';
+const $ = s => document.querySelector(s);
+let pin = localStorage.getItem('pin') || '';
+let doses = [];
+const CHECK = '<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+const ic = n => `<svg class="i"><use href="#i-${n}"/></svg>`;
 
-    async function api(acao, extra = {}) {
-      const r = await fetch(API_URL, {
-        method: 'POST',
-        headers: {'Content-Type': 'text/plain;charset=utf-8'},
-        body: JSON.stringify({pin, acao, ...extra})
-      });
-      return r.json();
+async function api(acao, extra = {}) {
+  const r = await fetch(API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({ pin, acao, ...extra })
+  });
+  return r.json();
+}
+
+function el(tag, cls, txt) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (txt !== undefined) e.textContent = txt;
+  return e;
+}
+
+function mostrarLogin(msg = '') {
+  $('#app').hidden = true; $('#login').hidden = false;
+  $('#loginMsg').textContent = msg; $('#pin').value = '';
+}
+
+const ultima = {};
+const fresco = k => Date.now() - (ultima[k] || 0) < 45000;
+const hojeChave = () => new Date().toLocaleDateString('sv');
+function lerCache(k) { try { return JSON.parse(localStorage.getItem('cache:' + k)); } catch (e) { return null; } }
+function gravarCache(k, v) { try { localStorage.setItem('cache:' + k, JSON.stringify(v)); } catch (e) { /* sem espaço */ } }
+function limparCache() { Object.keys(localStorage).filter(k => k.startsWith('cache:')).forEach(k => localStorage.removeItem(k)); }
+let jaDesenhado = false, diaCarregado = '', prefetchFeito = false;
+
+function cabecalhoHoje() {
+  const h = new Date().getHours();
+  $('#saudacao').textContent = h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite';
+  $('#data').textContent = new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
+}
+
+async function carregarHoje(forcar) {
+  if (!forcar && jaDesenhado && fresco('hoje') && diaCarregado === hojeChave()) return true;
+  $('#msg').textContent = '';
+  try {
+    const r = await api('hoje', { forcar: !!forcar });
+    if (!r.ok) {
+      if (r.auth === false) { localStorage.removeItem('pin'); pin = ''; limparCache(); return mostrarLogin(r.erro); }
+      $('#msg').textContent = r.erro; return false;
     }
+    const mudou = JSON.stringify(r.doses) !== JSON.stringify(doses);
+    doses = r.doses; ultima.hoje = Date.now(); diaCarregado = hojeChave();
+    $('#login').hidden = true; $('#app').hidden = false;
+    cabecalhoHoje();
+    if (mudou || !jaDesenhado) desenharDoses(!jaDesenhado);
+    jaDesenhado = true;
+    if (!prefetchFeito) { prefetchFeito = true; setTimeout(prefetch, 500); }
+    return true;
+  } catch (e) {
+    $('#msg').textContent = 'Sem conexão. Tente atualizar.';
+    $('#app').hidden = false; $('#login').hidden = true;
+  }
+}
 
-    function el(tag, cls, txt) {
-      const e = document.createElement(tag);
-      if (cls) e.className = cls;
-      if (txt !== undefined) e.textContent = txt;
-      return e;
+// Depois de mostrar "Hoje", busca o resto numa única chamada para as outras abas abrirem na hora.
+async function prefetch() {
+  try {
+    const r = await api('resto');
+    if (!r.ok) return;
+    listaMeds = r.meds; itens = r.itens; itensP = r.pressao;
+    gravarCache('meds', r.meds); gravarCache('itens', r.itens); gravarCache('press', r.pressao);
+    ultima.meds = ultima.itens = ultima.press = Date.now();
+  } catch (e) { /* segue sem pré-carregar */ }
+}
+
+function desenharDoses(animar) {
+  const box = $('#doses'); box.innerHTML = '';
+  if (!doses.length) box.append(el('p', 'empty', 'Nenhuma dose para hoje.'));
+  let periodo = '', n = 0;
+  doses.forEach(d => {
+    const hora = parseInt(d.horario, 10);
+    const p = hora < 12 ? 'Manhã' : hora < 18 ? 'Tarde' : 'Noite';
+    if (p !== periodo) {
+      periodo = p;
+      const h = el('div', 'per'); h.innerHTML = ic(p === 'Noite' ? 'moon' : 'sun');
+      h.append(document.createTextNode(p)); box.append(h);
     }
+    const b = el('button', 'dose' + (d.tomou ? ' done' : ''));
+    if (animar) b.style.setProperty('--d', (n++ * 50) + 'ms'); else b.style.animation = 'none';
+    const tile = el('div', 'tile'); tile.innerHTML = ic('pill');
+    const t = el('div', 't'); t.append(el('b', '', d.medicamento));
+    const sp = el('span'); const em = el('em', '', d.horario);
+    sp.append(em, document.createTextNode(' · ' + d.dosagem + (d.tomou && d.marcadoAs ? ' · tomou às ' + d.marcadoAs : '')));
+    t.append(sp);
+    const c = el('div', 'chk' + (d.recem ? ' pop' : '')); c.innerHTML = d.tomou ? CHECK : '';
+    b.append(tile, t, c);
+    b.onclick = () => alternar(d);
+    box.append(b);
+  });
+  const feitas = doses.filter(d => d.tomou).length;
+  const tudo = doses.length > 0 && feitas === doses.length;
+  $('#prog').style.strokeDashoffset = 113.1 * (1 - (doses.length ? feitas / doses.length : 0));
+  $('#ringTxt').textContent = `${feitas}/${doses.length}`;
+  $('#ring').classList.toggle('full', tudo);
+  $('#titulo').textContent = tudo ? 'Tudo certo por hoje' : 'Suas doses de hoje';
+  gravarCache('doses', { dia: hojeChave(), doses });
+}
 
-    function mostrarLogin(msg = '') {
-      $('#app').hidden = true; $('#login').hidden = false;
-      $('#loginMsg').textContent = msg; $('#pin').value = '';
-    }
+async function alternar(d) {
+  d.tomou = !d.tomou; d.marcadoAs = d.tomou ? new Date().toTimeString().slice(0, 5) : '';
+  d.recem = d.tomou; desenharDoses(); d.recem = false;
+  try {
+    const r = await api('marcar', { linha: d.linha, tomou: d.tomou, horario: d.horario, med: d.medicamento });
+    if (!r.ok) throw new Error(r.erro);
+  } catch (e) {
+    d.tomou = !d.tomou; desenharDoses();
+    $('#msg').textContent = 'Não foi possível salvar. Verifique a conexão.';
+  }
+}
 
-    async function carregarHoje() {
-      $('#msg').textContent = '';
-      try {
-        const r = await api('hoje');
-        if (!r.ok) {
-          if (r.auth === false) {localStorage.removeItem('pin'); pin = ''; return mostrarLogin(r.erro);}
-          $('#msg').textContent = r.erro; return false;
-        }
-        doses = r.doses;
-        $('#login').hidden = true; $('#app').hidden = false;
-        const h = new Date().getHours();
-        $('#saudacao').textContent = h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite';
-        $('#data').textContent = new Date().toLocaleDateString('pt-BR', {weekday: 'long', day: 'numeric', month: 'long'});
-        desenharDoses(true);
-        return true;
-      } catch (e) {
-        $('#msg').textContent = 'Sem conexão. Tente atualizar.';
-        $('#app').hidden = false; $('#login').hidden = true;
-      }
-    }
+function iconeForma(f = '') {
+  f = f.toLowerCase();
+  return /gota|xarope/.test(f) ? 'droplet' : /inje/.test(f) ? 'syringe' : 'pill';
+}
 
-    function desenharDoses(animar) {
-      const box = $('#doses'); box.innerHTML = '';
-      if (!doses.length) box.append(el('p', 'empty', 'Nenhuma dose para hoje.'));
-      let periodo = '', n = 0;
-      doses.forEach(d => {
-        const hora = parseInt(d.horario, 10);
-        const p = hora < 12 ? 'Manhã' : hora < 18 ? 'Tarde' : 'Noite';
-        if (p !== periodo) {
-          periodo = p;
-          const h = el('div', 'per'); h.innerHTML = ic(p === 'Noite' ? 'moon' : 'sun');
-          h.append(document.createTextNode(p)); box.append(h);
-        }
-        const b = el('button', 'dose' + (d.tomou ? ' done' : ''));
-        if (animar) b.style.setProperty('--d', (n++ * 50) + 'ms'); else b.style.animation = 'none';
-        const tile = el('div', 'tile'); tile.innerHTML = ic('pill');
-        const t = el('div', 't'); t.append(el('b', '', d.medicamento));
-        const sp = el('span'); const em = el('em', '', d.horario);
-        sp.append(em, document.createTextNode(' · ' + d.dosagem + (d.tomou && d.marcadoAs ? ' · tomou às ' + d.marcadoAs : '')));
-        t.append(sp);
-        const c = el('div', 'chk' + (d.recem ? ' pop' : '')); c.innerHTML = d.tomou ? CHECK : '';
-        b.append(tile, t, c);
-        b.onclick = () => alternar(d);
-        box.append(b);
-      });
-      const feitas = doses.filter(d => d.tomou).length;
-      const tudo = doses.length > 0 && feitas === doses.length;
-      $('#prog').style.strokeDashoffset = 113.1 * (1 - (doses.length ? feitas / doses.length : 0));
-      $('#ringTxt').textContent = `${feitas}/${doses.length}`;
-      $('#ring').classList.toggle('full', tudo);
-      $('#titulo').textContent = tudo ? 'Tudo certo por hoje' : 'Suas doses de hoje';
-    }
+function pintarMeds(meds) {
+  const box = $('#vMeds'); box.innerHTML = '';
+  if (!meds.length) {
+    box.append(el('p', 'empty', 'Nenhum medicamento cadastrado ainda. Toque nos três pontinhos no topo e escolha “Adicionar ou editar” para começar.'));
+    return;
+  }
+    const lista = [...meds].sort((a, b) => (a.status === 'Ativo' ? 0 : 1) - (b.status === 'Ativo' ? 0 : 1));
+    lista.forEach((m, i) => {
+      const det = el('details', m.status === 'Ativo' ? '' : 'off');
+      det.style.setProperty('--d', (i * 50) + 'ms');
+      const s = el('summary');
+      const tile = el('div', 'tile'); tile.innerHTML = ic(iconeForma(m.forma));
+      const t = el('div', 't'); t.append(el('b', '', m.nome));
+      const sub = [m.dosagem, m.forma].filter(Boolean).join(' · ');
+      if (sub) t.append(el('span', '', sub));
+      if (m.paraQue) { t.append(document.createElement('br')); t.append(el('span', 'chip', m.paraQue)); }
+      if (m.status && m.status !== 'Ativo') t.append(el('span', 'chip off', m.status));
+      s.append(tile, t); det.append(s);
+      const info = el('div', 'info');
+      const linha = (icone, rotulo, conteudo, cls = '') => {
+        const r = el('div', 'rowi ' + cls);
+        const mini = el('div', 'mini'); mini.innerHTML = ic(icone);
+        const c = el('div', 'cont'); c.append(el('div', 'k', rotulo), conteudo);
+        r.append(mini, c); info.append(r);
+      };
+      const txt = v => el('div', 'v', v);
+      const chips = (v, cls) => {
+        const w = el('div', 'chips');
+        v.split(',').map(x => x.trim()).filter(Boolean).forEach(x => w.append(el('span', 'chip ' + cls, x)));
+        return w;
+      };
+      if (m.ativo) linha('flask', 'Princípio ativo', txt(m.ativo));
+      if (m.outros) linha('tag', 'Também conhecido como', chips(m.outros, 'o'));
+      if (m.posologia) linha('calendar', 'Como tomar', txt(m.posologia));
+      if (m.horarios) linha('bell', 'Horários', chips(m.horarios, ''));
+      if (m.forma) linha(iconeForma(m.forma), 'Forma', txt(m.forma));
+      if (m.obs) linha('info', 'Observações', txt(m.obs), 'note');
+      det.append(info); box.append(det);
+    });
+}
 
-    async function alternar(d) {
-      d.tomou = !d.tomou; d.marcadoAs = d.tomou ? new Date().toTimeString().slice(0, 5) : '';
-      d.recem = d.tomou; desenharDoses(); d.recem = false;
-      try {
-        const r = await api('marcar', {linha: d.linha, tomou: d.tomou, horario: d.horario, med: d.medicamento});
-        if (!r.ok) throw new Error(r.erro);
-      } catch (e) {
-        d.tomou = !d.tomou; desenharDoses();
-        $('#msg').textContent = 'Não foi possível salvar. Verifique a conexão.';
-      }
-    }
+async function carregarMeds(forcar) {
+  if (!listaMeds.length) { const c = lerCache('meds'); if (c) listaMeds = c; }
+  let pintou = false;
+  if (listaMeds.length || fresco('meds')) { pintarMeds(listaMeds); pintou = true; }
+  else { $('#vMeds').innerHTML = ''; $('#msg').textContent = 'Carregando…'; }
+  if (!forcar && fresco('meds')) return;
+  try {
+    const r = await api('meds');
+    if (!r.ok) { $('#msg').textContent = r.erro; return; }
+    $('#msg').textContent = '';
+    const mudou = JSON.stringify(r.meds) !== JSON.stringify(listaMeds);
+    listaMeds = r.meds; ultima.meds = Date.now(); gravarCache('meds', r.meds);
+    if (mudou || !pintou) pintarMeds(r.meds);
+  } catch (e) {
+    $('#msg').textContent = 'Não foi possível carregar os medicamentos. Verifique a conexão e a implantação do Apps Script.';
+  }
+}
 
-    function iconeForma(f = '') {
-      f = f.toLowerCase();
-      return /gota|xarope/.test(f) ? 'droplet' : /inje/.test(f) ? 'syringe' : 'pill';
-    }
+let abaAtual = 'hoje', itensP = [];
 
-    async function carregarMeds() {
-      const box = $('#vMeds'); box.innerHTML = '';
-      $('#msg').textContent = '';
-      try {
-        const r = await api('meds');
-        if (!r.ok) {$('#msg').textContent = r.erro; return;}
-        listaMeds = r.meds;
-        if (!r.meds.length) {
-          box.append(el('p', 'empty', 'Nenhum medicamento cadastrado ainda. Toque nos três pontinhos no topo e escolha “Adicionar ou editar” para começar.'));
-          return;
-        }
-        const lista = [...r.meds].sort((a, b) => (a.status === 'Ativo' ? 0 : 1) - (b.status === 'Ativo' ? 0 : 1));
-        lista.forEach((m, i) => {
-          const det = el('details', m.status === 'Ativo' ? '' : 'off');
-          det.style.setProperty('--d', (i * 50) + 'ms');
-          const s = el('summary');
-          const tile = el('div', 'tile'); tile.innerHTML = ic(iconeForma(m.forma));
-          const t = el('div', 't'); t.append(el('b', '', m.nome));
-          const sub = [m.dosagem, m.forma].filter(Boolean).join(' · ');
-          if (sub) t.append(el('span', '', sub));
-          if (m.paraQue) {t.append(document.createElement('br')); t.append(el('span', 'chip', m.paraQue));}
-          if (m.status && m.status !== 'Ativo') t.append(el('span', 'chip off', m.status));
-          s.append(tile, t); det.append(s);
-          const info = el('div', 'info');
-          const linha = (icone, rotulo, conteudo, cls = '') => {
-            const r = el('div', 'rowi ' + cls);
-            const mini = el('div', 'mini'); mini.innerHTML = ic(icone);
-            const c = el('div', 'cont'); c.append(el('div', 'k', rotulo), conteudo);
-            r.append(mini, c); info.append(r);
-          };
-          const txt = v => el('div', 'v', v);
-          const chips = (v, cls) => {
-            const w = el('div', 'chips');
-            v.split(',').map(x => x.trim()).filter(Boolean).forEach(x => w.append(el('span', 'chip ' + cls, x)));
-            return w;
-          };
-          if (m.ativo) linha('flask', 'Princípio ativo', txt(m.ativo));
-          if (m.outros) linha('tag', 'Também conhecido como', chips(m.outros, 'o'));
-          if (m.posologia) linha('calendar', 'Como tomar', txt(m.posologia));
-          if (m.horarios) linha('bell', 'Horários', chips(m.horarios, ''));
-          if (m.forma) linha(iconeForma(m.forma), 'Forma', txt(m.forma));
-          if (m.obs) linha('info', 'Observações', txt(m.obs), 'note');
-          det.append(info); box.append(det);
-        });
-      } catch (e) {
-        $('#msg').textContent = 'Não foi possível carregar os medicamentos. Verifique a conexão e a implantação do Apps Script.';
-      }
-    }
+function aba(q) {
+  abaAtual = q;
+  [['hoje', '#vHoje', '#tHoje'], ['meds', '#vMeds', '#tMeds'], ['press', '#vPress', '#tPress'], ['itens', '#vItens', '#tItens']].forEach(([k, v, t]) => {
+    $(v).hidden = k !== q; $(t).classList.toggle('on', k === q);
+  });
+  $('#msg').textContent = '';
+  if (q === 'hoje') carregarHoje();
+  if (q === 'meds') carregarMeds();
+  if (q === 'press') carregarPressao();
+  if (q === 'itens') carregarItens();
+  $('#novoTxt').textContent = q === 'itens' ? 'Adicionar ou editar item' : 'Adicionar ou editar remédio';
+}
+function recarregar() { ({ hoje: carregarHoje, meds: carregarMeds, press: carregarPressao, itens: carregarItens })[abaAtual](true); }
 
+function classe(s, d) {
+  if (s >= 180 || d >= 110) return ['Muito elevada', '#a23f61'];
+  if (s >= 140 || d >= 90) return ['Elevada', '#d6546b'];
+  if (s >= 130 || d >= 85) return ['Limítrofe', '#d9a441'];
+  if (s < 90 || d < 60) return ['Baixa', '#6b8fd1'];
+  return ['Normal', '#5aa37a'];
+}
+function stat(s, d) {
+  const [nome, cor] = classe(s, d);
+  const e = el('span', 'pstat'); const i = el('i'); i.style.setProperty('--c', cor);
+  e.append(i, document.createTextNode(nome)); return e;
+}
 
-    let abaAtual = 'hoje', itensP = [];
-
-    function aba(q) {
-      abaAtual = q;
-      [['hoje', '#vHoje', '#tHoje'], ['meds', '#vMeds', '#tMeds'], ['press', '#vPress', '#tPress'], ['itens', '#vItens', '#tItens']].forEach(([k, v, t]) => {
-        $(v).hidden = k !== q; $(t).classList.toggle('on', k === q);
-      });
-      $('#msg').textContent = '';
-      if (q === 'hoje') carregarHoje();
-      if (q === 'meds') carregarMeds();
-      if (q === 'press') carregarPressao();
-      if (q === 'itens') carregarItens();
-      $('#novoTxt').textContent = q === 'itens' ? 'Adicionar ou editar item' : 'Adicionar ou editar remédio';
-    }
-    function recarregar() {({hoje: carregarHoje, meds: carregarMeds, press: carregarPressao, itens: carregarItens})[abaAtual]();}
-
-    function classe(s, d) {
-      if (s >= 180 || d >= 110) return ['Muito elevada', '#a23f61'];
-      if (s >= 140 || d >= 90) return ['Elevada', '#d6546b'];
-      if (s >= 130 || d >= 85) return ['Limítrofe', '#d9a441'];
-      if (s < 90 || d < 60) return ['Baixa', '#6b8fd1'];
-      return ['Normal', '#5aa37a'];
-    }
-    function stat(s, d) {
-      const [nome, cor] = classe(s, d);
-      const e = el('span', 'pstat'); const i = el('i'); i.style.setProperty('--c', cor);
-      e.append(i, document.createTextNode(nome)); return e;
-    }
-
-    const FORM_P = `<div class="pcard">
+const FORM_P = `<div class="pcard">
   <h2 class="ptit">Nova medição</h2>
   <div class="pgrid">
     <label><span>Sistólica</span><input id="pSis" type="number" inputmode="numeric" placeholder="120" aria-label="Sistólica (máxima)"></label>
@@ -2155,333 +627,353 @@
 <div id="pResumo"></div>
 <div id="pLista"></div>`;
 
-    function ligarForm() {
-      const box = $('#vPress'); box.innerHTML = FORM_P; box.dataset.pronto = '1';
-      $('#pSalvar').onclick = salvarPressao;
-      ['#pSis', '#pDia', '#pPul'].forEach(i => $(i).onkeydown = e => {if (e.key === 'Enter') salvarPressao();});
-    }
+function ligarForm() {
+  const box = $('#vPress'); box.innerHTML = FORM_P; box.dataset.pronto = '1';
+  $('#pSalvar').onclick = salvarPressao;
+  ['#pSis', '#pDia', '#pPul'].forEach(i => $(i).onkeydown = e => { if (e.key === 'Enter') salvarPressao(); });
+}
 
-    async function salvarPressao() {
-      const sis = $('#pSis').value, dia = $('#pDia').value, pulso = $('#pPul').value;
-      if (!sis || !dia) {$('#msg').textContent = 'Informe a sistólica e a diastólica.'; return;}
-      const b = $('#pSalvar'); b.disabled = true; $('#msg').textContent = '';
-      try {
-        const r = await api('pressao_add', {sis, dia, pulso});
-        if (!r.ok) {$('#msg').textContent = r.erro; return;}
-        itensP.unshift(r.item);
-        ['#pSis', '#pDia', '#pPul'].forEach(i => $(i).value = '');
-        $('#msg').textContent = `Registrado às ${r.item.hora}.`;
-        desenharPressao(true);
-      } catch (e) {
-        $('#msg').textContent = 'Não foi possível salvar. Verifique a conexão.';
-      } finally {b.disabled = false;}
-    }
+async function salvarPressao() {
+  const sis = $('#pSis').value, dia = $('#pDia').value, pulso = $('#pPul').value;
+  if (!sis || !dia) { $('#msg').textContent = 'Informe a sistólica e a diastólica.'; return; }
+  const b = $('#pSalvar'); b.disabled = true; $('#msg').textContent = '';
+  try {
+    const r = await api('pressao_add', { sis, dia, pulso });
+    if (!r.ok) { $('#msg').textContent = r.erro; return; }
+    itensP.unshift(r.item); gravarCache('press', itensP);
+    ['#pSis', '#pDia', '#pPul'].forEach(i => $(i).value = '');
+    $('#msg').textContent = `Registrado às ${r.item.hora}.`;
+    desenharPressao(true);
+  } catch (e) {
+    $('#msg').textContent = 'Não foi possível salvar. Verifique a conexão.';
+  } finally { b.disabled = false; }
+}
 
-    async function carregarPressao() {
-      if (!$('#vPress').dataset.pronto) ligarForm();
-      try {
-        const r = await api('pressao');
-        if (!r.ok) {$('#msg').textContent = r.erro; return;}
-        itensP = r.itens; desenharPressao(true);
-      } catch (e) {
-        $('#msg').textContent = 'Não foi possível carregar. Verifique a conexão e a implantação do Apps Script.';
-      }
-    }
+async function carregarPressao(forcar) {
+  if (!$('#vPress').dataset.pronto) ligarForm();
+  if (!itensP.length) { const c = lerCache('press'); if (c) itensP = c; }
+  let pintou = false;
+  if (itensP.length || fresco('press')) { desenharPressao(true); pintou = true; }
+  else $('#msg').textContent = 'Carregando…';
+  if (!forcar && fresco('press')) return;
+  try {
+    const r = await api('pressao');
+    if (!r.ok) { $('#msg').textContent = r.erro; return; }
+    $('#msg').textContent = '';
+    const mudou = JSON.stringify(r.itens) !== JSON.stringify(itensP);
+    itensP = r.itens; ultima.press = Date.now(); gravarCache('press', r.itens);
+    if (mudou || !pintou) desenharPressao(true);
+  } catch (e) {
+    $('#msg').textContent = 'Não foi possível carregar. Verifique a conexão e a implantação do Apps Script.';
+  }
+}
 
-    function grafico(its) {
-      const d = its.slice(0, 14).reverse(); if (d.length < 2) return '';
-      const W = 320, H = 110, px = 10, py = 12;
-      const lo = Math.min(...d.map(x => x.dia)) - 10, hi = Math.max(...d.map(x => x.sis)) + 10;
-      const X = i => px + i * (W - 2 * px) / (d.length - 1), Y = v => py + (hi - v) * (H - 2 * py) / (hi - lo);
-      const pts = k => d.map((x, i) => `${X(i).toFixed(1)},${Y(x[k]).toFixed(1)}`).join(' ');
-      const dots = k => d.map((x, i) => `<circle cx="${X(i).toFixed(1)}" cy="${Y(x[k]).toFixed(1)}" r="3"/>`).join('');
-      return `<svg class="graf" viewBox="0 0 ${W} ${H}"><polyline class="ld" pathLength="1" points="${pts('dia')}"/><g class="dd">${dots('dia')}</g><polyline class="ls" pathLength="1" points="${pts('sis')}"/><g class="ds">${dots('sis')}</g></svg>
+function grafico(its) {
+  const d = its.slice(0, 14).reverse(); if (d.length < 2) return '';
+  const W = 320, H = 110, px = 10, py = 12;
+  const lo = Math.min(...d.map(x => x.dia)) - 10, hi = Math.max(...d.map(x => x.sis)) + 10;
+  const X = i => px + i * (W - 2 * px) / (d.length - 1), Y = v => py + (hi - v) * (H - 2 * py) / (hi - lo);
+  const pts = k => d.map((x, i) => `${X(i).toFixed(1)},${Y(x[k]).toFixed(1)}`).join(' ');
+  const dots = k => d.map((x, i) => `<circle cx="${X(i).toFixed(1)}" cy="${Y(x[k]).toFixed(1)}" r="3"/>`).join('');
+  return `<svg class="graf" viewBox="0 0 ${W} ${H}"><polyline class="ld" pathLength="1" points="${pts('dia')}"/><g class="dd">${dots('dia')}</g><polyline class="ls" pathLength="1" points="${pts('sis')}"/><g class="ds">${dots('sis')}</g></svg>
     <div class="leg"><span><i style="background:var(--rose)"></i>Sistólica</span><span><i style="background:#e8a6b8"></i>Diastólica</span></div>`;
-    }
+}
 
-    function desenharPressao() {
-      const res = $('#pResumo'), lista = $('#pLista'); res.innerHTML = ''; lista.innerHTML = '';
-      if (!itensP.length) {lista.append(el('p', 'empty', 'Nenhuma medição registrada ainda.')); return;}
-      const u = itensP[0], ult = itensP.slice(0, 7);
-      const mS = Math.round(ult.reduce((a, x) => a + x.sis, 0) / ult.length), mD = Math.round(ult.reduce((a, x) => a + x.dia, 0) / ult.length);
-      const c = el('div', 'pcard');
-      const top = el('div', 'pres');
-      const esq = el('div'); esq.append(el('div', 'big', `${u.sis}/${u.dia}`));
-      const sm = el('small', '', `Última: ${u.data.slice(0, 5)} às ${u.hora}`); esq.append(sm);
-      const dir = el('div', 'med'); const mb = el('b', '', `${mS}/${mD}`);
-      dir.append(mb, document.createTextNode(`média das últimas ${ult.length}`));
-      top.append(esq, dir); c.append(top);
-      const st = el('div'); st.style.marginTop = '10px'; st.append(stat(u.sis, u.dia)); c.append(st);
-      if (classe(u.sis, u.dia)[0] === 'Muito elevada') {
-        c.append(el('p', 'palerta', 'Valor muito elevado. Se tiver sintomas ou o valor se repetir, procure atendimento médico.'));
-      }
-      const g = el('div'); g.innerHTML = grafico(itensP); c.append(g);
-      res.append(c);
+function desenharPressao() {
+  const res = $('#pResumo'), lista = $('#pLista'); res.innerHTML = ''; lista.innerHTML = '';
+  if (!itensP.length) { lista.append(el('p', 'empty', 'Nenhuma medição registrada ainda.')); return; }
+  const u = itensP[0], ult = itensP.slice(0, 7);
+  const mS = Math.round(ult.reduce((a, x) => a + x.sis, 0) / ult.length), mD = Math.round(ult.reduce((a, x) => a + x.dia, 0) / ult.length);
+  const c = el('div', 'pcard');
+  const top = el('div', 'pres');
+  const esq = el('div'); esq.append(el('div', 'big', `${u.sis}/${u.dia}`));
+  const sm = el('small', '', `Última: ${u.data.slice(0, 5)} às ${u.hora}`); esq.append(sm);
+  const dir = el('div', 'med'); const mb = el('b', '', `${mS}/${mD}`);
+  dir.append(mb, document.createTextNode(`média das últimas ${ult.length}`));
+  top.append(esq, dir); c.append(top);
+  const st = el('div'); st.style.marginTop = '10px'; st.append(stat(u.sis, u.dia)); c.append(st);
+  if (classe(u.sis, u.dia)[0] === 'Muito elevada') {
+    c.append(el('p', 'palerta', 'Valor muito elevado. Se tiver sintomas ou o valor se repetir, procure atendimento médico.'));
+  }
+  const g = el('div'); g.innerHTML = grafico(itensP); c.append(g);
+  res.append(c);
 
-      itensP.slice(0, 30).forEach((x, i) => {
-        const it = el('div', 'pitem'); it.style.setProperty('--d', Math.min(i, 8) * 40 + 'ms');
-        const m = el('div', 'pm'); m.append(el('b', '', `${x.sis}/${x.dia}`));
-        m.append(el('span', '', `${x.data.slice(0, 5)} · ${x.hora}` + (x.pulso ? ` · pulso ${x.pulso}` : '')));
-        const del = el('button', 'pdel'); del.setAttribute('aria-label', 'Apagar medição'); del.innerHTML = ic('trash');
-        del.onclick = async () => {
-          if (!confirm(`Apagar a medição ${x.sis}/${x.dia} de ${x.data} às ${x.hora}?`)) return;
-          try {
-            const r = await api('pressao_del', {linha: x.linha, data: x.data, hora: x.hora});
-            if (!r.ok) {$('#msg').textContent = r.erro; return;}
-            carregarPressao();
-          } catch (e) {$('#msg').textContent = 'Não foi possível apagar. Verifique a conexão.';}
-        };
-        it.append(m, stat(x.sis, x.dia), del); lista.append(it);
-      });
-      lista.append(el('p', 'pfoot', 'Classificação de referência baseada na Diretriz Brasileira de Hipertensão. Ela não substitui a orientação do seu médico.'));
-    }
-
-    let edit = null, horas = [], statusSel = 'Ativo', listaMeds = [];
-    const FORMAS = ['Comprimido', 'Cápsula', 'Gotas', 'Xarope', 'Injeção', 'Pomada', 'Outro'];
-    const PRESETS = {'1×': ['08:00'], '2×': ['08:00', '20:00'], '3×': ['08:00', '14:00', '20:00'], '4×': ['06:00', '12:00', '18:00', '22:00']};
-    const normHora = h => {const x = String(h).trim().match(/^(\d{1,2})(?:[:h.](\d{2}))?/); return x ? ('0' + x[1]).slice(-2) + ':' + (x[2] || '00') : null;};
-
-    function desenharHoras() {
-      const c = $('#fChips'); c.innerHTML = ''; horas.sort();
-      horas.forEach(h => {
-        const e = el('span', 'hchip'); e.append(document.createTextNode(h));
-        const b = el('button'); b.type = 'button'; b.setAttribute('aria-label', 'Remover ' + h); b.innerHTML = ic('x');
-        b.onclick = () => {horas = horas.filter(x => x !== h); desenharHoras();};
-        e.append(b); c.append(e);
-      });
-      if (!horas.length) c.append(el('span', 'hint', 'Nenhum horário ainda. Sem horário, o remédio não entra na lista de “Hoje”.'));
-    }
-    function addHora() {
-      const v = normHora($('#fHora').value || '');
-      if (v && !horas.includes(v)) horas.push(v);
-      $('#fHora').value = ''; desenharHoras();
-    }
-    function marcarStatus() {
-      document.querySelectorAll('#fStatus button').forEach(b => b.classList.toggle('on', b.dataset.v === statusSel));
-    }
-    function preencher(m) {
-      edit = m ? {linha: m.linha, nome: m.nome} : null;
-      $('#sTit').textContent = m ? 'Editar medicamento' : 'Novo medicamento';
-      $('#fNome').value = m ? m.nome : ''; $('#fAtivo').value = m ? m.ativo : '';
-      $('#fOutros').value = m ? m.outros : ''; $('#fDose').value = m ? m.dosagem : '';
-      $('#fPos').value = m ? m.posologia : ''; $('#fPara').value = m ? m.paraQue : ''; $('#fObs').value = m ? m.obs : '';
-      const f = $('#fForma'); f.innerHTML = '';
-      const lista = m && m.forma && !FORMAS.includes(m.forma) ? [...FORMAS, m.forma] : FORMAS;
-      [''].concat(lista).forEach(x => {const o = el('option', '', x || 'Selecione'); o.value = x; f.append(o);});
-      f.value = m ? m.forma : '';
-      horas = m && m.horarios ? [...new Set(m.horarios.split(/[,;]/).map(normHora).filter(Boolean))] : [];
-      statusSel = m && String(m.status).toLowerCase() === 'suspenso' ? 'Suspenso' : 'Ativo'; marcarStatus();
-      $('#sExcluir').hidden = !m; $('#sMsg').textContent = '';
-      desenharHoras();
-    }
-    async function abrirEditor() {
-      try {const r = await api('meds'); if (r.ok) listaMeds = r.meds;} catch (e) { /* usa a lista já carregada */}
-      abrirForm();
-    }
-    function montarEscolha(sel) {
-      const c = $('#fEscolher'); c.innerHTML = '';
-      const n = el('option', '', 'Adicionar um novo medicamento'); n.value = ''; c.append(n);
-      [...listaMeds].sort((a, b) => a.nome.localeCompare(b.nome)).forEach(m => {
-        const o = el('option', '', 'Editar: ' + m.nome + (m.dosagem ? ' · ' + m.dosagem : '')); o.value = m.linha; c.append(o);
-      });
-      c.value = sel ? String(sel.linha) : '';
-    }
-    function abrirForm(m) {
-      montarEscolha(m); preencher(m);
-      const sh = $('#sheet'); sh.hidden = false; requestAnimationFrame(() => sh.classList.add('open'));
-      document.body.style.overflow = 'hidden';
-    }
-    function fecharForm() {
-      const sh = $('#sheet'); sh.classList.remove('open');
-      setTimeout(() => {sh.hidden = true;}, 260); document.body.style.overflow = '';
-    }
-    async function salvarMed() {
-      if ($('#fHora').value) addHora();
-      const nome = $('#fNome').value.trim();
-      if (!nome) {$('#sMsg').textContent = 'Informe o nome do medicamento.'; return;}
-      const med = {
-        nome, ativo: $('#fAtivo').value.trim(), outros: $('#fOutros').value.trim(), dosagem: $('#fDose').value.trim(),
-        forma: $('#fForma').value, posologia: $('#fPos').value.trim(), horarios: horas.join(', '),
-        paraQue: $('#fPara').value.trim(), obs: $('#fObs').value.trim(), status: statusSel
-      };
-      const b = $('#sSalvar'); b.disabled = true; $('#sMsg').textContent = '';
+  itensP.slice(0, 30).forEach((x, i) => {
+    const it = el('div', 'pitem'); it.style.setProperty('--d', Math.min(i, 8) * 40 + 'ms');
+    const m = el('div', 'pm'); m.append(el('b', '', `${x.sis}/${x.dia}`));
+    m.append(el('span', '', `${x.data.slice(0, 5)} · ${x.hora}` + (x.pulso ? ` · pulso ${x.pulso}` : '')));
+    const del = el('button', 'pdel'); del.setAttribute('aria-label', 'Apagar medição'); del.innerHTML = ic('trash');
+    del.onclick = async () => {
+      if (!confirm(`Apagar a medição ${x.sis}/${x.dia} de ${x.data} às ${x.hora}?`)) return;
       try {
-        const r = await api('med_salvar', {linha: edit ? edit.linha : 0, nomeOriginal: edit ? edit.nome : '', med});
-        if (!r.ok) {$('#sMsg').textContent = r.erro; return;}
-        fecharForm(); await carregarMeds(); if (abaAtual === 'hoje') await carregarHoje(); $('#msg').textContent = 'Medicamento salvo.';
-      } catch (e) {$('#sMsg').textContent = 'Não foi possível salvar. Verifique a conexão.';}
-      finally {b.disabled = false;}
-    }
-    async function excluirMed() {
-      if (!edit || !confirm(`Excluir “${edit.nome}”? O histórico de doses já registradas continua na planilha. Se quiser só pausar, use o status Suspenso.`)) return;
-      try {
-        const r = await api('med_del', {linha: edit.linha, nomeOriginal: edit.nome});
-        if (!r.ok) {$('#sMsg').textContent = r.erro; return;}
-        fecharForm(); await carregarMeds(); if (abaAtual === 'hoje') await carregarHoje(); $('#msg').textContent = 'Medicamento excluído.';
-      } catch (e) {$('#sMsg').textContent = 'Não foi possível excluir. Verifique a conexão.';}
-    }
-    Object.keys(PRESETS).forEach(k => {
-      const b = el('button', '', k + ' ao dia'); b.type = 'button';
-      b.onclick = () => {horas = [...PRESETS[k]]; desenharHoras();};
-      $('#fPre').append(b);
-    });
-    document.querySelectorAll('#fStatus button').forEach(b => b.onclick = () => {statusSel = b.dataset.v; marcarStatus();});
-    $('#fAddHora').onclick = addHora;
-    $('#fHora').onkeydown = e => {if (e.key === 'Enter') {e.preventDefault(); addHora();} };
-    $('#novoMed').onclick = () => abaAtual === 'itens' ? abrirEditorItem() : abrirEditor();
-    $('#fEscolher').onchange = e => preencher(listaMeds.find(x => String(x.linha) === e.target.value));
-    $('#sSalvar').onclick = salvarMed; $('#sExcluir').onclick = excluirMed;
-    $('#sFechar').onclick = fecharForm; $('#sBg').onclick = fecharForm;
-    document.addEventListener('keydown', e => {if (e.key === 'Escape' && !$('#sheet').hidden) fecharForm();});
-
-    let itens = [], editI = null, tRe = null;
-    const CATS = ['Higiene', 'Curativos', 'Pomadas e cremes', 'Equipamentos', 'Outros'];
-    const baixo = it => it.min > 0 && it.qtd <= it.min;
-    const fmtN = n => Number.isInteger(n) ? String(n) : String(Math.round(n * 100) / 100).replace('.', ',');
-    const mostrarSheet = sh => {sh.hidden = false; requestAnimationFrame(() => sh.classList.add('open')); document.body.style.overflow = 'hidden';};
-    const esconderSheet = sh => {sh.classList.remove('open'); setTimeout(() => {sh.hidden = true;}, 260); document.body.style.overflow = '';};
-
-    async function carregarItens() {
-      $('#msg').textContent = '';
-      try {
-        const r = await api('itens');
-        if (!r.ok) {$('#msg').textContent = r.erro; return;}
-        itens = r.itens; desenharItens(true);
-      } catch (e) {
-        $('#msg').textContent = 'Não foi possível carregar os itens. Verifique a conexão e a implantação do Apps Script.';
-      }
-    }
-
-    function desenharItens(animar) {
-      const box = $('#vItens'); box.innerHTML = '';
-      if (!itens.length) {
-        box.append(el('p', 'empty', 'Nenhum item cadastrado ainda. Toque nos três pontinhos e escolha “Adicionar ou editar item” (fraldas, gazes, pomadas…).'));
-        return;
-      }
-      let n = 0;
-      const secao = (titulo, icone, lista) => {
-        if (!lista.length) return;
-        const h = el('div', 'per'); h.innerHTML = ic(icone); h.append(document.createTextNode(titulo)); box.append(h);
-        lista.forEach(it => box.append(linhaItem(it, animar ? n++ : -1)));
-      };
-      secao('Repor em breve', 'alert', itens.filter(baixo));
-      const resto = itens.filter(x => !baixo(x));
-      [...new Set(resto.map(x => x.categoria || 'Outros'))].sort().forEach(c => secao(c, 'box', resto.filter(x => (x.categoria || 'Outros') === c)));
-    }
-
-    function linhaItem(it, idx) {
-      const r = el('div', 'item' + (baixo(it) ? ' low' : ''));
-      if (idx >= 0) r.style.setProperty('--d', Math.min(idx, 10) * 40 + 'ms'); else r.style.animation = 'none';
-      const tile = el('div', 'tile'); tile.innerHTML = ic(baixo(it) ? 'alert' : 'box');
-      const t = el('div', 't'); t.append(el('b', '', it.nome));
-      const sub = it.min > 0 ? `Avisa com ${fmtN(it.min)} ${it.unidade || ''}`.trim() : (it.unidade || '');
-      if (sub) t.append(el('span', '', sub));
-      const st = el('div', 'step');
-      const menos = el('button'); menos.setAttribute('aria-label', 'Diminuir'); menos.innerHTML = ic('minus');
-      const mais = el('button'); mais.setAttribute('aria-label', 'Aumentar'); mais.innerHTML = ic('plus');
-      const q = el('b', '', fmtN(it.qtd));
-      menos.onclick = () => ajustar(it, -1, q, r); mais.onclick = () => ajustar(it, 1, q, r);
-      st.append(menos, q, mais); r.append(tile, t, st); return r;
-    }
-
-    async function ajustar(it, delta, q, row) {
-      if (delta < 0 && it.qtd <= 0) return;
-      it.qtd = Math.max(0, it.qtd + delta); q.textContent = fmtN(it.qtd);
-      q.classList.remove('bump'); void q.offsetWidth; q.classList.add('bump');
-      row.classList.toggle('low', baixo(it));
-      clearTimeout(tRe); tRe = setTimeout(() => desenharItens(false), 1000);
-      try {
-        const r = await api('item_ajustar', {linha: it.linha, nome: it.nome, delta});
-        if (!r.ok) throw new Error(r.erro);
-      } catch (e) {
-        it.qtd = Math.max(0, it.qtd - delta); q.textContent = fmtN(it.qtd);
-        $('#msg').textContent = 'Não foi possível salvar. Atualize e tente de novo.';
-      }
-    }
-
-    function preencherI(it) {
-      editI = it ? {linha: it.linha, nome: it.nome} : null;
-      $('#iTit').textContent = it ? 'Editar item' : 'Novo item';
-      $('#iNome').value = it ? it.nome : ''; $('#iUn').value = it ? it.unidade : '';
-      $('#iQtd').value = it ? it.qtd : ''; $('#iMin').value = it && it.min ? it.min : ''; $('#iObs').value = it ? it.obs : '';
-      const c = $('#iCat'); c.innerHTML = '';
-      const cats = it && it.categoria && !CATS.includes(it.categoria) ? [...CATS, it.categoria] : CATS;
-      cats.forEach(x => {const o = el('option', '', x); o.value = x; c.append(o);});
-      c.value = it && it.categoria ? it.categoria : 'Outros';
-      $('#iExcluir').hidden = !it; $('#iMsg').textContent = '';
-    }
-    function montarEscolhaI() {
-      const c = $('#iEscolher'); c.innerHTML = '';
-      const n = el('option', '', 'Adicionar um novo item'); n.value = ''; c.append(n);
-      [...itens].sort((a, b) => a.nome.localeCompare(b.nome)).forEach(it => {
-        const o = el('option', '', 'Editar: ' + it.nome); o.value = it.linha; c.append(o);
-      });
-      c.value = '';
-    }
-    async function abrirEditorItem() {
-      try {const r = await api('itens'); if (r.ok) itens = r.itens;} catch (e) { /* usa a lista já carregada */}
-      montarEscolhaI(); preencherI(); mostrarSheet($('#sheetI'));
-    }
-    async function salvarItem() {
-      const nome = $('#iNome').value.trim();
-      if (!nome) {$('#iMsg').textContent = 'Informe o nome do item.'; return;}
-      const item = {nome, categoria: $('#iCat').value, unidade: $('#iUn').value.trim(), qtd: $('#iQtd').value, min: $('#iMin').value, obs: $('#iObs').value.trim()};
-      const b = $('#iSalvar'); b.disabled = true; $('#iMsg').textContent = '';
-      try {
-        const r = await api('item_salvar', {linha: editI ? editI.linha : 0, nomeOriginal: editI ? editI.nome : '', item});
-        if (!r.ok) {$('#iMsg').textContent = r.erro; return;}
-        esconderSheet($('#sheetI')); await carregarItens(); $('#msg').textContent = 'Item salvo.';
-      } catch (e) {$('#iMsg').textContent = 'Não foi possível salvar. Verifique a conexão.';}
-      finally {b.disabled = false;}
-    }
-    async function excluirItem() {
-      if (!editI || !confirm(`Excluir “${editI.nome}” da lista?`)) return;
-      try {
-        const r = await api('item_del', {linha: editI.linha, nomeOriginal: editI.nome});
-        if (!r.ok) {$('#iMsg').textContent = r.erro; return;}
-        esconderSheet($('#sheetI')); await carregarItens(); $('#msg').textContent = 'Item excluído.';
-      } catch (e) {$('#iMsg').textContent = 'Não foi possível excluir. Verifique a conexão.';}
-    }
-    $('#iEscolher').onchange = e => preencherI(itens.find(x => String(x.linha) === e.target.value));
-    $('#iSalvar').onclick = salvarItem; $('#iExcluir').onclick = excluirItem;
-    $('#iFechar').onclick = () => esconderSheet($('#sheetI')); $('#iBg').onclick = () => esconderSheet($('#sheetI'));
-    document.addEventListener('keydown', e => {if (e.key === 'Escape' && !$('#sheetI').hidden) esconderSheet($('#sheetI'));});
-
-    $('#entrar').onclick = async () => {
-      pin = $('#pin').value.trim(); if (!pin) return;
-      $('#loginMsg').textContent = 'Verificando…';
-      if (await carregarHoje()) localStorage.setItem('pin', pin);
+        const r = await api('pressao_del', { linha: x.linha, data: x.data, hora: x.hora });
+        if (!r.ok) { $('#msg').textContent = r.erro; return; }
+        carregarPressao(true);
+      } catch (e) { $('#msg').textContent = 'Não foi possível apagar. Verifique a conexão.'; }
     };
-    $('#pin').onkeydown = e => {if (e.key === 'Enter') $('#entrar').click();};
-    $('#tHoje').onclick = () => aba('hoje');
-    $('#tMeds').onclick = () => aba('meds');
-    $('#tPress').onclick = () => aba('press');
-    $('#tItens').onclick = () => aba('itens');
-    $('#atualizar').onclick = e => {
-      const b = e.currentTarget; b.classList.add('spin'); setTimeout(() => b.classList.remove('spin'), 750);
-      recarregar();
-    };
-    $('#sair').onclick = () => {localStorage.removeItem('pin'); pin = ''; mostrarLogin();};
-    const menu = $('.menu');
-    $('#menuBtn').onclick = e => {
-      e.stopPropagation();
-      const aberto = menu.classList.toggle('open');
-      e.currentTarget.setAttribute('aria-expanded', aberto);
-    };
-    document.addEventListener('click', () => menu.classList.remove('open'));
-    document.addEventListener('keydown', e => {if (e.key === 'Escape') menu.classList.remove('open');});
-    document.addEventListener('visibilitychange', () => {if (!document.hidden && pin) carregarHoje();});
+    it.append(m, stat(x.sis, x.dia), del); lista.append(it);
+  });
+  lista.append(el('p', 'pfoot', 'Classificação de referência baseada na Diretriz Brasileira de Hipertensão. Ela não substitui a orientação do seu médico.'));
+}
 
-    if (API_URL.includes('COLE_AQUI')) {
-      mostrarLogin('Falta colar a URL do Apps Script no index.html (linha API_URL).');
-    } else if (pin) {
-      $('#app').hidden = false;
-      $('#msg').textContent = 'Carregando…';
-      carregarHoje();
-    } else {
-      mostrarLogin();
-    }
-  </script>
+let edit = null, horas = [], statusSel = 'Ativo', listaMeds = [];
+const FORMAS = ['Comprimido', 'Cápsula', 'Gotas', 'Xarope', 'Injeção', 'Pomada', 'Outro'];
+const PRESETS = { '1×': ['08:00'], '2×': ['08:00', '20:00'], '3×': ['08:00', '14:00', '20:00'], '4×': ['06:00', '12:00', '18:00', '22:00'] };
+const normHora = h => { const x = String(h).trim().match(/^(\d{1,2})(?:[:h.](\d{2}))?/); return x ? ('0' + x[1]).slice(-2) + ':' + (x[2] || '00') : null; };
+
+function desenharHoras() {
+  const c = $('#fChips'); c.innerHTML = ''; horas.sort();
+  horas.forEach(h => {
+    const e = el('span', 'hchip'); e.append(document.createTextNode(h));
+    const b = el('button'); b.type = 'button'; b.setAttribute('aria-label', 'Remover ' + h); b.innerHTML = ic('x');
+    b.onclick = () => { horas = horas.filter(x => x !== h); desenharHoras(); };
+    e.append(b); c.append(e);
+  });
+  if (!horas.length) c.append(el('span', 'hint', 'Nenhum horário ainda. Sem horário, o remédio não entra na lista de “Hoje”.'));
+}
+function addHora() {
+  const v = normHora($('#fHora').value || '');
+  if (v && !horas.includes(v)) horas.push(v);
+  $('#fHora').value = ''; desenharHoras();
+}
+function marcarStatus() {
+  document.querySelectorAll('#fStatus button').forEach(b => b.classList.toggle('on', b.dataset.v === statusSel));
+}
+function preencher(m) {
+  edit = m ? { linha: m.linha, nome: m.nome } : null;
+  $('#sTit').textContent = m ? 'Editar medicamento' : 'Novo medicamento';
+  $('#fNome').value = m ? m.nome : ''; $('#fAtivo').value = m ? m.ativo : '';
+  $('#fOutros').value = m ? m.outros : ''; $('#fDose').value = m ? m.dosagem : '';
+  $('#fPos').value = m ? m.posologia : ''; $('#fPara').value = m ? m.paraQue : ''; $('#fObs').value = m ? m.obs : '';
+  const f = $('#fForma'); f.innerHTML = '';
+  const lista = m && m.forma && !FORMAS.includes(m.forma) ? [...FORMAS, m.forma] : FORMAS;
+  [''].concat(lista).forEach(x => { const o = el('option', '', x || 'Selecione'); o.value = x; f.append(o); });
+  f.value = m ? m.forma : '';
+  horas = m && m.horarios ? [...new Set(m.horarios.split(/[,;]/).map(normHora).filter(Boolean))] : [];
+  statusSel = m && String(m.status).toLowerCase() === 'suspenso' ? 'Suspenso' : 'Ativo'; marcarStatus();
+  $('#sExcluir').hidden = !m; $('#sMsg').textContent = '';
+  desenharHoras();
+}
+async function abrirEditor() {
+  try { const r = await api('meds'); if (r.ok) listaMeds = r.meds; } catch (e) { /* usa a lista já carregada */ }
+  abrirForm();
+}
+function montarEscolha(sel) {
+  const c = $('#fEscolher'); c.innerHTML = '';
+  const n = el('option', '', 'Adicionar um novo medicamento'); n.value = ''; c.append(n);
+  [...listaMeds].sort((a, b) => a.nome.localeCompare(b.nome)).forEach(m => {
+    const o = el('option', '', 'Editar: ' + m.nome + (m.dosagem ? ' · ' + m.dosagem : '')); o.value = m.linha; c.append(o);
+  });
+  c.value = sel ? String(sel.linha) : '';
+}
+function abrirForm(m) {
+  montarEscolha(m); preencher(m);
+  const sh = $('#sheet'); sh.hidden = false; requestAnimationFrame(() => sh.classList.add('open'));
+  document.body.style.overflow = 'hidden';
+}
+function fecharForm() {
+  const sh = $('#sheet'); sh.classList.remove('open');
+  setTimeout(() => { sh.hidden = true; }, 260); document.body.style.overflow = '';
+}
+async function salvarMed() {
+  if ($('#fHora').value) addHora();
+  const nome = $('#fNome').value.trim();
+  if (!nome) { $('#sMsg').textContent = 'Informe o nome do medicamento.'; return; }
+  const med = { nome, ativo: $('#fAtivo').value.trim(), outros: $('#fOutros').value.trim(), dosagem: $('#fDose').value.trim(),
+    forma: $('#fForma').value, posologia: $('#fPos').value.trim(), horarios: horas.join(', '),
+    paraQue: $('#fPara').value.trim(), obs: $('#fObs').value.trim(), status: statusSel };
+  const b = $('#sSalvar'); b.disabled = true; $('#sMsg').textContent = '';
+  try {
+    const r = await api('med_salvar', { linha: edit ? edit.linha : 0, nomeOriginal: edit ? edit.nome : '', med });
+    if (!r.ok) { $('#sMsg').textContent = r.erro; return; }
+    fecharForm(); await carregarMeds(true); if (abaAtual === 'hoje') await carregarHoje(true); $('#msg').textContent = 'Medicamento salvo.';
+  } catch (e) { $('#sMsg').textContent = 'Não foi possível salvar. Verifique a conexão.'; }
+  finally { b.disabled = false; }
+}
+async function excluirMed() {
+  if (!edit || !confirm(`Excluir “${edit.nome}”? O histórico de doses já registradas continua na planilha. Se quiser só pausar, use o status Suspenso.`)) return;
+  try {
+    const r = await api('med_del', { linha: edit.linha, nomeOriginal: edit.nome });
+    if (!r.ok) { $('#sMsg').textContent = r.erro; return; }
+    fecharForm(); await carregarMeds(true); if (abaAtual === 'hoje') await carregarHoje(true); $('#msg').textContent = 'Medicamento excluído.';
+  } catch (e) { $('#sMsg').textContent = 'Não foi possível excluir. Verifique a conexão.'; }
+}
+Object.keys(PRESETS).forEach(k => {
+  const b = el('button', '', k + ' ao dia'); b.type = 'button';
+  b.onclick = () => { horas = [...PRESETS[k]]; desenharHoras(); };
+  $('#fPre').append(b);
+});
+document.querySelectorAll('#fStatus button').forEach(b => b.onclick = () => { statusSel = b.dataset.v; marcarStatus(); });
+$('#fAddHora').onclick = addHora;
+$('#fHora').onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); addHora(); } };
+$('#novoMed').onclick = () => abaAtual === 'itens' ? abrirEditorItem() : abrirEditor();
+$('#fEscolher').onchange = e => preencher(listaMeds.find(x => String(x.linha) === e.target.value));
+$('#sSalvar').onclick = salvarMed; $('#sExcluir').onclick = excluirMed;
+$('#sFechar').onclick = fecharForm; $('#sBg').onclick = fecharForm;
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#sheet').hidden) fecharForm(); });
+
+let itens = [], editI = null, tRe = null;
+const CATS = ['Higiene', 'Curativos', 'Pomadas e cremes', 'Equipamentos', 'Outros'];
+const baixo = it => it.min > 0 && it.qtd <= it.min;
+const fmtN = n => Number.isInteger(n) ? String(n) : String(Math.round(n * 100) / 100).replace('.', ',');
+const mostrarSheet = sh => { sh.hidden = false; requestAnimationFrame(() => sh.classList.add('open')); document.body.style.overflow = 'hidden'; };
+const esconderSheet = sh => { sh.classList.remove('open'); setTimeout(() => { sh.hidden = true; }, 260); document.body.style.overflow = ''; };
+
+async function carregarItens(forcar) {
+  if (!itens.length) { const c = lerCache('itens'); if (c) itens = c; }
+  let pintou = false;
+  if (itens.length || fresco('itens')) { desenharItens(true); pintou = true; }
+  else $('#msg').textContent = 'Carregando…';
+  if (!forcar && fresco('itens')) return;
+  try {
+    const r = await api('itens');
+    if (!r.ok) { $('#msg').textContent = r.erro; return; }
+    $('#msg').textContent = '';
+    const mudou = JSON.stringify(r.itens) !== JSON.stringify(itens);
+    itens = r.itens; ultima.itens = Date.now(); gravarCache('itens', r.itens);
+    if (mudou || !pintou) desenharItens(!pintou);
+  } catch (e) {
+    $('#msg').textContent = 'Não foi possível carregar os itens. Verifique a conexão e a implantação do Apps Script.';
+  }
+}
+
+function desenharItens(animar) {
+  const box = $('#vItens'); box.innerHTML = '';
+  if (!itens.length) {
+    box.append(el('p', 'empty', 'Nenhum item cadastrado ainda. Toque nos três pontinhos e escolha “Adicionar ou editar item” (fraldas, gazes, pomadas…).'));
+    return;
+  }
+  let n = 0;
+  const secao = (titulo, icone, lista) => {
+    if (!lista.length) return;
+    const h = el('div', 'per'); h.innerHTML = ic(icone); h.append(document.createTextNode(titulo)); box.append(h);
+    lista.forEach(it => box.append(linhaItem(it, animar ? n++ : -1)));
+  };
+  secao('Repor em breve', 'alert', itens.filter(baixo));
+  const resto = itens.filter(x => !baixo(x));
+  [...new Set(resto.map(x => x.categoria || 'Outros'))].sort().forEach(c => secao(c, 'box', resto.filter(x => (x.categoria || 'Outros') === c)));
+}
+
+function linhaItem(it, idx) {
+  const r = el('div', 'item' + (baixo(it) ? ' low' : ''));
+  if (idx >= 0) r.style.setProperty('--d', Math.min(idx, 10) * 40 + 'ms'); else r.style.animation = 'none';
+  const tile = el('div', 'tile'); tile.innerHTML = ic(baixo(it) ? 'alert' : 'box');
+  const t = el('div', 't'); t.append(el('b', '', it.nome));
+  const sub = it.min > 0 ? `Avisa com ${fmtN(it.min)} ${it.unidade || ''}`.trim() : (it.unidade || '');
+  if (sub) t.append(el('span', '', sub));
+  const st = el('div', 'step');
+  const menos = el('button'); menos.setAttribute('aria-label', 'Diminuir'); menos.innerHTML = ic('minus');
+  const mais = el('button'); mais.setAttribute('aria-label', 'Aumentar'); mais.innerHTML = ic('plus');
+  const q = el('b', '', fmtN(it.qtd));
+  menos.onclick = () => ajustar(it, -1, q, r); mais.onclick = () => ajustar(it, 1, q, r);
+  st.append(menos, q, mais); r.append(tile, t, st); return r;
+}
+
+async function ajustar(it, delta, q, row) {
+  if (delta < 0 && it.qtd <= 0) return;
+  it.qtd = Math.max(0, it.qtd + delta); q.textContent = fmtN(it.qtd);
+  q.classList.remove('bump'); void q.offsetWidth; q.classList.add('bump');
+  row.classList.toggle('low', baixo(it)); gravarCache('itens', itens);
+  clearTimeout(tRe); tRe = setTimeout(() => desenharItens(false), 1000);
+  try {
+    const r = await api('item_ajustar', { linha: it.linha, nome: it.nome, delta });
+    if (!r.ok) throw new Error(r.erro);
+  } catch (e) {
+    it.qtd = Math.max(0, it.qtd - delta); q.textContent = fmtN(it.qtd);
+    $('#msg').textContent = 'Não foi possível salvar. Atualize e tente de novo.';
+  }
+}
+
+function preencherI(it) {
+  editI = it ? { linha: it.linha, nome: it.nome } : null;
+  $('#iTit').textContent = it ? 'Editar item' : 'Novo item';
+  $('#iNome').value = it ? it.nome : ''; $('#iUn').value = it ? it.unidade : '';
+  $('#iQtd').value = it ? it.qtd : ''; $('#iMin').value = it && it.min ? it.min : ''; $('#iObs').value = it ? it.obs : '';
+  const c = $('#iCat'); c.innerHTML = '';
+  const cats = it && it.categoria && !CATS.includes(it.categoria) ? [...CATS, it.categoria] : CATS;
+  cats.forEach(x => { const o = el('option', '', x); o.value = x; c.append(o); });
+  c.value = it && it.categoria ? it.categoria : 'Outros';
+  $('#iExcluir').hidden = !it; $('#iMsg').textContent = '';
+}
+function montarEscolhaI() {
+  const c = $('#iEscolher'); c.innerHTML = '';
+  const n = el('option', '', 'Adicionar um novo item'); n.value = ''; c.append(n);
+  [...itens].sort((a, b) => a.nome.localeCompare(b.nome)).forEach(it => {
+    const o = el('option', '', 'Editar: ' + it.nome); o.value = it.linha; c.append(o);
+  });
+  c.value = '';
+}
+async function abrirEditorItem() {
+  try { const r = await api('itens'); if (r.ok) itens = r.itens; } catch (e) { /* usa a lista já carregada */ }
+  montarEscolhaI(); preencherI(); mostrarSheet($('#sheetI'));
+}
+async function salvarItem() {
+  const nome = $('#iNome').value.trim();
+  if (!nome) { $('#iMsg').textContent = 'Informe o nome do item.'; return; }
+  const item = { nome, categoria: $('#iCat').value, unidade: $('#iUn').value.trim(), qtd: $('#iQtd').value, min: $('#iMin').value, obs: $('#iObs').value.trim() };
+  const b = $('#iSalvar'); b.disabled = true; $('#iMsg').textContent = '';
+  try {
+    const r = await api('item_salvar', { linha: editI ? editI.linha : 0, nomeOriginal: editI ? editI.nome : '', item });
+    if (!r.ok) { $('#iMsg').textContent = r.erro; return; }
+    esconderSheet($('#sheetI')); await carregarItens(true); $('#msg').textContent = 'Item salvo.';
+  } catch (e) { $('#iMsg').textContent = 'Não foi possível salvar. Verifique a conexão.'; }
+  finally { b.disabled = false; }
+}
+async function excluirItem() {
+  if (!editI || !confirm(`Excluir “${editI.nome}” da lista?`)) return;
+  try {
+    const r = await api('item_del', { linha: editI.linha, nomeOriginal: editI.nome });
+    if (!r.ok) { $('#iMsg').textContent = r.erro; return; }
+    esconderSheet($('#sheetI')); await carregarItens(true); $('#msg').textContent = 'Item excluído.';
+  } catch (e) { $('#iMsg').textContent = 'Não foi possível excluir. Verifique a conexão.'; }
+}
+$('#iEscolher').onchange = e => preencherI(itens.find(x => String(x.linha) === e.target.value));
+$('#iSalvar').onclick = salvarItem; $('#iExcluir').onclick = excluirItem;
+$('#iFechar').onclick = () => esconderSheet($('#sheetI')); $('#iBg').onclick = () => esconderSheet($('#sheetI'));
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#sheetI').hidden) esconderSheet($('#sheetI')); });
+
+$('#entrar').onclick = async () => {
+  pin = $('#pin').value.trim(); if (!pin) return;
+  $('#loginMsg').textContent = 'Verificando…';
+  if (await carregarHoje()) localStorage.setItem('pin', pin);
+};
+$('#pin').onkeydown = e => { if (e.key === 'Enter') $('#entrar').click(); };
+$('#tHoje').onclick = () => aba('hoje');
+$('#tMeds').onclick = () => aba('meds');
+$('#tPress').onclick = () => aba('press');
+$('#tItens').onclick = () => aba('itens');
+$('#atualizar').onclick = e => {
+  const b = e.currentTarget; b.classList.add('spin'); setTimeout(() => b.classList.remove('spin'), 750);
+  recarregar();
+};
+$('#sair').onclick = () => {
+  localStorage.removeItem('pin'); pin = ''; limparCache();
+  doses = []; listaMeds = []; itens = []; itensP = []; jaDesenhado = false; prefetchFeito = false;
+  Object.keys(ultima).forEach(k => delete ultima[k]); mostrarLogin();
+};
+const menu = $('.menu');
+$('#menuBtn').onclick = e => {
+  e.stopPropagation();
+  const aberto = menu.classList.toggle('open');
+  e.currentTarget.setAttribute('aria-expanded', aberto);
+};
+document.addEventListener('click', () => menu.classList.remove('open'));
+document.addEventListener('keydown', e => { if (e.key === 'Escape') menu.classList.remove('open'); });
+document.addEventListener('visibilitychange', () => { if (!document.hidden && pin) carregarHoje(); });
+
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+
+if (API_URL.includes('COLE_AQUI')) {
+  mostrarLogin('Falta colar a URL do Apps Script no index.html (linha API_URL).');
+} else if (pin) {
+  $('#app').hidden = false;
+  const c = lerCache('doses');
+  if (c && c.dia === hojeChave()) { doses = c.doses; cabecalhoHoje(); desenharDoses(true); jaDesenhado = true; }
+  else $('#msg').textContent = 'Carregando…';
+  carregarHoje();
+} else {
+  mostrarLogin();
+}
+</script>
 </body>
-
 </html>
