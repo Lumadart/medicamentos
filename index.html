@@ -1925,6 +1925,194 @@
     .ja:active {
       transform: scale(.94)
     }
+
+    /* calendário colorido */
+    .cal-grade {
+      gap: 4px 0
+    }
+
+    .dia {
+      border-radius: 14px
+    }
+
+    .dia.sel .n {
+      background: transparent;
+      color: var(--ink);
+      box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--rose-d)
+    }
+
+    .dia.hoje .n {
+      background: var(--rose-l);
+      color: var(--rose-d)
+    }
+
+    .dia .n {
+      position: relative
+    }
+
+    .dia .n.um {
+      background: var(--c);
+      color: #fff
+    }
+
+    .dia .n.multi {
+      background: var(--g);
+      color: var(--ink)
+    }
+
+    .dia .n.multi::before {
+      content: "";
+      position: absolute;
+      inset: 3px;
+      border-radius: 50%;
+      background: #fff
+    }
+
+    .dia .n.multi span {
+      position: relative
+    }
+
+    .dia.rem {
+      background: #efeafb;
+      border-radius: 0
+    }
+
+    .dia.rem.rini {
+      border-radius: 14px 0 0 14px
+    }
+
+    .dia.rem.rfim {
+      border-radius: 0 14px 14px 0
+    }
+
+    .dia.rem.rini.rfim {
+      border-radius: 14px
+    }
+
+    .tile.ses {
+      background: #fbe3ea;
+      color: var(--rose-d)
+    }
+
+    .tile.rem {
+      background: #efeafb;
+      color: #6f5bc0
+    }
+
+    .tile.out {
+      background: #e3f1ed;
+      color: #3f7d6e
+    }
+
+    .pdata {
+      width: 48px;
+      height: 52px;
+      border-radius: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: none;
+      line-height: 1.05
+    }
+
+    .pdata b {
+      font: 600 20px var(--display)
+    }
+
+    .pdata span {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .04em
+    }
+
+    .pdata.ses {
+      background: #fbe3ea;
+      color: var(--rose-d)
+    }
+
+    .pdata.rem {
+      background: #efeafb;
+      color: #6f5bc0
+    }
+
+    .pdata.out {
+      background: #e3f1ed;
+      color: #3f7d6e
+    }
+
+    .prox {
+      cursor: pointer
+    }
+
+    .pfechar {
+      margin-left: auto;
+      order: 3;
+      border: 0;
+      background: var(--rose-l);
+      color: var(--rose-d);
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      flex: none
+    }
+
+    .pfechar .i {
+      width: 14px;
+      height: 14px
+    }
+
+    .per {
+      width: 100%
+    }
+
+    /* cartões de item e de agenda mais completos */
+    .item .t span {
+      display: block
+    }
+
+    .item .t .obs {
+      display: flex;
+      gap: 6px;
+      align-items: flex-start;
+      margin-top: 4px;
+      font-size: 13px;
+      line-height: 1.35
+    }
+
+    .item .t .obs .i {
+      width: 14px;
+      height: 14px;
+      margin-top: 1px;
+      color: var(--rose)
+    }
+
+    .stepcol {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      flex: none
+    }
+
+    .stepcol small {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      color: var(--mute);
+      max-width: 96px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap
+    }
+
+    .item.low .stepcol small {
+      color: #b9741a
+    }
   </style>
 </head>
 
@@ -2310,7 +2498,7 @@
   </div>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbygi4DMEklucoLk_H2q8SPpUq-h3Y-r52xIy5zKFYcW95G6CPohunB_8MKD0q7L2Wje/exec'; 
+    const API_URL = 'https://script.google.com/macros/s/AKfycbygi4DMEklucoLk_H2q8SPpUq-h3Y-r52xIy5zKFYcW95G6CPohunB_8MKD0q7L2Wje/exec';
     const $ = s => document.querySelector(s);
     let pin = localStorage.getItem('pin') || '';
     let doses = [];
@@ -2777,32 +2965,38 @@
         return;
       }
       let n = 0;
-      const secao = (titulo, icone, lista) => {
+      const secao = (titulo, icone, lista, cat) => {
         if (!lista.length) return;
         const h = el('div', 'per'); h.innerHTML = ic(icone); h.append(document.createTextNode(titulo)); box.append(h);
-        lista.forEach(it => box.append(linhaItem(it, animar ? n++ : -1)));
+        lista.forEach(it => box.append(linhaItem(it, animar ? n++ : -1, !!cat)));
       };
-      secao('Repor em breve', 'alert', itens.filter(baixo));
+      secao('Repor em breve', 'alert', itens.filter(baixo), true);
       const resto = itens.filter(x => !baixo(x));
       [...new Set(resto.map(x => x.categoria || 'Outros'))].sort().forEach(c => secao(c, 'box', resto.filter(x => (x.categoria || 'Outros') === c)));
     }
 
-    function linhaItem(it, idx) {
+    function linhaItem(it, idx, mostrarCat) {
       const r = el('div', 'item' + (baixo(it) ? ' low' : ''));
       if (idx >= 0) r.style.setProperty('--d', Math.min(idx, 10) * 40 + 'ms'); else r.style.animation = 'none';
       const tile = el('div', 'tile'); tile.innerHTML = ic(baixo(it) ? 'alert' : 'box');
       const t = el('div', 't'); t.append(el('b', '', it.nome));
       const partes = [];
-      if (it.unidade) partes.push(it.unidade);
+      if (mostrarCat && it.categoria) partes.push(it.categoria);
       if (it.min > 0) partes.push('avisar com ' + fmtN(it.min) + ' ou menos');
-      const sub = partes.join(' · ');
-      if (sub) t.append(el('span', '', sub));
+      if (partes.length) t.append(el('span', '', partes.join(' · ')));
+      if (it.obs) {const o = el('span', 'obs'); o.innerHTML = ic('info'); o.append(document.createTextNode(it.obs)); t.append(o);}
       const st = el('div', 'step');
       const menos = el('button'); menos.setAttribute('aria-label', 'Diminuir'); menos.innerHTML = ic('minus');
       const mais = el('button'); mais.setAttribute('aria-label', 'Aumentar'); mais.innerHTML = ic('plus');
       const q = el('b', '', fmtN(it.qtd));
-      menos.onclick = () => ajustar(it, -1, q, r); mais.onclick = () => ajustar(it, 1, q, r);
-      st.append(menos, q, mais); r.append(tile, t, st); return r;
+      menos.onclick = ev => {ev.stopPropagation(); ajustar(it, -1, q, r);};
+      mais.onclick = ev => {ev.stopPropagation(); ajustar(it, 1, q, r);};
+      st.append(menos, q, mais);
+      const col = el('div', 'stepcol'); col.append(st);
+      if (it.unidade) col.append(el('small', '', it.unidade));
+      r.append(tile, t, col);
+      r.style.cursor = 'pointer'; r.onclick = () => abrirEditorItem(it);
+      return r;
     }
 
     async function ajustar(it, delta, q, row) {
@@ -2831,17 +3025,18 @@
       c.value = it && it.categoria ? it.categoria : 'Outros';
       $('#iExcluir').hidden = !it; $('#iMsg').textContent = '';
     }
-    function montarEscolhaI() {
+    function montarEscolhaI(sel) {
       const c = $('#iEscolher'); c.innerHTML = '';
       const n = el('option', '', 'Adicionar um novo item'); n.value = ''; c.append(n);
       [...itens].sort((a, b) => a.nome.localeCompare(b.nome)).forEach(it => {
         const o = el('option', '', 'Editar: ' + it.nome); o.value = it.linha; c.append(o);
       });
-      c.value = '';
+      c.value = sel ? String(sel.linha) : '';
     }
-    async function abrirEditorItem() {
+    async function abrirEditorItem(it) {
       try {const r = await api('itens'); if (r.ok) itens = r.itens;} catch (e) { /* usa a lista já carregada */}
-      montarEscolhaI(); preencherI(); mostrarSheet($('#sheetI'));
+      if (it) it = itens.find(x => x.nome === it.nome) || it;
+      montarEscolhaI(it); preencherI(it); mostrarSheet($('#sheetI'));
     }
     async function salvarItem() {
       const nome = $('#iNome').value.trim();
@@ -2941,9 +3136,11 @@
       }
     }
 
+    const COR = {'Sessão': '#c25577', 'Outro': '#6fae9e', aut: '#d9a441'};
+    const clsTipo = t => t === 'Sessão' ? 'ses' : t === 'Remédio' ? 'rem' : 'out';
+
     function desenharAgenda() {
       const box = $('#vAgenda'); box.innerHTML = '';
-      if (!diaSel) diaSel = isoDe(new Date());
       const lemb = el('div'); lemb.id = 'agLemb'; box.append(lemb);
       const card = el('div', 'calcard');
       const cab = el('div', 'cal-cab');
@@ -2956,29 +3153,77 @@
       const grade = el('div', 'cal-grade');
       for (let i = 0; i < mesRef.getDay(); i++) grade.append(el('span'));
       const total = new Date(mesRef.getFullYear(), mesRef.getMonth() + 1, 0).getDate(), hoje = isoDe(new Date());
+      const temRem = x => eventos.some(e => e.tipo === 'Remédio' && cobre(e, x));
       for (let d = 1; d <= total; d++) {
-        const x = isoDe(new Date(mesRef.getFullYear(), mesRef.getMonth(), d));
-        const b = el('button', 'dia' + (x === hoje ? ' hoje' : '') + (x === diaSel ? ' sel' : '')); b.dataset.d = x;
-        b.append(el('span', 'n', String(d)));
-        const marcas = el('span', 'marcas'), evs = eventos.filter(e => cobre(e, x));
-        if (evs.some(e => e.tipo === 'Sessão')) marcas.append(el('i', 'm ses'));
-        if (evs.some(e => e.tipo === 'Remédio')) marcas.append(el('i', 'm rem'));
-        if (evs.some(e => e.tipo === 'Outro')) marcas.append(el('i', 'm out'));
-        if (eventos.some(e => e.antec > 0 && !e.autFeita && !e.feito && somaDias(e.data, -e.antec) === x)) marcas.append(el('i', 'm aut'));
-        b.append(marcas);
-        b.onclick = () => {diaSel = x; box.querySelectorAll('.dia').forEach(y => y.classList.toggle('sel', y.dataset.d === x)); desenharListaDia();};
+        const dt = new Date(mesRef.getFullYear(), mesRef.getMonth(), d), x = isoDe(dt), dow = dt.getDay();
+        // cores do dia: remédio vira faixa; sessão, outro e prazo de autorização viram o círculo
+        const tipos = [];
+        if (eventos.some(e => e.tipo === 'Sessão' && cobre(e, x))) tipos.push('Sessão');
+        if (eventos.some(e => e.tipo === 'Outro' && cobre(e, x))) tipos.push('Outro');
+        if (eventos.some(e => e.antec > 0 && !e.autFeita && !e.feito && somaDias(e.data, -e.antec) === x)) tipos.push('aut');
+        let cls = 'dia' + (x === hoje ? ' hoje' : '') + (x === diaSel ? ' sel' : '');
+        if (temRem(x)) {
+          cls += ' rem';
+          if (!(dow > 0 && temRem(somaDias(x, -1)))) cls += ' rini';
+          if (!(dow < 6 && temRem(somaDias(x, 1)))) cls += ' rfim';
+        }
+        const b = el('button', cls); b.dataset.d = x;
+        const n = el('span', 'n' + (tipos.length === 1 ? ' um' : tipos.length > 1 ? ' multi' : ''));
+        n.append(el('span', '', String(d)));
+        if (tipos.length === 1) n.style.setProperty('--c', COR[tipos[0]]);
+        if (tipos.length > 1) {
+          const p = 100 / tipos.length;
+          n.style.setProperty('--g', 'conic-gradient(' + tipos.map((t, i) => `${COR[t]} ${i * p}% ${(i + 1) * p}%`).join(',') + ')');
+        }
+        b.append(n);
+        b.onclick = () => {
+          diaSel = diaSel === x ? '' : x;
+          box.querySelectorAll('.dia').forEach(y => y.classList.toggle('sel', y.dataset.d === diaSel));
+          desenharPainelDia();
+        };
         grade.append(b);
       }
-      const leg = el('div', 'leg2');
-      leg.innerHTML = '<span><i class="m ses"></i>Sessão</span><span><i class="m rem"></i>Dias de remédio</span><span><i class="m aut"></i>Pedir autorização</span><span><i class="m out"></i>Outro</span>';
-      card.append(cab, sem, grade, leg); box.append(card);
-      const lista = el('div'); lista.id = 'agLista'; box.append(lista);
-      desenharListaDia(); atualizarLembretes();
+      card.append(cab, sem, grade); box.append(card);
+      const dia = el('div'); dia.id = 'agDia'; const pro = el('div'); pro.id = 'agProx'; box.append(dia, pro);
+      desenharPainelDia(); desenharProximos(); atualizarLembretes();
+    }
+
+    function proximosEv() {
+      const hoje = isoDe(new Date());
+      return eventos.filter(e => (e.fim || e.data) >= hoje && !e.feito)
+        .map(e => ({e, ini: e.data < hoje ? hoje : e.data}))
+        .sort((a, b) => a.ini < b.ini ? -1 : a.ini > b.ini ? 1 : (a.e.hora || '').localeCompare(b.e.hora || ''))
+        .slice(0, 5);
+    }
+
+    function cartaoProx(p, i) {
+      const e = p.e, hoje = isoDe(new Date()), d = doIso(p.ini);
+      const r = el('div', 'item prox'); r.style.setProperty('--d', i * 40 + 'ms');
+      const dt = el('div', 'pdata ' + clsTipo(e.tipo));
+      dt.append(el('b', '', String(d.getDate())), el('span', '', d.toLocaleDateString('pt-BR', {month: 'short'}).replace('.', '')));
+      const t = el('div', 't'); t.append(el('b', '', e.titulo));
+      const q = [e.data < hoje ? 'em andamento' : emDias(diasAte(p.ini))];
+      if (e.hora) q.push(e.hora);
+      if (e.tipo === 'Remédio') q.push(e.fim ? `${fmtData(e.data)} a ${fmtData(e.fim)}` : fmtData(e.data)); else if (e.med) q.push(e.med);
+      if (e.antec > 0) q.push(e.autFeita ? 'autorização pedida' : `autorização: ${e.antec} d antes`);
+      t.append(el('span', '', q.join(' · ')));
+      if (e.obs) {const o = el('span', 'obs'); o.innerHTML = ic('info'); o.append(document.createTextNode(e.obs)); t.append(o);}
+      r.append(dt, t); r.onclick = () => abrirEditorEv(e); return r;
+    }
+
+    function desenharProximos() {
+      const box = $('#agProx'); if (!box) return; box.innerHTML = '';
+      const h = el('div', 'per'); h.innerHTML = ic('cal'); h.append(document.createTextNode('Próximos compromissos')); box.append(h);
+      const lista = proximosEv();
+      lista.forEach((p, i) => box.append(cartaoProx(p, i)));
+      if (!lista.length) box.append(el('p', 'empty', 'Nada marcado para os próximos dias.'));
+      const add = el('button', 'addmed'); add.innerHTML = ic('plus') + 'Adicionar compromisso';
+      add.onclick = () => abrirEditorEv(null, diaSel || isoDe(new Date())); box.append(add);
     }
 
     function cartaoEv(e, i) {
       const r = el('div', 'item evc' + (e.feito ? ' done' : '')); r.style.setProperty('--d', Math.min(i, 8) * 40 + 'ms');
-      const tile = el('div', 'tile'); tile.innerHTML = ic(iconeEv(e.tipo));
+      const tile = el('div', 'tile ' + clsTipo(e.tipo)); tile.innerHTML = ic(iconeEv(e.tipo));
       const t = el('div', 't'); t.append(el('b', '', e.titulo));
       const p = [];
       if (e.hora) p.push(e.hora);
@@ -2996,10 +3241,14 @@
       return r;
     }
 
-    function desenharListaDia() {
-      const box = $('#agLista'); if (!box) return; box.innerHTML = '';
+    function desenharPainelDia() {
+      const box = $('#agDia'); if (!box) return; box.innerHTML = '';
+      if (!diaSel) return;
       const h = el('div', 'per'); h.innerHTML = ic('cal');
-      h.append(document.createTextNode(doIso(diaSel).toLocaleDateString('pt-BR', {weekday: 'long', day: 'numeric', month: 'long'}))); box.append(h);
+      h.append(document.createTextNode(doIso(diaSel).toLocaleDateString('pt-BR', {weekday: 'long', day: 'numeric', month: 'long'})));
+      const fechar = el('button', 'pfechar'); fechar.setAttribute('aria-label', 'Fechar dia'); fechar.innerHTML = ic('x');
+      fechar.onclick = () => {diaSel = ''; $('#vAgenda').querySelectorAll('.dia').forEach(y => y.classList.remove('sel')); desenharPainelDia();};
+      h.append(fechar); box.append(h);
       const auts = eventos.filter(e => e.antec > 0 && !e.autFeita && !e.feito && somaDias(e.data, -e.antec) === diaSel);
       const evs = eventos.filter(e => cobre(e, diaSel)).sort((a, b) => (a.hora || '99').localeCompare(b.hora || '99'));
       if (auts.length) {const c = el('div', 'lemb'); auts.forEach(e => c.append(linhaLembrete({ev: e, tipo: 'aut', ate: diasAte(diaSel)}))); box.append(c);}
