@@ -207,7 +207,7 @@ dt{color:var(--mute)}dd{margin:0}
 .sheet-head button{width:36px;height:36px;border:0;border-radius:50%;background:var(--rose-l);color:var(--rose-d);display:grid;place-items:center}
 .sheet-body{overflow:auto;padding:8px 20px 12px;display:grid;gap:14px;-webkit-overflow-scrolling:touch}
 .f{display:block}.f>span,.f label>span{display:block;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin-bottom:6px}
-.f2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .f input,.f select,.f textarea{width:100%;border:1.5px solid transparent;border-radius:14px;background:#fff;color:var(--ink);font:600 16px 'Nunito',sans-serif;padding:12px 14px;box-shadow:0 1px 2px rgba(58,42,49,.05);transition:border-color .2s,box-shadow .2s;resize:vertical}
 .f input:focus,.f select:focus,.f textarea:focus{outline:0;border-color:var(--rose);box-shadow:0 0 0 4px var(--rose-l)}
 .pre{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
@@ -249,6 +249,47 @@ dt{color:var(--mute)}dd{margin:0}
 .step b{min-width:34px;text-align:center;font:600 17px var(--display);font-variant-numeric:tabular-nums}
 .bump{animation:bump .3s var(--ease)}
 @keyframes bump{40%{transform:scale(1.28)}}
+
+/* tratamento */
+.sw{position:relative;display:flex;align-items:center;gap:12px;padding:12px 14px;background:#fff;border-radius:14px;box-shadow:0 1px 2px rgba(58,42,49,.05);font-weight:600;font-size:14px;cursor:pointer}
+.sw input{position:absolute;opacity:0;pointer-events:none}
+.sw i{width:44px;height:26px;border-radius:99px;background:var(--rose-m);position:relative;flex:none;transition:background .25s}
+.sw i::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:transform .25s var(--ease)}
+.sw input:checked+i{background:var(--rose)}.sw input:checked+i::after{transform:translateX(18px)}
+.sw input:focus-visible+i{outline:2px solid var(--rose);outline-offset:2px}
+.chip.trat{background:var(--rose);color:#fff}
+.chip.trat .i{width:12px;height:12px;margin-right:4px;vertical-align:-2px}
+
+/* agenda */
+.calcard{background:#fff;border:1px solid var(--line);border-radius:22px;padding:14px;margin-bottom:14px;box-shadow:0 1px 2px rgba(58,42,49,.04),0 8px 22px rgba(58,42,49,.045)}
+.cal-cab{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.cal-cab b{font:600 17px var(--display);text-transform:capitalize}
+.cal-cab button{width:36px;height:36px;border:0;border-radius:12px;background:var(--rose-l);color:var(--rose-d);display:grid;place-items:center;transition:transform .15s var(--ease)}
+.cal-cab button:active{transform:scale(.9)}
+.cal-sem,.cal-grade{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-sem span{text-align:center;font-size:11px;font-weight:700;color:var(--mute);padding:4px 0}
+.dia{aspect-ratio:1/1.08;border:0;border-radius:14px;background:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--ink);transition:transform .15s var(--ease)}
+.dia:active{transform:scale(.9)}
+.dia .n{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font:600 15px var(--display);transition:background .2s,color .2s}
+.dia.hoje .n{background:var(--rose-l);color:var(--rose-d)}
+.dia.sel .n{background:var(--rose);color:#fff}
+.marcas{display:flex;gap:3px;height:6px}
+.m{width:6px;height:6px;border-radius:50%}
+.m.ses{background:var(--rose)}.m.rem{background:#9b8cd9}.m.aut{background:#d9a441}.m.out{background:#7fb3a6}
+.leg2{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--mute);margin-top:10px}
+.leg2 .m{display:inline-block;margin-right:5px;vertical-align:0}
+.evc{cursor:pointer}
+.evc.done{background:linear-gradient(135deg,var(--rose-l),#fff);border-color:var(--rose-m)}
+.evc .chk{cursor:pointer}
+.evc.done .chk{background:var(--rose);border-color:var(--rose)}
+.lemb{background:linear-gradient(135deg,#fff7ec,#fff);border:1px solid #f3dcb8;border-radius:20px;padding:4px 14px;margin-bottom:14px;animation:subir .45s var(--ease) both}
+.lrow{display:flex;align-items:center;gap:12px;padding:10px 0}
+.lrow+.lrow{border-top:1px dashed #f0dfc6}
+.lrow .tile{background:#fdebd0;color:#b9741a;width:40px;height:40px;border-radius:13px}
+.lrow.late .tile{background:var(--rose-m);color:var(--rose-d)}
+.lrow .t b{font-size:15px}.lrow .t span{font-size:13px}
+.ja{border:0;border-radius:12px;padding:8px 12px;background:var(--rose);color:#fff;font:600 13px var(--display);flex:none;transition:transform .15s var(--ease)}
+.ja:active{transform:scale(.94)}
 </style>
 </head>
 <body>
@@ -276,6 +317,10 @@ dt{color:var(--mute)}dd{margin:0}
   <symbol id="i-box" viewBox="0 0 24 24"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></symbol>
   <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
   <symbol id="i-alert" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></symbol>
+  <symbol id="i-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+  <symbol id="i-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></symbol>
   <symbol id="i-hpulse" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/><path d="M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27"/></symbol>
   <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></symbol>
   <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></symbol>
@@ -326,13 +371,15 @@ dt{color:var(--mute)}dd{margin:0}
   </header>
   <div class="msg" id="msg"></div>
   <div class="wrap">
-    <div id="vHoje"><div id="doses"></div></div>
+    <div id="vHoje"><div id="lembretes"></div><div id="doses"></div></div>
     <div id="vMeds" hidden></div>
     <div id="vPress" hidden></div>
     <div id="vItens" hidden></div>
+    <div id="vAgenda" hidden></div>
   </div>
   <nav class="nav">
     <button id="tHoje" class="on"><svg class="i"><use href="#i-list"/></svg><span>Hoje</span></button>
+    <button id="tAgenda"><svg class="i"><use href="#i-cal"/></svg><span>Agenda</span></button>
     <button id="tMeds"><svg class="i"><use href="#i-pill"/></svg><span>Remédios</span></button>
     <button id="tPress"><svg class="i"><use href="#i-hpulse"/></svg><span>Pressão</span></button>
     <button id="tItens"><svg class="i"><use href="#i-box"/></svg><span>Itens</span></button>
@@ -348,7 +395,7 @@ dt{color:var(--mute)}dd{margin:0}
       <label class="f"><span>Nome *</span><input id="fNome" placeholder="Ex.: Losartana" autocomplete="off"></label>
       <label class="f"><span>Princípio ativo</span><input id="fAtivo" autocomplete="off"></label>
       <label class="f"><span>Outros nomes</span><input id="fOutros" placeholder="Separe por vírgula" autocomplete="off"></label>
-      <div class="f2">
+      <div class="fg">
         <label class="f"><span>Dosagem</span><input id="fDose" placeholder="50 mg" autocomplete="off"></label>
         <label class="f"><span>Forma</span><select id="fForma"></select></label>
       </div>
@@ -361,6 +408,7 @@ dt{color:var(--mute)}dd{margin:0}
       </div>
       <label class="f"><span>Para que serve</span><input id="fPara" autocomplete="off"></label>
       <label class="f"><span>Observações</span><textarea id="fObs" rows="2"></textarea></label>
+      <label class="sw"><input type="checkbox" id="fTrat"><i></i><span>Faz parte do tratamento (quimioterapia)</span></label>
       <div class="f"><span>Status</span>
         <div class="seg" id="fStatus"><button type="button" data-v="Ativo">Ativo</button><button type="button" data-v="Suspenso">Suspenso</button></div>
       </div>
@@ -380,12 +428,12 @@ dt{color:var(--mute)}dd{margin:0}
     <div class="sheet-body">
       <label class="f"><span>O que você quer fazer?</span><select id="iEscolher"></select></label>
       <label class="f"><span>Item *</span><input id="iNome" placeholder="Ex.: Fraldas M" autocomplete="off"></label>
-      <div class="f2">
+      <div class="fg">
         <label class="f"><span>Categoria</span><select id="iCat"></select></label>
         <label class="f"><span>Unidade</span><input id="iUn" placeholder="pacotes" list="listaUn" autocomplete="off"></label>
       </div>
       <datalist id="listaUn"><option value="unidades"><option value="pacotes"><option value="caixas"><option value="tubos"><option value="frascos"><option value="rolos"></datalist>
-      <div class="f2">
+      <div class="fg">
         <label class="f"><span>Quantidade atual</span><input id="iQtd" type="number" inputmode="decimal" min="0" placeholder="0"></label>
         <label class="f"><span>Avisar quando restar</span><input id="iMin" type="number" inputmode="decimal" min="0" placeholder="2"></label>
       </div>
@@ -399,8 +447,36 @@ dt{color:var(--mute)}dd{margin:0}
   </div>
 </div>
 
+<div id="sheetE" class="sheet" hidden>
+  <div class="sheet-bg" id="eBg"></div>
+  <div class="sheet-card" role="dialog" aria-modal="true" aria-labelledby="eTitSheet">
+    <div class="sheet-head"><h2 id="eTitSheet">Novo compromisso</h2><button id="eFechar" aria-label="Fechar"><svg class="i"><use href="#i-x"/></svg></button></div>
+    <div class="sheet-body">
+      <label class="f"><span>O que você quer fazer?</span><select id="eEscolher"></select></label>
+      <div class="f"><span>Tipo</span>
+        <div class="seg" id="eTipo"><button type="button" data-v="Sessão">Sessão</button><button type="button" data-v="Remédio">Remédio</button><button type="button" data-v="Outro">Outro</button></div>
+        <p class="hint" id="eDica" style="margin:8px 0 0"></p>
+      </div>
+      <label class="f"><span>Título</span><input id="eTitulo" autocomplete="off"></label>
+      <div class="f" id="eMedBox"><span>Medicamento</span><select id="eMed"></select></div>
+      <div class="fg">
+        <label class="f"><span>Data</span><input id="eData" type="date"></label>
+        <label class="f"><span>Até (opcional)</span><input id="eFim" type="date"></label>
+      </div>
+      <label class="f"><span>Hora (opcional)</span><input id="eHora" type="time"></label>
+      <label class="f"><span>Pedir autorização com quantos dias de antecedência?</span><input id="eAnt" type="number" inputmode="numeric" min="0" max="90" placeholder="0 = não precisa de autorização"></label>
+      <label class="f"><span>Observações</span><textarea id="eObs" rows="2" placeholder="Local, jejum, o que levar…"></textarea></label>
+      <div class="msg" id="eMsg" style="margin:0"></div>
+    </div>
+    <div class="sheet-foot">
+      <button class="danger" id="eExcluir">Excluir</button>
+      <button class="psave" id="eSalvar" style="margin:0">Salvar</button>
+    </div>
+  </div>
+</div>
+
 <script>
-const API_URL = 'https://script.google.com/macros/s/AKfycbygi4DMEklucoLk_H2q8SPpUq-h3Y-r52xIy5zKFYcW95G6CPohunB_8MKD0q7L2Wje/exec';
+const API_URL = 'COLE_AQUI_A_URL_DO_APPS_SCRIPT'; // termina com /exec
 const $ = s => document.querySelector(s);
 let pin = localStorage.getItem('pin') || '';
 let doses = [];
@@ -454,7 +530,7 @@ async function carregarHoje(forcar) {
     const mudou = JSON.stringify(r.doses) !== JSON.stringify(doses);
     doses = r.doses; ultima.hoje = Date.now(); diaCarregado = hojeChave();
     $('#login').hidden = true; $('#app').hidden = false;
-    cabecalhoHoje();
+    cabecalhoHoje(); atualizarLembretes();
     if (mudou || !jaDesenhado) desenharDoses(!jaDesenhado);
     jaDesenhado = true;
     if (!prefetchFeito) { prefetchFeito = true; setTimeout(prefetch, 500); }
@@ -471,8 +547,10 @@ async function prefetch() {
     const r = await api('resto');
     if (!r.ok) return;
     listaMeds = r.meds; itens = r.itens; itensP = r.pressao;
-    gravarCache('meds', r.meds); gravarCache('itens', r.itens); gravarCache('press', r.pressao);
-    ultima.meds = ultima.itens = ultima.press = Date.now();
+    eventos = r.eventos || [];
+    gravarCache('meds', r.meds); gravarCache('itens', r.itens); gravarCache('press', r.pressao); gravarCache('agenda', eventos);
+    ultima.meds = ultima.itens = ultima.press = ultima.agenda = Date.now();
+    atualizarLembretes();
   } catch (e) { /* segue sem pré-carregar */ }
 }
 
@@ -490,7 +568,7 @@ function desenharDoses(animar) {
     }
     const b = el('button', 'dose' + (d.tomou ? ' done' : ''));
     if (animar) b.style.setProperty('--d', (n++ * 50) + 'ms'); else b.style.animation = 'none';
-    const tile = el('div', 'tile'); tile.innerHTML = ic('pill');
+    const tile = el('div', 'tile'); tile.innerHTML = ic(d.tratamento ? 'heart' : 'pill');
     const t = el('div', 't'); t.append(el('b', '', d.medicamento));
     const sp = el('span'); const em = el('em', '', d.horario);
     sp.append(em, document.createTextNode(' · ' + d.dosagem + (d.tomou && d.marcadoAs ? ' · tomou às ' + d.marcadoAs : '')));
@@ -542,6 +620,10 @@ function pintarMeds(meds) {
       const sub = [m.dosagem, m.forma].filter(Boolean).join(' · ');
       if (sub) t.append(el('span', '', sub));
       if (m.paraQue) { t.append(document.createElement('br')); t.append(el('span', 'chip', m.paraQue)); }
+      if (m.tratamento) {
+        if (!m.paraQue) t.append(document.createElement('br'));
+        const ct = el('span', 'chip trat'); ct.innerHTML = ic('heart'); ct.append(document.createTextNode('Tratamento')); t.append(ct);
+      }
       if (m.status && m.status !== 'Ativo') t.append(el('span', 'chip off', m.status));
       s.append(tile, t); det.append(s);
       const info = el('div', 'info');
@@ -589,7 +671,7 @@ let abaAtual = 'hoje', itensP = [];
 
 function aba(q) {
   abaAtual = q;
-  [['hoje', '#vHoje', '#tHoje'], ['meds', '#vMeds', '#tMeds'], ['press', '#vPress', '#tPress'], ['itens', '#vItens', '#tItens']].forEach(([k, v, t]) => {
+  [['hoje', '#vHoje', '#tHoje'], ['meds', '#vMeds', '#tMeds'], ['press', '#vPress', '#tPress'], ['itens', '#vItens', '#tItens'], ['agenda', '#vAgenda', '#tAgenda']].forEach(([k, v, t]) => {
     $(v).hidden = k !== q; $(t).classList.toggle('on', k === q);
   });
   $('#msg').textContent = '';
@@ -597,9 +679,10 @@ function aba(q) {
   if (q === 'meds') carregarMeds();
   if (q === 'press') carregarPressao();
   if (q === 'itens') carregarItens();
-  $('#novoTxt').textContent = q === 'itens' ? 'Adicionar ou editar item' : 'Adicionar ou editar remédio';
+  if (q === 'agenda') carregarAgenda();
+  $('#novoTxt').textContent = q === 'itens' ? 'Adicionar ou editar item' : q === 'agenda' ? 'Adicionar ou editar na agenda' : 'Adicionar ou editar remédio';
 }
-function recarregar() { ({ hoje: carregarHoje, meds: carregarMeds, press: carregarPressao, itens: carregarItens })[abaAtual](true); }
+function recarregar() { ({ hoje: carregarHoje, meds: carregarMeds, press: carregarPressao, itens: carregarItens, agenda: carregarAgenda })[abaAtual](true); }
 
 function classe(s, d) {
   if (s >= 180 || d >= 110) return ['Muito elevada', '#a23f61'];
@@ -745,7 +828,7 @@ function preencher(m) {
   $('#sTit').textContent = m ? 'Editar medicamento' : 'Novo medicamento';
   $('#fNome').value = m ? m.nome : ''; $('#fAtivo').value = m ? m.ativo : '';
   $('#fOutros').value = m ? m.outros : ''; $('#fDose').value = m ? m.dosagem : '';
-  $('#fPos').value = m ? m.posologia : ''; $('#fPara').value = m ? m.paraQue : ''; $('#fObs').value = m ? m.obs : '';
+  $('#fPos').value = m ? m.posologia : ''; $('#fPara').value = m ? m.paraQue : ''; $('#fObs').value = m ? m.obs : ''; $('#fTrat').checked = !!(m && m.tratamento);
   const f = $('#fForma'); f.innerHTML = '';
   const lista = m && m.forma && !FORMAS.includes(m.forma) ? [...FORMAS, m.forma] : FORMAS;
   [''].concat(lista).forEach(x => { const o = el('option', '', x || 'Selecione'); o.value = x; f.append(o); });
@@ -782,7 +865,7 @@ async function salvarMed() {
   if (!nome) { $('#sMsg').textContent = 'Informe o nome do medicamento.'; return; }
   const med = { nome, ativo: $('#fAtivo').value.trim(), outros: $('#fOutros').value.trim(), dosagem: $('#fDose').value.trim(),
     forma: $('#fForma').value, posologia: $('#fPos').value.trim(), horarios: horas.join(', '),
-    paraQue: $('#fPara').value.trim(), obs: $('#fObs').value.trim(), status: statusSel };
+    paraQue: $('#fPara').value.trim(), obs: $('#fObs').value.trim(), status: statusSel, tratamento: $('#fTrat').checked };
   const b = $('#sSalvar'); b.disabled = true; $('#sMsg').textContent = '';
   try {
     const r = await api('med_salvar', { linha: edit ? edit.linha : 0, nomeOriginal: edit ? edit.nome : '', med });
@@ -807,7 +890,7 @@ Object.keys(PRESETS).forEach(k => {
 document.querySelectorAll('#fStatus button').forEach(b => b.onclick = () => { statusSel = b.dataset.v; marcarStatus(); });
 $('#fAddHora').onclick = addHora;
 $('#fHora').onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); addHora(); } };
-$('#novoMed').onclick = () => abaAtual === 'itens' ? abrirEditorItem() : abrirEditor();
+$('#novoMed').onclick = () => abaAtual === 'itens' ? abrirEditorItem() : abaAtual === 'agenda' ? abrirEditorEv() : abrirEditor();
 $('#fEscolher').onchange = e => preencher(listaMeds.find(x => String(x.linha) === e.target.value));
 $('#sSalvar').onclick = salvarMed; $('#sExcluir').onclick = excluirMed;
 $('#sFechar').onclick = fecharForm; $('#sBg').onclick = fecharForm;
@@ -860,7 +943,10 @@ function linhaItem(it, idx) {
   if (idx >= 0) r.style.setProperty('--d', Math.min(idx, 10) * 40 + 'ms'); else r.style.animation = 'none';
   const tile = el('div', 'tile'); tile.innerHTML = ic(baixo(it) ? 'alert' : 'box');
   const t = el('div', 't'); t.append(el('b', '', it.nome));
-  const sub = it.min > 0 ? `Avisa com ${fmtN(it.min)} ${it.unidade || ''}`.trim() : (it.unidade || '');
+  const partes = [];
+  if (it.unidade) partes.push(it.unidade);
+  if (it.min > 0) partes.push('avisar com ' + fmtN(it.min) + ' ou menos');
+  const sub = partes.join(' · ');
   if (sub) t.append(el('span', '', sub));
   const st = el('div', 'step');
   const menos = el('button'); menos.setAttribute('aria-label', 'Diminuir'); menos.innerHTML = ic('minus');
@@ -933,6 +1019,229 @@ $('#iSalvar').onclick = salvarItem; $('#iExcluir').onclick = excluirItem;
 $('#iFechar').onclick = () => esconderSheet($('#sheetI')); $('#iBg').onclick = () => esconderSheet($('#sheetI'));
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#sheetI').hidden) esconderSheet($('#sheetI')); });
 
+let eventos = [], editE = null, tipoE = 'Sessão', diaSel = '';
+let mesRef = new Date(); mesRef = new Date(mesRef.getFullYear(), mesRef.getMonth(), 1);
+const isoDe = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+const doIso = x => { const [a, b, c] = x.split('-').map(Number); return new Date(a, b - 1, c); };
+const fmtData = x => x.slice(8, 10) + '/' + x.slice(5, 7);
+const somaDias = (x, n) => { const d = doIso(x); d.setDate(d.getDate() + n); return isoDe(d); };
+const diasAte = x => Math.round((doIso(x) - doIso(isoDe(new Date()))) / 86400000);
+const cobre = (e, x) => e.data <= x && x <= (e.fim || e.data);
+const iconeEv = t => t === 'Sessão' ? 'droplet' : t === 'Remédio' ? 'pill' : 'cal';
+const emDias = n => n === 0 ? 'hoje' : n === 1 ? 'amanhã' : `em ${n} dias`;
+
+function lembretes() {
+  const out = [];
+  eventos.forEach(e => {
+    if (e.feito) return;
+    const ate = diasAte(e.data);
+    if (ate < 0) return;
+    if ((e.tipo !== 'Remédio' && ate <= 3) || (e.tipo === 'Remédio' && ate <= 1)) out.push({ ev: e, tipo: 'prox', ate });
+    if (e.antec > 0 && !e.autFeita) {
+      const ateP = diasAte(somaDias(e.data, -e.antec));
+      if (ateP <= 7) out.push({ ev: e, tipo: 'aut', ate: ateP });
+    }
+  });
+  return out.sort((a, b) => a.ate - b.ate);
+}
+
+function linhaLembrete(l) {
+  const e = l.ev, aut = l.tipo === 'aut';
+  const r = el('div', 'lrow' + (aut && l.ate < 0 ? ' late' : ''));
+  const tile = el('div', 'tile'); tile.innerHTML = ic(aut ? 'alert' : iconeEv(e.tipo));
+  const t = el('div', 't');
+  if (aut) {
+    const prazo = somaDias(e.data, -e.antec);
+    const quando = l.ate < 0 ? `prazo passou em ${fmtData(prazo)}` : l.ate === 0 ? 'prazo é hoje' : `pedir até ${fmtData(prazo)} (${emDias(l.ate)})`;
+    t.append(el('b', '', 'Pedir autorização'), el('span', '', `${e.titulo} · ${fmtData(e.data)} · ${quando}`));
+    const b = el('button', 'ja', 'Já pedi'); b.onclick = () => marcarEv(e, 'aut', true);
+    r.append(tile, t, b);
+  } else {
+    const extra = e.tipo === 'Remédio' && e.fim ? ` · até ${fmtData(e.fim)}` : '';
+    t.append(el('b', '', e.titulo), el('span', '', emDias(l.ate) + (e.hora ? ' às ' + e.hora : '') + extra));
+    r.append(tile, t);
+  }
+  return r;
+}
+
+function atualizarLembretes() {
+  const lista = lembretes();
+  ['#lembretes', '#agLemb'].forEach(sel => {
+    const box = $(sel); if (!box) return; box.innerHTML = '';
+    if (!lista.length) return;
+    const c = el('div', 'lemb'); lista.slice(0, 5).forEach(l => c.append(linhaLembrete(l))); box.append(c);
+  });
+}
+
+async function carregarAgenda(forcar) {
+  if (!eventos.length) { const c = lerCache('agenda'); if (c) eventos = c; }
+  let pintou = false;
+  if (eventos.length || fresco('agenda')) { desenharAgenda(); pintou = true; }
+  else $('#msg').textContent = 'Carregando…';
+  if (!forcar && fresco('agenda')) return;
+  try {
+    const r = await api('agenda');
+    if (!r.ok) { $('#msg').textContent = r.erro; return; }
+    $('#msg').textContent = '';
+    const mudou = JSON.stringify(r.eventos) !== JSON.stringify(eventos);
+    eventos = r.eventos; ultima.agenda = Date.now(); gravarCache('agenda', r.eventos);
+    if (mudou || !pintou) desenharAgenda();
+    atualizarLembretes();
+  } catch (e) {
+    $('#msg').textContent = 'Não foi possível carregar a agenda. Verifique a conexão e a implantação do Apps Script.';
+  }
+}
+
+function desenharAgenda() {
+  const box = $('#vAgenda'); box.innerHTML = '';
+  if (!diaSel) diaSel = isoDe(new Date());
+  const lemb = el('div'); lemb.id = 'agLemb'; box.append(lemb);
+  const card = el('div', 'calcard');
+  const cab = el('div', 'cal-cab');
+  const ant = el('button'); ant.setAttribute('aria-label', 'Mês anterior'); ant.innerHTML = ic('left');
+  const prox = el('button'); prox.setAttribute('aria-label', 'Próximo mês'); prox.innerHTML = ic('right');
+  ant.onclick = () => { mesRef = new Date(mesRef.getFullYear(), mesRef.getMonth() - 1, 1); desenharAgenda(); };
+  prox.onclick = () => { mesRef = new Date(mesRef.getFullYear(), mesRef.getMonth() + 1, 1); desenharAgenda(); };
+  cab.append(ant, el('b', '', mesRef.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })), prox);
+  const sem = el('div', 'cal-sem'); 'DSTQQSS'.split('').forEach(x => sem.append(el('span', '', x)));
+  const grade = el('div', 'cal-grade');
+  for (let i = 0; i < mesRef.getDay(); i++) grade.append(el('span'));
+  const total = new Date(mesRef.getFullYear(), mesRef.getMonth() + 1, 0).getDate(), hoje = isoDe(new Date());
+  for (let d = 1; d <= total; d++) {
+    const x = isoDe(new Date(mesRef.getFullYear(), mesRef.getMonth(), d));
+    const b = el('button', 'dia' + (x === hoje ? ' hoje' : '') + (x === diaSel ? ' sel' : '')); b.dataset.d = x;
+    b.append(el('span', 'n', String(d)));
+    const marcas = el('span', 'marcas'), evs = eventos.filter(e => cobre(e, x));
+    if (evs.some(e => e.tipo === 'Sessão')) marcas.append(el('i', 'm ses'));
+    if (evs.some(e => e.tipo === 'Remédio')) marcas.append(el('i', 'm rem'));
+    if (evs.some(e => e.tipo === 'Outro')) marcas.append(el('i', 'm out'));
+    if (eventos.some(e => e.antec > 0 && !e.autFeita && !e.feito && somaDias(e.data, -e.antec) === x)) marcas.append(el('i', 'm aut'));
+    b.append(marcas);
+    b.onclick = () => { diaSel = x; box.querySelectorAll('.dia').forEach(y => y.classList.toggle('sel', y.dataset.d === x)); desenharListaDia(); };
+    grade.append(b);
+  }
+  const leg = el('div', 'leg2');
+  leg.innerHTML = '<span><i class="m ses"></i>Sessão</span><span><i class="m rem"></i>Dias de remédio</span><span><i class="m aut"></i>Pedir autorização</span><span><i class="m out"></i>Outro</span>';
+  card.append(cab, sem, grade, leg); box.append(card);
+  const lista = el('div'); lista.id = 'agLista'; box.append(lista);
+  desenharListaDia(); atualizarLembretes();
+}
+
+function cartaoEv(e, i) {
+  const r = el('div', 'item evc' + (e.feito ? ' done' : '')); r.style.setProperty('--d', Math.min(i, 8) * 40 + 'ms');
+  const tile = el('div', 'tile'); tile.innerHTML = ic(iconeEv(e.tipo));
+  const t = el('div', 't'); t.append(el('b', '', e.titulo));
+  const p = [];
+  if (e.hora) p.push(e.hora);
+  if (e.tipo === 'Remédio') p.push(e.fim ? `${fmtData(e.data)} a ${fmtData(e.fim)}` : fmtData(e.data)); else if (e.med) p.push(e.med);
+  if (e.antec > 0) p.push(e.autFeita ? 'autorização pedida' : `autorização: ${e.antec} d antes`);
+  if (e.obs) p.push(e.obs);
+  if (p.length) t.append(el('span', '', p.join(' · ')));
+  r.append(tile, t);
+  if (e.tipo !== 'Remédio') {
+    const c = el('div', 'chk'); c.innerHTML = e.feito ? CHECK : ''; c.setAttribute('aria-label', 'Marcar como feito');
+    c.onclick = ev => { ev.stopPropagation(); marcarEv(e, 'feito', !e.feito); };
+    r.append(c);
+  }
+  r.onclick = () => abrirEditorEv(e);
+  return r;
+}
+
+function desenharListaDia() {
+  const box = $('#agLista'); if (!box) return; box.innerHTML = '';
+  const h = el('div', 'per'); h.innerHTML = ic('cal');
+  h.append(document.createTextNode(doIso(diaSel).toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' }))); box.append(h);
+  const auts = eventos.filter(e => e.antec > 0 && !e.autFeita && !e.feito && somaDias(e.data, -e.antec) === diaSel);
+  const evs = eventos.filter(e => cobre(e, diaSel)).sort((a, b) => (a.hora || '99').localeCompare(b.hora || '99'));
+  if (auts.length) { const c = el('div', 'lemb'); auts.forEach(e => c.append(linhaLembrete({ ev: e, tipo: 'aut', ate: diasAte(diaSel) }))); box.append(c); }
+  evs.forEach((e, i) => box.append(cartaoEv(e, i)));
+  if (!evs.length && !auts.length) box.append(el('p', 'empty', 'Nada marcado neste dia.'));
+  const add = el('button', 'addmed'); add.innerHTML = ic('plus') + 'Adicionar neste dia';
+  add.onclick = () => abrirEditorEv(null, diaSel); box.append(add);
+}
+
+async function marcarEv(e, campo, valor) {
+  const k = campo === 'aut' ? 'autFeita' : 'feito', antes = e[k];
+  e[k] = valor; gravarCache('agenda', eventos); desenharAgenda();
+  try {
+    const r = await api('ev_marcar', { linha: e.linha, id: e.id, campo, valor });
+    if (!r.ok) throw new Error(r.erro);
+  } catch (x) {
+    e[k] = antes; gravarCache('agenda', eventos); desenharAgenda();
+    $('#msg').textContent = 'Não foi possível salvar. Atualize e tente de novo.';
+  }
+}
+
+const DICAS_E = { 'Sessão': 'Sessão presencial de quimioterapia.', 'Remédio': 'Marque o período em que o remédio é tomado. Nos outros dias ele não aparece em “Hoje”.', 'Outro': 'Consulta, exame ou qualquer outro compromisso.' };
+function marcarTipoE() {
+  document.querySelectorAll('#eTipo button').forEach(b => b.classList.toggle('on', b.dataset.v === tipoE));
+  $('#eMedBox').hidden = tipoE !== 'Remédio'; $('#eDica').textContent = DICAS_E[tipoE];
+  $('#eTitulo').placeholder = tipoE === 'Sessão' ? 'Sessão de quimioterapia' : tipoE === 'Remédio' ? 'Nome do remédio (opcional)' : 'Ex.: Consulta com a oncologista';
+}
+function montarEscolhaE(sel) {
+  const c = $('#eEscolher'); c.innerHTML = '';
+  const n = el('option', '', 'Adicionar um novo compromisso'); n.value = ''; c.append(n);
+  const limite = somaDias(isoDe(new Date()), -30);
+  eventos.filter(e => e.data >= limite || (sel && e.id === sel.id)).forEach(e => {
+    const o = el('option', '', `Editar: ${fmtData(e.data)} · ${e.titulo}`); o.value = e.linha; c.append(o);
+  });
+  c.value = sel ? String(sel.linha) : '';
+}
+function preencherE(e, dia) {
+  editE = e ? { linha: e.linha, id: e.id } : null;
+  $('#eTitSheet').textContent = e ? 'Editar compromisso' : 'Novo compromisso';
+  tipoE = e ? e.tipo : 'Sessão'; marcarTipoE();
+  $('#eTitulo').value = e ? e.titulo : ''; $('#eData').value = e ? e.data : (dia || isoDe(new Date()));
+  $('#eFim').value = e ? e.fim : ''; $('#eHora').value = e ? e.hora : '';
+  $('#eAnt').value = e && e.antec ? e.antec : ''; $('#eObs').value = e ? e.obs : '';
+  const sel = $('#eMed'); sel.innerHTML = '';
+  const nomes = [...new Set(listaMeds.map(m => m.nome))].sort();
+  if (e && e.med && !nomes.includes(e.med)) nomes.push(e.med);
+  [''].concat(nomes).forEach(x => { const o = el('option', '', x || 'Selecione'); o.value = x; sel.append(o); });
+  sel.value = e ? e.med : '';
+  $('#eExcluir').hidden = !e; $('#eMsg').textContent = '';
+}
+async function abrirEditorEv(e, dia) {
+  try {
+    const r = await api('resto');
+    if (r.ok) { listaMeds = r.meds; itens = r.itens; itensP = r.pressao; eventos = r.eventos; }
+  } catch (x) { /* usa o que já está carregado */ }
+  if (e) e = eventos.find(x => x.id === e.id) || e;
+  montarEscolhaE(e); preencherE(e, dia); mostrarSheet($('#sheetE'));
+}
+async function depoisDeMudarAgenda(dataAlvo) {
+  if (dataAlvo) { diaSel = dataAlvo; const d = doIso(dataAlvo); mesRef = new Date(d.getFullYear(), d.getMonth(), 1); }
+  ultima.hoje = 0;
+  await carregarAgenda(true);
+  if (abaAtual === 'hoje') await carregarHoje(true);
+}
+async function salvarEv() {
+  const data = $('#eData').value;
+  if (!data) { $('#eMsg').textContent = 'Informe a data.'; return; }
+  const ev = { tipo: tipoE, titulo: $('#eTitulo').value.trim(), data, fim: $('#eFim').value, hora: $('#eHora').value,
+    med: tipoE === 'Remédio' ? $('#eMed').value : '', antec: $('#eAnt').value, obs: $('#eObs').value.trim() };
+  const b = $('#eSalvar'); b.disabled = true; $('#eMsg').textContent = '';
+  try {
+    const r = await api('ev_salvar', { linha: editE ? editE.linha : 0, id: editE ? editE.id : '', ev });
+    if (!r.ok) { $('#eMsg').textContent = r.erro; return; }
+    esconderSheet($('#sheetE')); await depoisDeMudarAgenda(data); $('#msg').textContent = 'Agenda atualizada.';
+  } catch (x) { $('#eMsg').textContent = 'Não foi possível salvar. Verifique a conexão.'; }
+  finally { b.disabled = false; }
+}
+async function excluirEv() {
+  if (!editE || !confirm('Excluir este compromisso da agenda?')) return;
+  try {
+    const r = await api('ev_del', { linha: editE.linha, id: editE.id });
+    if (!r.ok) { $('#eMsg').textContent = r.erro; return; }
+    esconderSheet($('#sheetE')); await depoisDeMudarAgenda(); $('#msg').textContent = 'Compromisso excluído.';
+  } catch (x) { $('#eMsg').textContent = 'Não foi possível excluir. Verifique a conexão.'; }
+}
+document.querySelectorAll('#eTipo button').forEach(b => b.onclick = () => { tipoE = b.dataset.v; marcarTipoE(); });
+$('#eEscolher').onchange = e => preencherE(eventos.find(x => String(x.linha) === e.target.value));
+$('#eSalvar').onclick = salvarEv; $('#eExcluir').onclick = excluirEv;
+$('#eFechar').onclick = () => esconderSheet($('#sheetE')); $('#eBg').onclick = () => esconderSheet($('#sheetE'));
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#sheetE').hidden) esconderSheet($('#sheetE')); });
+
 $('#entrar').onclick = async () => {
   pin = $('#pin').value.trim(); if (!pin) return;
   $('#loginMsg').textContent = 'Verificando…';
@@ -943,13 +1252,14 @@ $('#tHoje').onclick = () => aba('hoje');
 $('#tMeds').onclick = () => aba('meds');
 $('#tPress').onclick = () => aba('press');
 $('#tItens').onclick = () => aba('itens');
+$('#tAgenda').onclick = () => aba('agenda');
 $('#atualizar').onclick = e => {
   const b = e.currentTarget; b.classList.add('spin'); setTimeout(() => b.classList.remove('spin'), 750);
   recarregar();
 };
 $('#sair').onclick = () => {
   localStorage.removeItem('pin'); pin = ''; limparCache();
-  doses = []; listaMeds = []; itens = []; itensP = []; jaDesenhado = false; prefetchFeito = false;
+  doses = []; listaMeds = []; itens = []; itensP = []; eventos = []; jaDesenhado = false; prefetchFeito = false;
   Object.keys(ultima).forEach(k => delete ultima[k]); mostrarLogin();
 };
 const menu = $('.menu');
@@ -970,6 +1280,7 @@ if (API_URL.includes('COLE_AQUI')) {
   $('#app').hidden = false;
   const c = lerCache('doses');
   if (c && c.dia === hojeChave()) { doses = c.doses; cabecalhoHoje(); desenharDoses(true); jaDesenhado = true; }
+  const ca = lerCache('agenda'); if (ca) { eventos = ca; atualizarLembretes(); }
   else $('#msg').textContent = 'Carregando…';
   carregarHoje();
 } else {
