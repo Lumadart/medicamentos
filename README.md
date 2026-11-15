@@ -72,7 +72,7 @@ As informações ficam guardadas na própria conta Google de quem usa o app, e o
 
 ## 🛠️ Feito com
 
-Google Planilhas, Google Apps Script e GitHub Pages. Quer entender como funciona ou montar uma versão sua? O passo a passo está em [COMO-INSTALAR.md](COMO-INSTALAR.md).
+Google Planilhas, Google Apps Script e GitHub Pages.
 
 > ⚠️ Este app é um apoio de organização e **não substitui a orientação de médicos e outros profissionais de saúde**.
 
