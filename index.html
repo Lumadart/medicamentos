@@ -2574,6 +2574,58 @@
     .nav button.on .i {
       margin: 0
     }
+
+    /* barra de baixo rosa, com uma linha no topo marcando a aba ativa */
+    .nav {
+      background: var(--hero);
+      border-top: 0;
+      box-shadow: 0 -8px 24px rgba(169, 64, 95, .28);
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none
+    }
+
+    .nav button {
+      position: relative;
+      color: rgba(255, 255, 255, .68)
+    }
+
+    .nav button.on {
+      color: #fff
+    }
+
+    .nav button::before {
+      content: "";
+      position: absolute;
+      top: -6px;
+      left: 50%;
+      width: 0;
+      height: 3px;
+      border-radius: 0 0 4px 4px;
+      background: #fff;
+      transform: translateX(-50%);
+      transition: width .3s var(--ease)
+    }
+
+    .nav button.on::before {
+      width: 36px
+    }
+
+    .nav button .i,
+    .nav button.on .i {
+      width: 24px;
+      height: 24px;
+      padding: 0;
+      margin: 3px 0;
+      background: none;
+      border-radius: 0
+    }
+
+    @media (hover:hover) {
+      .nav button:not(.on):hover {
+        background: none;
+        color: #fff
+      }
+    }
   </style>
 </head>
 
@@ -3077,7 +3129,7 @@
   </div>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbygi4DMEklucoLk_H2q8SPpUq-h3Y-r52xIy5zKFYcW95G6CPohunB_8MKD0q7L2Wje/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbygi4DMEklucoLk_H2q8SPpUq-h3Y-r52xIy5zKFYcW95G6CPohunB_8MKD0q7L2Wje/exec'; 
     const $ = s => document.querySelector(s);
     let pin = localStorage.getItem('pin') || '';
     let doses = [];
