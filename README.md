@@ -12,7 +12,7 @@
 
 ## 💗 Sobre o projeto
 
-**Minhas medicações** é um aplicativo pessoal, criado para organizar o dia a dia de um tratamento de saúde: que remédio tomar e a que horas, as consultas e sessões, a pressão arterial e as coisas que não podem faltar em casa, como fraldas, gazes e pomadas.
+**Minhas medicações** é um aplicativo pessoal, criado para organizar o dia a dia de um tratamento de saúde: que remédio tomar e a que horas, as consultas e sessões, a pressão arterial, os contatos dos médicos, os exames guardados e as coisas que não podem faltar em casa.
 
 Ele nasceu de uma necessidade real da família: são muitos horários, muitas datas para lembrar, autorizações para pedir com antecedência e remédios para comprar antes de acabarem. A ideia é simples: abrir o app, ver o que é para hoje e ficar tranquila.
 
@@ -20,13 +20,15 @@ Ele nasceu de uma necessidade real da família: são muitos horários, muitas da
 
 ## ✨ O que ele faz
 
+O que mais se usa fica na barra de baixo. O resto está a um toque, em **Mais**.
+
 | | |
 |---|---|
-| 📋 **Hoje** | Mostra as doses do dia, da manhã à noite. É só tocar para marcar o que já foi tomado e acompanhar o progresso do dia. |
-| 📅 **Agenda** | Um calendário colorido com as sessões, os dias de cada remédio e as consultas, além dos **próximos compromissos** à vista. |
-| 💊 **Remédios** | A ficha de cada medicamento: para que serve, outros nomes, dosagem, horários e observações. |
+| 📋 **Hoje** | As doses do dia, da manhã à noite. É só tocar para marcar o que já foi tomado e acompanhar o progresso. Os avisos importantes ficam logo no topo. |
 | ❤️ **Pressão** | Um registro rápido da pressão arterial. Basta digitar os números: a data e a hora entram sozinhas, e o app mostra a evolução em um gráfico. |
-| 📦 **Itens** | O estoque de tudo o que não é remédio, com botões simples para ajustar as quantidades. |
+| 📅 **Agenda** | Um calendário colorido com as sessões, os dias de cada remédio e as consultas, os **próximos compromissos** à vista e a lista dos últimos que já passaram. |
+| 💧 **Quimio** | A área do tratamento: próxima sessão, número do ciclo, histórico de cada ciclo e a previsão do seguinte. |
+| ⋯ **Mais** | **Remédios** (a ficha de cada um, com estoque), **Produtos** (fraldas, gazes, pomadas), **Contatos** (telefone e endereço de médicos e clínicas, com ligação e mapa em um toque) e **Documentos** (exames e papéis importantes, guardados no Google Drive). |
 
 ---
 
@@ -34,6 +36,7 @@ Ele nasceu de uma necessidade real da família: são muitos horários, muitas da
 
 - **Lembra das autorizações:** avisa quando é hora de pedir a autorização de uma sessão ou de um remédio.
 - **Avisa a hora de comprar:** calcula quanto tempo o estoque de cada remédio dura e lembra de comprar antes de acabar.
+- **Acompanha os ciclos:** cada sessão tem seu número, e o app sugere a data do próximo ciclo.
 - **Respeita o tratamento:** os remédios do tratamento ficam destacados, e os que são tomados só em certos períodos aparecem apenas nesses dias.
 - **Mais de uma dose por dia:** cada horário é marcado separadamente.
 - **Visual delicado e fácil de usar:** pensado para o celular, com letras grandes e poucos toques.
@@ -52,9 +55,14 @@ Ele nasceu de uma necessidade real da família: são muitos horários, muitas da
     <td align="center"><img src="docs/agenda.png" width="230" alt="Tela Agenda"><br><sub><b>Agenda</b></sub></td>
   </tr>
   <tr>
-    <td align="center"><img src="docs/remedios.png" width="230" alt="Tela Remédios"><br><sub><b>Remédios</b></sub></td>
     <td align="center"><img src="docs/pressao.png" width="230" alt="Tela Pressão"><br><sub><b>Pressão</b></sub></td>
-    <td align="center"><img src="docs/itens.png" width="230" alt="Tela Itens"><br><sub><b>Itens</b></sub></td>
+    <td align="center"><img src="docs/mais.png" width="230" alt="Tela Mais"><br><sub><b>Mais</b></sub></td>
+    <td align="center"><img src="docs/remedios.png" width="230" alt="Tela Remédios"><br><sub><b>Remédios</b></sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/produtos.png" width="230" alt="Tela Produtos"><br><sub><b>Produtos</b></sub></td>
+    <td align="center"><img src="docs/contatos.png" width="230" alt="Tela Contatos"><br><sub><b>Contatos</b></sub></td>
+    <td align="center"><img src="docs/documentos.png" width="230" alt="Tela Documentos"><br><sub><b>Documentos</b></sub></td>
   </tr>
 </table>
 
@@ -66,13 +74,13 @@ Ele nasceu de uma necessidade real da família: são muitos horários, muitas da
 
 ## 🔒 Privacidade
 
-As informações ficam guardadas na própria conta Google de quem usa o app, e o acesso é protegido por um PIN. Nada é compartilhado com ninguém.
+As informações ficam guardadas na própria conta Google de quem usa o app (na planilha e no Drive), e o acesso é protegido por um PIN. Nada é compartilhado com ninguém.
 
 ---
 
 ## 🛠️ Feito com
 
-Google Planilhas, Google Apps Script e GitHub Pages.
+Google Planilhas, Google Drive, Google Apps Script e GitHub Pages. Quer entender como funciona ou montar uma versão sua? O passo a passo está em [COMO-INSTALAR.md](COMO-INSTALAR.md).
 
 > ⚠️ Este app é um apoio de organização e **não substitui a orientação de médicos e outros profissionais de saúde**.
 
